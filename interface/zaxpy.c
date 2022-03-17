@@ -41,11 +41,7 @@
 #ifdef FUNCTION_PROFILE
 #include "functable.h"
 #endif
-#if  defined(Z13)
-#define MULTI_THREAD_MINIMAL  200000
-#else
-#define MULTI_THREAD_MINIMAL  10000
-#endif
+
 #ifndef CBLAS
 
 void NAME(blasint *N, FLOAT *ALPHA, FLOAT *x, blasint *INCX, FLOAT *y, blasint *INCY){
@@ -55,14 +51,9 @@ void NAME(blasint *N, FLOAT *ALPHA, FLOAT *x, blasint *INCX, FLOAT *y, blasint *
   blasint incy = *INCY;
 
 #else
-#ifdef COMPLEX
-void CNAME(blasint n, void *VALPHA, void *vx, blasint incx, void *vy, blasint incy){
-FLOAT *ALPHA = (FLOAT*) VALPHA;
-FLOAT *x = (FLOAT*) vx;
-FLOAT *y = (FLOAT*) vy;
-#else
+
 void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *y, blasint incy){
-#endif
+
 #endif
 
   FLOAT alpha_r = *(ALPHA + 0);
@@ -73,7 +64,7 @@ void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *y, blasint in
 #endif
 
 #ifndef CBLAS
-  PRINT_DEBUG_NAME;
+  PRINT_DEBUG_CNAME;
 #else
   PRINT_DEBUG_CNAME;
 #endif
@@ -82,12 +73,6 @@ void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *y, blasint in
 
   if ((alpha_r == ZERO) && (alpha_i == ZERO)) return;
 
-  if (incx == 0 && incy == 0) {
-  *y += n * (alpha_r * (*x) - alpha_i* (*(x+1)) );
-  *(y+1) += n * (alpha_i * (*x) + alpha_r * (*(x +1)) );
-  return;
-  }
-  
   IDEBUG_START;
 
   FUNCTION_PROFILE_START();
@@ -96,15 +81,12 @@ void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *y, blasint in
   if (incy < 0) y -= (n - 1) * incy * 2;
 
 #ifdef SMP
+  nthreads = num_cpu_avail(1);
+
   //disable multi-thread when incx==0 or incy==0
   //In that case, the threads would be dependent.
-  //
-  //Temporarily work-around the low performance issue with small input size &
-  //multithreads.
-  if (incx == 0 || incy == 0 || n <= MULTI_THREAD_MINIMAL)
+  if (incx == 0 || incy == 0)
 	  nthreads = 1;
-  else
-	  nthreads = num_cpu_avail(1);
 
   if (nthreads == 1) {
 #endif
@@ -128,9 +110,9 @@ void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *y, blasint in
 
     blas_level1_thread(mode, n, 0, 0, ALPHA, x, incx, y, incy, NULL, 0,
 #ifndef CONJ
-                       (int (*)(void))AXPYU_K,
+		       (void *)AXPYU_K,
 #else
-                       (int (*)(void))AXPYC_K,
+		       (void *)AXPYC_K,
 #endif
 		       nthreads);
   }

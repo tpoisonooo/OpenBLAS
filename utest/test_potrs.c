@@ -39,6 +39,7 @@ void BLASFUNC(zpotrs_(char*, BLASINT*, BLASINT*, complex double*,
 	     BLASINT*, complex double*, BLASINT*, BLASINT*);
 */
 
+
 //https://github.com/xianyi/OpenBLAS/issues/695
 CTEST(potrf, bug_695){
 
@@ -150,10 +151,8 @@ CTEST(potrf, bug_695){
 
   blasint n=10;
   blasint info[1];
-#ifdef BUILD_COMPLEX
   BLASFUNC(cpotrf)(&up, &n, (float*)(A1), &n, info);
   //printf("%g+%g*I\n", creal(A1[91]), cimag(A1[91]));
-#endif
 
   openblas_complex_double A2[100] = 
   {
@@ -283,9 +282,8 @@ CTEST(potrf, bug_695){
   };
   char lo = 'L';
   blasint nrhs = 2;
-#ifdef BUILD_COMPLEX16
   BLASFUNC(zpotrs)(&lo, &n, &nrhs, (double*)(A2), &n, (double*)(B), &n, info);
-#endif
+
   // note that this is exactly equal to A1
   openblas_complex_float A3[100] = 
   {
@@ -390,182 +388,9 @@ CTEST(potrf, bug_695){
     openblas_make_complex_float(-0.9617417, -1.2486815),
     openblas_make_complex_float(3.4629636, +0.0)
   };
-#ifdef BUILD_COMPLEX
   BLASFUNC(cpotrf)(&up, &n, (float*)(A3), &n, info);
   //  printf("%g+%g*I\n", creal(A3[91]), cimag(A3[91]));
   if(isnan(CREAL(A3[91])) || isnan(CIMAG(A3[91]))) {
     CTEST_ERR("%s:%d  got NaN", __FILE__, __LINE__);
-  }
-#endif
-}
-
-// Check potrf factorizes a small problem correctly
-CTEST(potrf, smoketest_trivial){
-  float A1s[4] = {2, 0.3, 0.3, 3};
-  double A1d[4] = {2, 0.3, 0.3, 3};
-  openblas_complex_float A1c[4] = {
-    openblas_make_complex_float(2,0),
-    openblas_make_complex_float(0.3,0.1),
-    openblas_make_complex_float(0.3,-0.1),
-    openblas_make_complex_float(3,0)
-  };
-  openblas_complex_double A1z[4] = {
-    openblas_make_complex_double(2,0),
-    openblas_make_complex_double(0.3,0.1),
-    openblas_make_complex_double(0.3,-0.1),
-    openblas_make_complex_double(3,0)
-  };
-  float zeros = 0, ones = 1;
-  double zerod = 0, oned = 1;
-  openblas_complex_float zeroc = openblas_make_complex_float(0, 0),
-                         onec = openblas_make_complex_float(1, 0);
-  openblas_complex_double zeroz = openblas_make_complex_double(0, 0),
-                          onez = openblas_make_complex_float(1, 0);
-
-  char uplo, trans1, trans2;
-  blasint nv = 4;
-  blasint n = 2;
-  blasint inc = 1;
-  blasint info = 0;
-  int i, j, cycle;
-
-  float As[4], Bs[4];
-  double Ad[4], Bd[4];
-  openblas_complex_float Ac[4], Bc[4];
-  openblas_complex_double Az[4], Bz[4];
-
-  for (cycle = 0; cycle < 2; ++cycle) {
-    if (cycle == 0) {
-      uplo = 'L';
-    }
-    else {
-      uplo = 'U';
-    }
-
-#ifdef BUILD_SINGLE
-    BLASFUNC(scopy)(&nv, A1s, &inc, As, &inc);
-#endif
-#ifdef BUILD_DOUBLE
-    BLASFUNC(dcopy)(&nv, A1d, &inc, Ad, &inc);
-#endif
-#ifdef BUILD_COMPLEX
-    BLASFUNC(ccopy)(&nv, (float *)A1c, &inc, (float *)Ac, &inc);
-#endif
-#ifdef BUILD_COMPLEX16
-    BLASFUNC(zcopy)(&nv, (double *)A1z, &inc, (double *)Az, &inc);
-#endif
-
-#ifdef BUILD_SINGLE
-    BLASFUNC(spotrf)(&uplo, &n, As, &n, &info);
-    if (info != 0) {
-      CTEST_ERR("%s:%d  info != 0", __FILE__, __LINE__);
-    }
-#endif
-#ifdef BUILD_DOUBLE
-    BLASFUNC(dpotrf)(&uplo, &n, Ad, &n, &info);
-    if (info != 0) {
-      CTEST_ERR("%s:%d  info != 0", __FILE__, __LINE__);
-    }
-#endif
-#ifdef BUILD_COMPLEX
-    BLASFUNC(cpotrf)(&uplo, &n, (float *)Ac, &n, &info);
-    if (info != 0) {
-      CTEST_ERR("%s:%d  info != 0", __FILE__, __LINE__);
-    }
-#endif
-#ifdef BUILD_COMPLEX16
-    BLASFUNC(zpotrf)(&uplo, &n, (double *)Az, &n, &info);
-    if (info != 0) {
-      CTEST_ERR("%s:%d  info != 0", __FILE__, __LINE__);
-    }
-#endif
-    /* Fill the other triangle */
-    if (uplo == 'L') {
-      for (i = 0; i < n; ++i) {
-        for (j = i+1; j < n; ++j) {
-          As[i+n*j] = 0;
-          Ad[i+n*j] = 0;
-          Ac[i+n*j] = zeroc;
-          Az[i+n*j] = zeroz;
-        }
-      }
-    }
-    else {
-      for (i = 0; i < n; ++i) {
-        for (j = 0; j < i; ++j) {
-          As[i+n*j] = 0;
-          Ad[i+n*j] = 0;
-          Ac[i+n*j] = zeroc;
-          Az[i+n*j] = zeroz;
-        }
-      }
-    }
-
-    /* B = A A^H or A^H A */
-    if (uplo == 'L') {
-      trans1 = 'N';
-      trans2 = 'C';
-    }
-    else {
-      trans1 = 'C';
-      trans2 = 'N';
-    }
-#ifdef BUILD_SINGLE
-    BLASFUNC(sgemm)(&trans1, &trans2, &n, &n, &n, &ones, As, &n, As, &n, &zeros, Bs, &n);
-#endif
-#ifdef BUILD_DOUBLE
-    BLASFUNC(dgemm)(&trans1, &trans2, &n, &n, &n, &oned, Ad, &n, Ad, &n, &zerod, Bd, &n);
-#endif
-#ifdef BUILD_COMPLEX
-    BLASFUNC(cgemm)(&trans1, &trans2, &n, &n, &n, (float *)&onec,
-                    (float *)Ac, &n, (float *)Ac, &n, (float *)&zeroc, (float *)Bc, &n);
-#endif
-#ifdef BUILD_COMPLEX16
-    BLASFUNC(zgemm)(&trans1, &trans2, &n, &n, &n, (double *)&onez,
-                    (double *)Az, &n, (double *)Az, &n, (double *)&zeroz, (double *)Bz, &n);
-#endif
-    /* Check result is close to original */
-    for (i = 0; i < n; ++i) {
-      for (j = 0; j < n; ++j) {
-        double err;
-
-#ifdef BUILD_SINGLE
-        err = fabs(A1s[i+n*j] - Bs[i+n*j]);
-        if (err > 1e-5) {
-          CTEST_ERR("%s:%d  %c s(%d,%d) difference: %g", __FILE__, __LINE__, uplo, i, j, err);
-        }
-#endif
-#ifdef BUILD_DOUBLE
-        err = fabs(A1d[i+n*j] - Bd[i+n*j]);
-        if (err > 1e-12) {
-          CTEST_ERR("%s:%d  %c d(%d,%d) difference: %g", __FILE__, __LINE__, uplo, i, j, err);
-        }
-#endif
-
-#ifdef BUILD_COMPLEX
-#ifdef OPENBLAS_COMPLEX_C99
-        err = cabsf(A1c[i+n*j] - Bc[i+n*j]);
-#else
-        err = hypot(A1c[i+n*j].real - Bc[i+n*j].real,
-                    A1c[i+n*j].imag - Bc[i+n*j].imag);
-#endif
-        if (err > 1e-5) {
-          CTEST_ERR("%s:%d  %c c(%d,%d) difference: %g", __FILE__, __LINE__, uplo, i, j, err);
-        }
-#endif
-
-#ifdef BUILD_COMPLEX16
-#ifdef OPENBLAS_COMPLEX_C99
-        err = cabs(A1z[i+n*j] - Bz[i+n*j]);
-#else
-        err = hypot(A1z[i+n*j].real - Bz[i+n*j].real,
-                    A1z[i+n*j].imag - Bz[i+n*j].imag);
-#endif
-        if (err > 1e-12) {
-          CTEST_ERR("%s:%d  %c z(%d,%d) difference: %g", __FILE__, __LINE__, uplo, i, j, err);
-        }
-#endif
-      }
-    }
   }
 }

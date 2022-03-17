@@ -51,10 +51,10 @@ static void scopy_kernel_32 (long n, float *x, float *y)
        "addi		%2, %2, 128	\n\t"
 
        "addic.		%1, %1, -32	\n\t"
-       "ble		two%=		\n\t"
+       "ble		2f		\n\t"
 
-       ".align	5		\n"
-     "one%=:				\n\t"
+       ".p2align	5		\n"
+     "1:				\n\t"
 
        "stxvd2x		40, 0, %3	\n\t"
        "stxvd2x		41, %5, %3	\n\t"
@@ -77,9 +77,9 @@ static void scopy_kernel_32 (long n, float *x, float *y)
        "addi		%2, %2, 128	\n\t"
 
        "addic.		%1, %1, -32	\n\t"
-       "bgt		one%=		\n"
+       "bgt		1b		\n"
 
-     "two%=:				\n\t"
+     "2:				\n\t"
 
        "stxvd2x		40, 0, %3	\n\t"
        "stxvd2x		41, %5, %3	\n\t"

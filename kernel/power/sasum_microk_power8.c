@@ -68,10 +68,10 @@ static float sasum_kernel_32 (long n, float *x)
        "addi		%2, %2, 128	\n\t"
 
        "addic.		%1, %1, -32	\n\t"
-       "ble		two%=		\n\t"
+       "ble		2f		\n\t"
 
-       ".align	5		\n"
-     "one%=:				\n\t"
+       ".p2align	5		\n"
+     "1:				\n\t"
 
        "xvabssp		48, 40		\n\t"
        "xvabssp		49, 41		\n\t"
@@ -108,9 +108,9 @@ static float sasum_kernel_32 (long n, float *x)
        "xvaddsp		38, 38, %x5	\n\t"
        "xvaddsp		39, 39, %x6	\n\t"
 
-       "bgt		one%=		\n"
+       "bgt		1b		\n"
 
-     "two%=:				\n\t"
+     "2:				\n\t"
 
        "xvabssp		48, 40		\n\t"
        "xvabssp		49, 41		\n\t"

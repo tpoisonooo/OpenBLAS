@@ -1,60 +1,54 @@
 SAMAXKERNEL  = ../arm/amax.c
-DAMAXKERNEL  = damax_z13.c
+DAMAXKERNEL  = ../arm/amax.c
 CAMAXKERNEL  = ../arm/zamax.c
-ZAMAXKERNEL  = zamax_z13.c
+ZAMAXKERNEL  = ../arm/zamax.c
 
 SAMINKERNEL  = ../arm/amin.c
-DAMINKERNEL  = damin_z13.c
+DAMINKERNEL  = ../arm/amin.c
 CAMINKERNEL  = ../arm/zamin.c
-ZAMINKERNEL  = zamin_z13.c
+ZAMINKERNEL  = ../arm/zamin.c
 
 SMAXKERNEL   = ../arm/max.c
-DMAXKERNEL   = dmax_z13.c
+DMAXKERNEL   = ../arm/max.c
 
 SMINKERNEL   = ../arm/min.c
-DMINKERNEL   = dmin_z13.c
+DMINKERNEL   = ../arm/min.c
 
 ISAMAXKERNEL = ../arm/iamax.c
-IDAMAXKERNEL = idamax.c
+IDAMAXKERNEL = ../arm/iamax.c
 ICAMAXKERNEL = ../arm/izamax.c
-IZAMAXKERNEL = izamax.c
+IZAMAXKERNEL = ../arm/izamax.c
 
 ISAMINKERNEL = ../arm/iamin.c
-IDAMINKERNEL = idamin.c
+IDAMINKERNEL = ../arm/iamin.c
 ICAMINKERNEL = ../arm/izamin.c
-IZAMINKERNEL = izamin.c
+IZAMINKERNEL = ../arm/izamin.c
 
 ISMAXKERNEL  = ../arm/imax.c
-IDMAXKERNEL  = idmax.c
+IDMAXKERNEL  = ../arm/imax.c
 
 ISMINKERNEL  = ../arm/imin.c
-IDMINKERNEL  = idmin.c
+IDMINKERNEL  = ../arm/imin.c
 
 SASUMKERNEL  = ../arm/asum.c
-DASUMKERNEL  = dasum.c
+DASUMKERNEL  = ../arm/asum.c
 CASUMKERNEL  = ../arm/zasum.c
-ZASUMKERNEL  = zasum.c
-
-SSUMKERNEL  = ../arm/asum.c
-DSUMKERNEL  = dasum.c
-CSUMKERNEL  = ../arm/zasum.c
-ZSUMKERNEL  = zasum.c
+ZASUMKERNEL  = ../arm/zasum.c
 
 SAXPYKERNEL  = ../arm/axpy.c
-DAXPYKERNEL  = daxpy.c
+DAXPYKERNEL  = ../arm/axpy.c
 CAXPYKERNEL  = ../arm/zaxpy.c
-ZAXPYKERNEL  = zaxpy.c
+ZAXPYKERNEL  = ../arm/zaxpy.c
 
 SCOPYKERNEL  = ../arm/copy.c
-DCOPYKERNEL  = dcopy.c
+DCOPYKERNEL  = ../arm/copy.c
 CCOPYKERNEL  = ../arm/zcopy.c
-ZCOPYKERNEL  = zcopy.c
+ZCOPYKERNEL  = ../arm/zcopy.c
 
 SDOTKERNEL   = ../arm/dot.c
-DDOTKERNEL   = ddot.c
+DDOTKERNEL   = ../arm/dot.c
 CDOTKERNEL   = ../arm/zdot.c
-ZDOTKERNEL   = zdot.c
-DSDOTKERNEL  = ../generic/dot.c
+ZDOTKERNEL   = ../arm/zdot.c
 
 SNRM2KERNEL  = ../arm/nrm2.c
 DNRM2KERNEL  = ../arm/nrm2.c
@@ -62,29 +56,29 @@ CNRM2KERNEL  = ../arm/znrm2.c
 ZNRM2KERNEL  = ../arm/znrm2.c
 
 SROTKERNEL   = ../arm/rot.c
-DROTKERNEL   = drot.c
+DROTKERNEL   = ../arm/rot.c
 CROTKERNEL   = ../arm/zrot.c
-ZROTKERNEL   = zrot.c
+ZROTKERNEL   = ../arm/zrot.c
 
 SSCALKERNEL  = ../arm/scal.c
-DSCALKERNEL  = dscal.c
+DSCALKERNEL  = ../arm/scal.c
 CSCALKERNEL  = ../arm/zscal.c
-ZSCALKERNEL  = zscal.c
+ZSCALKERNEL  = ../arm/zscal.c
 
 SSWAPKERNEL  = ../arm/swap.c
-DSWAPKERNEL  = dswap.c
+DSWAPKERNEL  = ../arm/swap.c
 CSWAPKERNEL  = ../arm/zswap.c
-ZSWAPKERNEL  = zswap.c
+ZSWAPKERNEL  = ../arm/zswap.c
 
 SGEMVNKERNEL = ../arm/gemv_n.c
-DGEMVNKERNEL = dgemv_n_4.c
+DGEMVNKERNEL = ../arm/gemv_n.c
 CGEMVNKERNEL = ../arm/zgemv_n.c
-ZGEMVNKERNEL = zgemv_n_4.c
+ZGEMVNKERNEL = ../arm/zgemv_n.c
 
 SGEMVTKERNEL = ../arm/gemv_t.c
-DGEMVTKERNEL = dgemv_t_4.c
+DGEMVTKERNEL = ../arm/gemv_t.c
 CGEMVTKERNEL = ../arm/zgemv_t.c
-ZGEMVTKERNEL = zgemv_t_4.c
+ZGEMVTKERNEL = ../arm/zgemv_t.c
 
 STRMMKERNEL	= strmm8x4V.S
 DTRMMKERNEL	= trmm8x4V.S
@@ -96,10 +90,10 @@ SGEMMINCOPY    = ../generic/gemm_ncopy_8.c
 SGEMMITCOPY    = ../generic/gemm_tcopy_8.c
 SGEMMONCOPY    = ../generic/gemm_ncopy_4.c
 SGEMMOTCOPY    = ../generic/gemm_tcopy_4.c
-SGEMMINCOPYOBJ = sgemm_incopy$(TSUFFIX).$(SUFFIX)
-SGEMMITCOPYOBJ = sgemm_itcopy$(TSUFFIX).$(SUFFIX)
-SGEMMONCOPYOBJ = sgemm_oncopy$(TSUFFIX).$(SUFFIX)
-SGEMMOTCOPYOBJ = sgemm_otcopy$(TSUFFIX).$(SUFFIX)
+SGEMMINCOPYOBJ = sgemm_incopy.o
+SGEMMITCOPYOBJ = sgemm_itcopy.o
+SGEMMONCOPYOBJ = sgemm_oncopy.o
+SGEMMOTCOPYOBJ = sgemm_otcopy.o
 
 
  
@@ -108,16 +102,16 @@ DGEMMINCOPY    = ../generic/gemm_ncopy_8.c
 DGEMMITCOPY    = ../generic/gemm_tcopy_8.c
 DGEMMONCOPY    = ../generic/gemm_ncopy_4.c
 DGEMMOTCOPY    = ../generic/gemm_tcopy_4.c
-DGEMMINCOPYOBJ = dgemm_incopy$(TSUFFIX).$(SUFFIX)
-DGEMMITCOPYOBJ = dgemm_itcopy$(TSUFFIX).$(SUFFIX)
-DGEMMONCOPYOBJ = dgemm_oncopy$(TSUFFIX).$(SUFFIX)
-DGEMMOTCOPYOBJ = dgemm_otcopy$(TSUFFIX).$(SUFFIX)
+DGEMMINCOPYOBJ = dgemm_incopy.o
+DGEMMITCOPYOBJ = dgemm_itcopy.o
+DGEMMONCOPYOBJ = dgemm_oncopy.o
+DGEMMOTCOPYOBJ = dgemm_otcopy.o
 
 CGEMMKERNEL    = ctrmm4x4V.S
 CGEMMONCOPY    = ../generic/zgemm_ncopy_4.c
 CGEMMOTCOPY    = ../generic/zgemm_tcopy_4.c
-CGEMMONCOPYOBJ =  cgemm_oncopy$(TSUFFIX).$(SUFFIX)
-CGEMMOTCOPYOBJ =  cgemm_otcopy$(TSUFFIX).$(SUFFIX)
+CGEMMONCOPYOBJ =  cgemm_oncopy.o
+CGEMMOTCOPYOBJ =  cgemm_otcopy.o
 
 ZGEMMKERNEL    = ztrmm4x4V.S
 ZGEMMONCOPY    = ../generic/zgemm_ncopy_4.c

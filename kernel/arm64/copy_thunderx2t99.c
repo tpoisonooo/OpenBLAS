@@ -90,62 +90,62 @@ static int do_copy(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_
 	"	mov	"Y", %[Y_]			\n"
 	"	mov	"INC_Y", %[INCY_]		\n"
 	"	cmp	"N", xzr			\n"
-	"	ble	8f //copy_kernel_L999		\n"
+	"	ble	.Lcopy_kernel_L999		\n"
 	"	cmp	"INC_X", #1			\n"
-	"	bne	4f //copy_kernel_S_BEGIN	\n"
+	"	bne	.Lcopy_kernel_S_BEGIN		\n"
 	"	cmp	"INC_Y", #1			\n"
-	"	bne	4f //copy_kernel_S_BEGIN	\n"
+	"	bne	.Lcopy_kernel_S_BEGIN		\n"
 
-	"// .Lcopy_kernel_F_BEGIN:			\n"
+	".Lcopy_kernel_F_BEGIN:				\n"
 	"	"INIT"					\n"
 	"	asr	"J", "N", #"N_DIV_SHIFT"	\n"
 	"	cmp	"J", xzr			\n"
-	"	beq	2f //copy_kernel_F1		\n"
+	"	beq	.Lcopy_kernel_F1		\n"
 	"	.align 5				\n"
 
-	"1: //copy_kernel_F:				\n"
+	".Lcopy_kernel_F:				\n"
 	"	"KERNEL_F"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	1b //copy_kernel_F		\n"
+	"	bne	.Lcopy_kernel_F			\n"
 
-	"2: //copy_kernel_F1:				\n"
+	".Lcopy_kernel_F1:				\n"
 #if defined(COMPLEX) && defined(DOUBLE)
-	"	b	8f //copy_kernel_L999		\n"
+	"	b	.Lcopy_kernel_L999		\n"
 #else
 	"	ands	"J", "N", #"N_REM_MASK"		\n"
-	"	ble	8f //copy_kernel_L999		\n"
+	"	ble	.Lcopy_kernel_L999		\n"
 #endif
 
-	"3: //copy_kernel_F10:				\n"
+	".Lcopy_kernel_F10:				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	3b //copy_kernel_F10		\n"
-	"	b	8f //copy_kernel_L999		\n"
+	"	bne	.Lcopy_kernel_F10		\n"
+	"	b	.Lcopy_kernel_L999		\n"
 
-	"4: //copy_kernel_S_BEGIN:			\n"
+	".Lcopy_kernel_S_BEGIN:				\n"
 	"	"INIT"					\n"
 	"	asr	"J", "N", #2			\n"
 	"	cmp	"J", xzr			\n"
-	"	ble	6f //copy_kernel_S1		\n"
+	"	ble	.Lcopy_kernel_S1		\n"
 
-	"5: //copy_kernel_S4:				\n"
+	".Lcopy_kernel_S4:				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	5b //copy_kernel_S4		\n"
+	"	bne	.Lcopy_kernel_S4		\n"
 
-	"6: //copy_kernel_S1:				\n"
+	".Lcopy_kernel_S1:				\n"
 	"	ands	"J", "N", #3			\n"
-	"	ble	8f //copy_kernel_L999		\n"
+	"	ble	.Lcopy_kernel_L999		\n"
 
-	"7: //copy_kernel_S10:				\n"
+	".Lcopy_kernel_S10:				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	7b //copy_kernel_S10		\n"
+	"	bne	.Lcopy_kernel_S10		\n"
 
-	"8: //copy_kernel_L999:				\n"
+	".Lcopy_kernel_L999:				\n"
 
 	:
 	: [N_]    "r"  (n),		//%1
@@ -183,10 +183,13 @@ int CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
 	if (n <= 0) return 0;
 
 #if defined(SMP)
-	if (inc_x == 0 || n <= 10000)
+	nthreads = num_cpu_avail(1);
+
+	if (inc_x == 0)
 		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
+
+	if (n <= 10000)
+		nthreads = 1;
 
 	if (nthreads == 1) {
 		do_copy(n, x, inc_x, y, inc_y);

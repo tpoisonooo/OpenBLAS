@@ -48,19 +48,17 @@ lapack_int LAPACKE_zgemqrt( int matrix_layout, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
-                             ( LAPACKE_lsame( side, 'R' ) ? n : 0 );
-        if( LAPACKE_zge_nancheck( matrix_layout, m, n, c, ldc ) ) {
-            return -12;
-        }
-        if( LAPACKE_zge_nancheck( matrix_layout, nb, k, t, ldt ) ) {
-            return -10;
-        }
-        if( LAPACKE_zge_nancheck( matrix_layout, nrows_v, k, v, ldv ) ) {
-            return -8;
-        }
+    /* Optionally check input matrices for NaNs */
+    nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
+                         ( LAPACKE_lsame( side, 'R' ) ? n : 0 );
+    if( LAPACKE_zge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        return -12;
+    }
+    if( LAPACKE_zge_nancheck( matrix_layout, nb, k, t, ldt ) ) {
+        return -10;
+    }
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_v, k, v, ldv ) ) {
+        return -8;
     }
 #endif
     /* Allocate memory for working array(s) */

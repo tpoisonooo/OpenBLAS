@@ -25,15 +25,12 @@
 *  ==========
 *
 *>  \param[out] VERS_MAJOR
-*>      VERS_MAJOR is INTEGER
 *>      return the lapack major version
 *>
 *>  \param[out] VERS_MINOR
-*>      VERS_MINOR is INTEGER
 *>      return the lapack minor version from the major version
 *>
 *>  \param[out] VERS_PATCH
-*>      VERS_PATCH is INTEGER
 *>      return the lapack patch version from the minor version
 *
 *  Authors:
@@ -44,23 +41,24 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2019
+*> \date December 2016
 *
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
 *
-*  -- LAPACK computational routine --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     June 2016
 *
 *  =====================================================================
 *
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *  =====================================================================
       VERS_MAJOR = 3
-      VERS_MINOR = 9
+      VERS_MINOR = 7
       VERS_PATCH = 0
 *  =====================================================================
 *

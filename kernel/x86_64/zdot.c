@@ -33,7 +33,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "zdot_microk_bulldozer-2.c"
 #elif defined(STEAMROLLER) || defined(PILEDRIVER) || defined(EXCAVATOR)
 #include "zdot_microk_steamroller-2.c"
-#elif defined(HASWELL) || defined(ZEN) || defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
+#elif defined(HASWELL) || defined(ZEN)
 #include "zdot_microk_haswell-2.c"
 #elif defined(SANDYBRIDGE)
 #include "zdot_microk_sandy-2.c"
@@ -86,26 +86,19 @@ static void zdot_kernel_8(BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *d)
 
 #endif
 
-
-#if defined(SMP)
-extern int blas_level1_thread_with_return_value(int mode, BLASLONG m, BLASLONG n,
-        BLASLONG k, void *alpha, void *a, BLASLONG lda, void *b, BLASLONG ldb,
-        void *c, BLASLONG ldc, int (*function)(), int nthreads);
-#endif
-                
-                
-
-static void zdot_compute (BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y,OPENBLAS_COMPLEX_FLOAT *result)
+FLOAT _Complex CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
 {
 	BLASLONG i;
 	BLASLONG ix,iy;
+	FLOAT _Complex result;
 	FLOAT  dot[4] = { 0.0, 0.0, 0.0 , 0.0 } ; 
-	
+
 	if ( n <= 0 ) 
 	{
-		OPENBLAS_COMPLEX_FLOAT res=OPENBLAS_MAKE_COMPLEX_FLOAT(0.0,0.0);
-		*result=res;
-		return;
+//	        CREAL(result) = 0.0 ;
+//        	CIMAG(result) = 0.0 ;
+		result=OPENBLAS_MAKE_COMPLEX_FLOAT(0.0,0.0);
+		return(result);
 
 	}
 
@@ -140,8 +133,8 @@ static void zdot_compute (BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLO
 		i=0;
 		ix=0;
 		iy=0;
-		inc_x *= 2;
-		inc_y *= 2;
+		inc_x <<= 1;
+		inc_y <<= 1;
 		while(i < n)
 		{
 
@@ -158,84 +151,18 @@ static void zdot_compute (BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLO
 	}
 
 #if !defined(CONJ)
-	OPENBLAS_COMPLEX_FLOAT res=OPENBLAS_MAKE_COMPLEX_FLOAT(dot[0]-dot[1],dot[2]+dot[3]);
+	result=OPENBLAS_MAKE_COMPLEX_FLOAT(dot[0]-dot[1],dot[2]+dot[3]);
+//	CREAL(result) = dot[0] - dot[1];
+//	CIMAG(result) = dot[2] + dot[3];
 #else
-	OPENBLAS_COMPLEX_FLOAT res=OPENBLAS_MAKE_COMPLEX_FLOAT(dot[0]+dot[1],dot[2]-dot[3]);
+	result=OPENBLAS_MAKE_COMPLEX_FLOAT(dot[0]+dot[1],dot[2]-dot[3]);
+//	CREAL(result) = dot[0] + dot[1];
+//	CIMAG(result) = dot[2] - dot[3];
+
 #endif
-        *result=res;
-	return;
+
+	return(result);
+
 }
 
-#if defined(SMP)
-static int zdot_thread_function(BLASLONG n, BLASLONG dummy0,
-BLASLONG dummy1, FLOAT dummy2r, FLOAT dummy2i, FLOAT *x, BLASLONG inc_x, FLOAT *y,
-BLASLONG inc_y, FLOAT *result, BLASLONG dummy3)
-{
-        zdot_compute(n, x, inc_x, y, inc_y, (void *)result);
-        return 0;
-}
-#endif
-
-OPENBLAS_COMPLEX_FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
-{
-#if defined(SMP)
-	int nthreads;
-	FLOAT dummy_alpha;
-#if defined(C_PGI) || defined(C_SUN)	
-	FLOAT zdotr=0., zdoti=0.;
-#endif	
-#endif
-	
-	OPENBLAS_COMPLEX_FLOAT zdot;
-#if defined(C_PGI) || defined(C_SUN)	
-        zdot=OPENBLAS_MAKE_COMPLEX_FLOAT(0.0,0.0);
-#else
-	CREAL(zdot) = 0.0;
-	CIMAG(zdot) = 0.0;
-#endif
-	
-#if defined(SMP)
-	if (inc_x == 0 || inc_y == 0 || n <= 10000)
-		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
-
-	if (nthreads == 1) {
-		zdot_compute(n, x, inc_x, y, inc_y, &zdot);
-	} else {
-		int mode, i;
-		char result[MAX_CPU_NUMBER * sizeof(double) * 2];
-		OPENBLAS_COMPLEX_FLOAT *ptr;
-
-#if !defined(DOUBLE)
-		mode = BLAS_SINGLE  | BLAS_COMPLEX;
-#else
-		mode = BLAS_DOUBLE  | BLAS_COMPLEX;
-#endif
-
-		blas_level1_thread_with_return_value(mode, n, 0, 0, &dummy_alpha,
-				   x, inc_x, y, inc_y, result, 0,
-				   (int (*)(void))zdot_thread_function, nthreads);
-
-		ptr = (OPENBLAS_COMPLEX_FLOAT *)result;
-		for (i = 0; i < nthreads; i++) {
-#if defined(C_PGI) || defined(C_SUN)			
-			zdotr += CREAL(*ptr);
-			zdoti += CIMAG(*ptr);
-#else			
-			CREAL(zdot) = CREAL(zdot) + CREAL(*ptr);
-			CIMAG(zdot) = CIMAG(zdot) + CIMAG(*ptr);
-#endif
-			ptr = (void *)(((char *)ptr) + sizeof(double) * 2);
-		}
-#if defined(C_PGI) || defined(C_SUN)		
-	zdot = OPENBLAS_MAKE_COMPLEX_FLOAT(zdotr,zdoti);
-#endif
-	}
-#else
-	zdot_compute(n, x, inc_x, y, inc_y, &zdot);
-#endif
-	
-	return zdot;
-}
 

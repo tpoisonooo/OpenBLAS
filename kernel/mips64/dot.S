@@ -103,83 +103,35 @@
 	.align 3
 
 .L12:
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1  
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
 	LD	a1,  4 * SIZE(X)
 	LD	b1,  4 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a2, a2
-cvt.d.s  b2, b2
-madd.d s2, s2, a2, b2
-#else
 	MADD	s2, s2, a2, b2
-#endif
 	LD	a2,  5 * SIZE(X)
 	LD	b2,  5 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a3, a3
-cvt.d.s  b3, b3
-madd.d s1, s1, a3, b3
-#else
 	MADD	s1, s1, a3, b3
-#endif
 	LD	a3,  6 * SIZE(X)
 	LD	b3,  6 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a4, a4
-cvt.d.s  b4, b4
-madd.d s2, s2, a4, b4
-#else
 	MADD	s2, s2, a4, b4
-#endif
 	LD	a4,  7 * SIZE(X)
 	LD	b4,  7 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
 	LD	a1,  8 * SIZE(X)
 	LD	b1,  8 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a2, a2
-cvt.d.s  b2, b2
-madd.d s2, s2, a2, b2
-#else
 	MADD	s2, s2, a2, b2
-#endif
 	LD	a2,  9 * SIZE(X)
 	LD	b2,  9 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a3, a3
-cvt.d.s  b3, b3
-madd.d s1, s1, a3, b3
-#else
 	MADD	s1, s1, a3, b3
-#endif
 	LD	a3, 10 * SIZE(X)
 	LD	b3, 10 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a4, a4
-cvt.d.s  b4, b4
-madd.d s2, s2, a4, b4
-#else
 	MADD	s2, s2, a4, b4
-#endif
 	LD	a4, 11 * SIZE(X)
 	LD	b4, 11 * SIZE(Y)
 
@@ -191,77 +143,29 @@ madd.d s2, s2, a4, b4
 	.align 3
 
 .L13:
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
 	LD	a1,  4 * SIZE(X)
 	LD	b1,  4 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s a2, a2
-cvt.d.s b2, b2
-madd.d s2, s2, a2, b2
-#else
 	MADD	s2, s2, a2, b2
-#endif
 	LD	a2,  5 * SIZE(X)
 	LD	b2,  5 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s a3, a3 
-cvt.d.s b3, b3
-madd.d s1, s1, a3, b3
-#else
 	MADD	s1, s1, a3, b3
-#endif
 	LD	a3,  6 * SIZE(X)
 	LD	b3,  6 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s a4, a4
-cvt.d.s b4, b4
-madd.d s2, s2, a4, b4
-#else
 	MADD	s2, s2, a4, b4
-#endif
 	LD	a4,  7 * SIZE(X)
 	LD	b4,  7 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
 	daddiu	X, X, 8 * SIZE
-#ifdef DSDOT
-cvt.d.s  a2, a2
-cvt.d.s  b2, b2
-madd.d s2, s2, a2, b2
-#else
 	MADD	s2, s2, a2, b2
-#endif
 	daddiu	Y, Y, 8 * SIZE
 
-#ifdef DSDOT
-cvt.d.s  a3, a3
-cvt.d.s  b3, b3
-madd.d s1, s1, a3, b3
-#else
 	MADD	s1, s1, a3, b3
-#endif
-#ifdef DSDOT
-cvt.d.s  a4, a4
-cvt.d.s  b4, b4
-madd.d s2, s2, a4, b4
-#else
 	MADD	s2, s2, a4, b4
-#endif
 	.align 3
 
 .L15:
@@ -275,13 +179,8 @@ madd.d s2, s2, a4, b4
 	LD	a1,  0 * SIZE(X)
 	LD	b1,  0 * SIZE(Y)
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
+
 	daddiu	I, I, -1
 
 	daddiu	X, X, SIZE
@@ -326,85 +225,50 @@ madd.d s1, s1, a1, b1
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s2, s2, a1, b1
-#else
 	MADD	s2, s2, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s2, s2, a1, b1
-#else
 	MADD	s2, s2, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s2, s2, a1, b1
-#else
 	MADD	s2, s2, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
 	dadd	Y, Y, INCY
 
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
+
 	LD	a1,  0 * SIZE(X)
 	dadd	X, X, INCX
 	LD	b1,  0 * SIZE(Y)
@@ -413,13 +277,7 @@ madd.d s1, s1, a1, b1
 	daddiu	I, I, -1
 
 	bgtz	I, .L23
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s2, s2, a1, b1
-#else
 	MADD	s2, s2, a1, b1
-#endif
 	.align 3
 
 .L25:
@@ -438,20 +296,13 @@ madd.d s2, s2, a1, b1
 	daddiu	I, I, -1
 
 	bgtz	I, .L26
-#ifdef DSDOT
-cvt.d.s  a1, a1
-cvt.d.s  b1, b1
-madd.d s1, s1, a1, b1
-#else
 	MADD	s1, s1, a1, b1
-#endif
 	.align 3
 
 .L999:
-#ifdef DSDOT
-	add.d s1, s1, s2
-#else
 	ADD	s1, s1, s2
+#ifdef DSDOT
+	cvt.d.s s1, s1
 #endif
 	j	$31
 	NOP

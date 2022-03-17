@@ -88,7 +88,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, n ).
+*>          A is DOUBLE PRECISION array of DIMENSION ( LDA, n ).
 *>           Before entry, the leading m by n part of the array A must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.
@@ -153,7 +153,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup doubleSYcomputational
 *
@@ -177,10 +177,10 @@
       SUBROUTINE DLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
      $                      INCY )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   ALPHA, BETA
@@ -230,7 +230,7 @@
          INFO = 10
       END IF
       IF( INFO.NE.0 )THEN
-         CALL XERBLA( 'DLA_SYAMV', INFO )
+         CALL XERBLA( 'DSYMV ', INFO )
          RETURN
       END IF
 *

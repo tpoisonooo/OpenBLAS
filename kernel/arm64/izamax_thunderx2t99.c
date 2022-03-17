@@ -229,72 +229,72 @@ static BLASLONG izamax_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 	"	mov	"INC_X", %[INCX_]			\n"
 
 	"	cmp	"N", xzr				\n"
-	"	ble	10f //izamax_kernel_zero		\n"
+	"	ble	.Lizamax_kernel_zero			\n"
 	"	cmp	"INC_X", xzr				\n"
-	"	ble	10f //izamax_kernel_zero		\n"
+	"	ble	.Lizamax_kernel_zero			\n"
 	"	cmp	"INC_X", #1				\n"
-	"	bne	5f //izamax_kernel_S_BEGIN		\n"
+	"	bne	.Lizamax_kernel_S_BEGIN			\n"
 	"	mov	x7, "X"					\n"
 
-	"1: //izamax_kernel_F_BEGIN:				\n"
+	".Lizamax_kernel_F_BEGIN:				\n"
 	"	"INIT"						\n"
 	"	subs	"N", "N", #1				\n"
-	"	ble	9f //izamax_kernel_L999			\n"
+	"	ble	.Lizamax_kernel_L999			\n"
 	"	asr	"J", "N", #"N_DIV_SHIFT"		\n"
 	"	cmp	"J", xzr				\n"
-	"	beq	3f //izamax_kernel_F1			\n"
+	"	beq	.Lizamax_kernel_F1			\n"
 	"	add	"Z", "Z", #1				\n"
 
-	"2: //izamax_kernel_F:					\n"
+	".Lizamax_kernel_F:					\n"
 	"	"KERNEL_F"					\n"
 	"	subs	"J", "J", #1				\n"
-	"	bne	2b //izamax_kernel_F			\n"
+	"	bne	.Lizamax_kernel_F			\n"
 	"	"KERNEL_F_FINALIZE"				\n"
 	"	sub	"Z", "Z", #1				\n"
 
-	"3: //izamax_kernel_F1:					\n"
+	".Lizamax_kernel_F1:					\n"
 	"	ands	"J", "N", #"N_REM_MASK"			\n"
-	"	ble	9f //izamax_kernel_L999			\n"
+	"	ble	.Lizamax_kernel_L999			\n"
 
-	"4: //izamax_kernel_F10:				\n"
+	".Lizamax_kernel_F10:					\n"
 	"	"KERNEL_S1"					\n"
 	"	subs	"J", "J", #1				\n"
-	"	bne	4b //izamax_kernel_F10			\n"
-	"	b	9f //izamax_kernel_L999			\n"
+	"	bne	.Lizamax_kernel_F10			\n"
+	"	b	.Lizamax_kernel_L999			\n"
 
-	"5: //izamax_kernel_S_BEGIN:				\n"
+	".Lizamax_kernel_S_BEGIN:				\n"
 	"	"INIT"						\n"
 	"	subs	"N", "N", #1				\n"
-	"	ble	9f //izamax_kernel_L999			\n"
+	"	ble	.Lizamax_kernel_L999			\n"
 	"	asr	"J", "N", #2				\n"
 	"	cmp	"J", xzr				\n"
-	"	ble	7f //izamax_kernel_S1			\n"
+	"	ble	.Lizamax_kernel_S1			\n"
 
-	"6: //izamax_kernel_S4:					\n"
+	".Lizamax_kernel_S4:					\n"
 	"	"KERNEL_S1"					\n"
 	"	"KERNEL_S1"					\n"
 	"	"KERNEL_S1"					\n"
 	"	"KERNEL_S1"					\n"
 	"	subs	"J", "J", #1				\n"
-	"	bne	6b //izamax_kernel_S4			\n"
+	"	bne	.Lizamax_kernel_S4			\n"
 
-	"7: //izamax_kernel_S1:					\n"
+	".Lizamax_kernel_S1:					\n"
 	"	ands	"J", "N", #3				\n"
-	"	ble	9f //izamax_kernel_L999			\n"
+	"	ble	.Lizamax_kernel_L999			\n"
 
-	"8: //izamax_kernel_S10:				\n"
+	".Lizamax_kernel_S10:					\n"
 	"	"KERNEL_S1"					\n"
 	"	subs	"J", "J", #1				\n"
-	"	bne	8b //izamax_kernel_S10			\n"
+	"	bne	.Lizamax_kernel_S10			\n"
 
-	"9: //izamax_kernel_L999:				\n"
+	".Lizamax_kernel_L999:					\n"
 	"	mov	x0, "INDEX"				\n"
-	"	b	11f //izamax_kernel_DONE		\n"
+	"	b	.Lizamax_kernel_DONE			\n"
 
-	"10: //izamax_kernel_zero:				\n"
+	".Lizamax_kernel_zero:					\n"
 	"	mov	x0, xzr					\n"
 
-	"11: //izamax_kernel_DONE:				\n"
+	".Lizamax_kernel_DONE:					\n"
 	"	mov	%[INDEX_], "INDEX"			\n"
 
 	: [INDEX_] "=r" (index)		//%0
@@ -330,10 +330,13 @@ BLASLONG CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 	BLASLONG max_index = 0;
 
 #if defined(SMP)
-	if (inc_x == 0 || n <= 10000)
+	nthreads = num_cpu_avail(1);
+
+	if (inc_x == 0)
 		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
+
+	if (n <= 10000)
+		nthreads = 1;
 
 	if (nthreads == 1) {
 		max_index = izamax_compute(n, x, inc_x);

@@ -59,11 +59,6 @@
 
 	PROFCODE
 
-#ifdef WINDOWS_ABI
-	emms
-#endif
-
-
 #define N	%ebx
 #define X	%esi
 #define INCX	%ecx

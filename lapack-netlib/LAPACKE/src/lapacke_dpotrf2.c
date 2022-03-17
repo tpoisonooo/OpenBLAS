@@ -41,11 +41,9 @@ lapack_int LAPACKE_dpotrf2( int matrix_layout, char uplo, lapack_int n, double* 
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dpo_nancheck( matrix_layout, uplo, n, a, lda ) ) {
-            return -4;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_dpo_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        return -4;
     }
 #endif
     return LAPACKE_dpotrf2_work( matrix_layout, uplo, n, a, lda );

@@ -3,12 +3,33 @@
 #  The test files are organized as follows:
 #
 #     AEIGTST -- Auxiliary test routines used in all precisions
-#     SCIGTST -- Auxiliary test routines used in single precision
-#     DZIGTST -- Auxiliary test routines used in double precision
+#     SCIGTST -- Auxiliary test routines used in REAL and COMPLEX
+#     DZIGTST -- Auxiliary test routines used in DOUBLE PRECISION and
+#                COMPLEX*16
 #     SEIGTST -- Single precision real test routines
 #     CEIGTST -- Single precision complex test routines
 #     DEIGTST -- Double precision real test routines
 #     ZEIGTST -- Double precision complex test routines
+#
+#  Test programs can be generated for all or some of the four different
+#  precisions.  Enter make followed by one or more of the data types
+#  desired.  Some examples:
+#       make single
+#       make single complex
+#       make single double complex complex16
+#  Alternatively, the command
+#       make
+#  without any arguments creates all four test programs.
+#  The executable files are called
+#       xeigtsts, xeigtstd, xeigtstc, and xeigtstz
+#  and are created in the next higher directory level.
+#
+#  To remove the object files after the executable files have been
+#  created, enter
+#       make clean
+#  On some systems, you can force the source files to be recompiled by
+#  entering (for example)
+#       make single FRC=FRC
 #
 ########################################################################
 
@@ -25,7 +46,7 @@ set(AEIGTST
 set(SCIGTST slafts.f slahd2.f slasum.f slatb9.f sstech.f sstect.f
    ssvdch.f ssvdct.f ssxt1.f)
 
-set(SEIGTST schkee.F
+set(SEIGTST schkee.f
    sbdt01.f sbdt02.f sbdt03.f sbdt04.f sbdt05.f
    schkbb.f schkbd.f schkbk.f schkbl.f schkec.f
    schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schkst2stg.f schksb2stg.f
@@ -42,7 +63,7 @@ set(SEIGTST schkee.F
    sort03.f ssbt21.f ssgt01.f sslect.f sspt21.f sstt21.f
    sstt22.f ssyt21.f ssyt22.f)
 
-set(CEIGTST cchkee.F
+set(CEIGTST cchkee.f
    cbdt01.f cbdt02.f cbdt03.f cbdt05.f
    cchkbb.f cchkbd.f cchkbk.f cchkbl.f cchkec.f
    cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f cchkst2stg.f cchkhb2stg.f
@@ -62,7 +83,7 @@ set(CEIGTST cchkee.F
 set(DZIGTST dlafts.f dlahd2.f dlasum.f dlatb9.f dstech.f dstect.f
    dsvdch.f dsvdct.f dsxt1.f)
 
-set(DEIGTST dchkee.F
+set(DEIGTST dchkee.f
    dbdt01.f dbdt02.f dbdt03.f dbdt04.f dbdt05.f
    dchkbb.f dchkbd.f dchkbk.f dchkbl.f dchkec.f
    dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f dchkst2stg.f dchksb2stg.f
@@ -79,7 +100,7 @@ set(DEIGTST dchkee.F
    dort03.f dsbt21.f dsgt01.f dslect.f dspt21.f dstt21.f
    dstt22.f dsyt21.f dsyt22.f)
 
-set(ZEIGTST zchkee.F
+set(ZEIGTST zchkee.f
    zbdt01.f zbdt02.f zbdt03.f zbdt05.f
    zchkbb.f zchkbd.f zchkbk.f zchkbl.f zchkec.f
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f zchkst2stg.f zchkhb2stg.f
@@ -98,21 +119,25 @@ set(ZEIGTST zchkee.F
 
 macro(add_eig_executable name)
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} openblas${SUFFIX64_UNDERSCORE})
+  target_link_libraries(${name} tmglib ${LAPACK_LIBRARIES})
 endmacro()
 
 if(BUILD_SINGLE)
-add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
+add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST}
+  ${SECOND_SRC})
 endif()
 
 if(BUILD_COMPLEX)
-add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
+add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST}
+  ${SECOND_SRC})
 endif()
 
 if(BUILD_DOUBLE)
-add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
+add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST}
+  ${DSECOND_SRC})
 endif()
 
 if(BUILD_COMPLEX16)
-add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST})
+add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST}
+  ${DSECOND_SRC})
 endif()

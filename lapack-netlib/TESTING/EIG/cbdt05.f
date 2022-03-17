@@ -52,7 +52,6 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The m by n matrix A.
-*> \endverbatim
 *>
 *> \param[in] LDA
 *> \verbatim
@@ -158,8 +157,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SASUM, SCASUM, SLAMCH, CLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SCASUM, SLAMCH, CLANGE
+      REAL               SASUM, SLAMCH, CLANGE
+      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH, CLANGE
+      REAL               SCASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM

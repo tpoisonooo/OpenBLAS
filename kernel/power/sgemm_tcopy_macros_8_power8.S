@@ -38,11 +38,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Macros for N=4 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_4x8', `
-#else
 .macro COPY_4x8
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 	lxvw4x		vs33,	o16,	A0
@@ -72,21 +68,13 @@ define(`COPY_4x8', `
 	stxvw4x		vs38,	o32,	T1
 	stxvw4x		vs39,	o48,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=4 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_4x4', `
-#else
 .macro COPY_4x4
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 
@@ -106,21 +94,13 @@ define(`COPY_4x4', `
 
 	stxvw4x		vs35,	o48,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=4 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_4x2', `
-#else
 .macro COPY_4x2
-#endif
 
 	lxsspx		vs32,	o0,	A0
 	lxsspx		vs33,	o4,	A0
@@ -154,21 +134,13 @@ define(`COPY_4x2', `
 	stxsspx		vs38,	o0,	T1
 	stxsspx		vs39,	o4,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=4 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_4x1', `
-#else
 .macro COPY_4x1
-#endif
 
 	lxsspx		vs32,	o0,	A0
 
@@ -190,21 +162,13 @@ define(`COPY_4x1', `
 
 	stxsspx		vs35,	o4,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=2 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_2x8', `
-#else
 .macro COPY_2x8
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 	lxvw4x		vs33,	o16,	A0
@@ -220,21 +184,13 @@ define(`COPY_2x8', `
 	stxvw4x		vs34,	o32,	T1
 	stxvw4x		vs35,	o48,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=2 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_2x4', `
-#else
 .macro COPY_2x4
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 
@@ -246,21 +202,13 @@ define(`COPY_2x4', `
 
 	stxvw4x		vs33,	o16,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=2 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_2x2', `
-#else
 .macro COPY_2x2
-#endif
 
 	lxsspx		vs32,	o0,	A0
 	lxsspx		vs33,	o4,	A0
@@ -278,21 +226,13 @@ define(`COPY_2x2', `
 	stxsspx		vs34,	o0,	T1
 	stxsspx		vs35,	o4,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=2 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_2x1', `
-#else
 .macro COPY_2x1
-#endif
 
 	lxsspx		vs32,	o0,	A0
 
@@ -304,21 +244,13 @@ define(`COPY_2x1', `
 
 	stxsspx		vs33,	o4,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=1 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_1x8', `
-#else
 .macro COPY_1x8
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 	lxvw4x		vs33,	o16,	A0
@@ -328,21 +260,13 @@ define(`COPY_1x8', `
 	stxvw4x		vs32,	o0,	T1
 	stxvw4x		vs33,	o16,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=1 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_1x4', `
-#else
 .macro COPY_1x4
-#endif
 
 	lxvw4x		vs32,	o0,	A0
 
@@ -350,21 +274,13 @@ define(`COPY_1x4', `
 
 	stxvw4x		vs32,	o0,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=1 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_1x2', `
-#else
 .macro COPY_1x2
-#endif
 
 	lxsspx		vs32,	o0,	A0
 	lxsspx		vs33,	o4,	A0
@@ -374,21 +290,13 @@ define(`COPY_1x2', `
 	stxsspx		vs32,	o0,	T1
 	stxsspx		vs33,	o4,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 /**********************************************************************************************
 * Macros for N=1 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`COPY_1x1', `
-#else
 .macro COPY_1x1
-#endif
 
 	lxsspx		vs32,	o0,	A0
 
@@ -396,9 +304,5 @@ define(`COPY_1x1', `
 
 	stxsspx		vs32,	o0,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 

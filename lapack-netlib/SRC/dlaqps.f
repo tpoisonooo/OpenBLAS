@@ -127,7 +127,7 @@
 *> \param[in,out] AUXV
 *> \verbatim
 *>          AUXV is DOUBLE PRECISION array, dimension (NB)
-*>          Auxiliary vector.
+*>          Auxiliar vector.
 *> \endverbatim
 *>
 *> \param[in,out] F

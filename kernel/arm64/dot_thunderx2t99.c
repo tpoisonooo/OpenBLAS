@@ -199,7 +199,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	"	faddp	"DOTF", v0.2d			\n"
 #endif /* !defined(DSDOT) */
 
-#else /* !defined(DOUBLE) */
+#else /* !defined(DOUBLE) */ 
 #define KERNEL_F1						\
 	"	ldr	"TMPX", ["X"]			\n"	\
 	"	ldr	"TMPY", ["Y"]			\n"	\
@@ -291,61 +291,61 @@ static RETURN_TYPE dot_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, B
 	"	fmov	d6, xzr				\n"
 	"	fmov	d7, xzr				\n"
 	"	cmp	"N", xzr			\n"
-	"	ble	9f //dot_kernel_L999		\n"
+	"	ble	.Ldot_kernel_L999		\n"
 	"	cmp	"INC_X", #1			\n"
-	"	bne	5f //dot_kernel_S_BEGIN		\n"
+	"	bne	.Ldot_kernel_S_BEGIN		\n"
 	"	cmp	"INC_Y", #1			\n"
-	"	bne	5f //dot_kernel_S_BEGIN		\n"
+	"	bne	.Ldot_kernel_S_BEGIN		\n"
 
-	"1: //dot_kernel_F_BEGIN:			\n"
+	".Ldot_kernel_F_BEGIN:				\n"
 	"	lsl	"INC_X", "INC_X", "INC_SHIFT"	\n"
 	"	lsl	"INC_Y", "INC_Y", "INC_SHIFT"	\n"
 	"	asr	"J", "N", #"N_DIV_SHIFT"	\n"
 	"	cmp	"J", xzr			\n"
-	"	beq	3f //dot_kernel_F1		\n"
+	"	beq	.Ldot_kernel_F1			\n"
 
 	"	.align 5				\n"
-	"2: //dot_kernel_F:				\n"
+	".Ldot_kernel_F:				\n"
 	"	"KERNEL_F"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	2b //dot_kernel_F		\n"
+	"	bne	.Ldot_kernel_F			\n"
 	"	"KERNEL_F_FINALIZE"			\n"
 
-	"3: //dot_kernel_F1:				\n"
+	".Ldot_kernel_F1:				\n"
 	"	ands	"J", "N", #"N_REM_MASK"		\n"
-	"	ble	9f //dot_kernel_L999		\n"
+	"	ble	.Ldot_kernel_L999		\n"
 
-	"4: //dot_kernel_F10:				\n"
+	".Ldot_kernel_F10:				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	4b //dot_kernel_F10		\n"
-	"	b	9f //dot_kernel_L999		\n"
+	"	bne	.Ldot_kernel_F10		\n"
+	"	b	.Ldot_kernel_L999		\n"
 
-	"5: //dot_kernel_S_BEGIN:			\n"
+	".Ldot_kernel_S_BEGIN:				\n"
 	"	lsl	"INC_X", "INC_X", "INC_SHIFT"	\n"
 	"	lsl	"INC_Y", "INC_Y", "INC_SHIFT"	\n"
 	"	asr	"J", "N", #2			\n"
 	"	cmp	"J", xzr			\n"
-	"	ble	7f //dot_kernel_S1		\n"
+	"	ble	.Ldot_kernel_S1			\n"
 
-	"6: //dot_kernel_S4:				\n"
+	".Ldot_kernel_S4:				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	6b //dot_kernel_S4		\n"
+	"	bne	.Ldot_kernel_S4			\n"
 
-	"7: //dot_kernel_S1:				\n"
+	".Ldot_kernel_S1:				\n"
 	"	ands	"J", "N", #3			\n"
-	"	ble	9f //dot_kernel_L999		\n"
+	"	ble	.Ldot_kernel_L999		\n"
 
-	"8: //dot_kernel_S10:				\n"
+	".Ldot_kernel_S10:				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	8b //dot_kernel_S10		\n"
+	"	bne	.Ldot_kernel_S10		\n"
 
-	"9: //dot_kernel_L999:				\n"
+	".Ldot_kernel_L999:				\n"
 	"	str	"DOTF", [%[DOT_]]		\n"
 
 	:
@@ -384,10 +384,13 @@ RETURN_TYPE CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y
 	RETURN_TYPE dot = 0.0;
 
 #if defined(SMP)
-	if (inc_x == 0 || inc_y == 0 || n <= 10000)
+	nthreads = num_cpu_avail(1);
+
+	if (inc_x == 0 || inc_y == 0)
 		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
+
+	if (n <= 10000)
+		nthreads = 1;
 
 	if (nthreads == 1) {
 		dot = dot_compute(n, x, inc_x, y, inc_y);

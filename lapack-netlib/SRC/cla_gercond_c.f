@@ -21,7 +21,7 @@
 *       REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV, C,
 *                                    CAPPLY, INFO, WORK, RWORK )
 *
-*       .. Scalar Arguments ..
+*       .. Scalar Aguments ..
 *       CHARACTER          TRANS
 *       LOGICAL            CAPPLY
 *       INTEGER            N, LDA, LDAF, INFO
@@ -114,13 +114,13 @@
 *>     i > 0:  The ith argument is invalid.
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (2*N).
 *>     Workspace.
 *> \endverbatim
 *>
-*> \param[out] RWORK
+*> \param[in] RWORK
 *> \verbatim
 *>          RWORK is REAL array, dimension (N).
 *>     Workspace.
@@ -147,7 +147,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     December 2016
 *
-*     .. Scalar Arguments ..
+*     .. Scalar Aguments ..
       CHARACTER          TRANS
       LOGICAL            CAPPLY
       INTEGER            N, LDA, LDAF, INFO

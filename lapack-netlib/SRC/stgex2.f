@@ -77,7 +77,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
+*>          A is REAL arrays, dimensions (LDA,N)
 *>          On entry, the matrix A in the pair (A, B).
 *>          On exit, the updated matrix A.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,N)
+*>          B is REAL arrays, dimensions (LDB,N)
 *>          On entry, the matrix B in the pair (A, B).
 *>          On exit, the updated matrix B.
 *> \endverbatim
@@ -103,7 +103,7 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>          Q is REAL array, dimension (LDQ,N)
+*>          Q is REAL array, dimension (LDZ,N)
 *>          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
 *>          On exit, the updated matrix Q.
 *>          Not referenced if WANTQ = .FALSE..
@@ -181,7 +181,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup realGEauxiliary
 *
@@ -221,10 +221,10 @@
       SUBROUTINE STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, J1, N1, N2, WORK, LWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTQ, WANTZ

@@ -77,7 +77,7 @@
 *     ..
 *     .. Local Arrays ..
       REAL               A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX*2)
+     $                   C( NMAX, NMAX ), TAU(NMAX)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SGEQR,
@@ -137,8 +137,6 @@
 *
       TAU(1)=1
       TAU(2)=1
-      TAU(3)=1
-      TAU(4)=1
       SRNAMT = 'SGEMQR'
       NB=1
       INFOT = 1

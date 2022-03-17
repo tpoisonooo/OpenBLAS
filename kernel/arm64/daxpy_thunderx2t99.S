@@ -98,56 +98,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	add	X, X, #128
 .endm
 
-/*
- * No need to do software prefetches if the vector fits
- * into L1 cache
- */
-.macro KERNEL_F16_L1CACHE
-	ldp	q4, q5, [X]
-	ldp	q16, q17, [Y]
-
-	ldp	q6, q7, [X, #32]
-	ldp	q18, q19, [Y, #32]
-
-	fmla	v16.2d, v4.2d, v0.d[0]
-	fmla	v17.2d, v5.2d, v0.d[0]
-
-	stp	q16, q17, [Y]
-
-	ldp	q20, q21, [X, #64]
-	ldp	q24, q25, [Y, #64]
-
-	fmla	v18.2d, v6.2d, v0.d[0]
-	fmla	v19.2d, v7.2d, v0.d[0]
-
-	stp	q18, q19, [Y, #32]
-
-	ldp	q22, q23, [X, #96]
-	ldp	q26, q27, [Y, #96]
-
-	fmla	v24.2d, v20.2d, v0.d[0]
-	fmla	v25.2d, v21.2d, v0.d[0]
-
-	stp	q24, q25, [Y, #64]
-
-	fmla	v26.2d, v22.2d, v0.d[0]
-	fmla	v27.2d, v23.2d, v0.d[0]
-
-	stp	q26, q27, [Y, #96]
-
-	add	Y, Y, #128
-	add	X, X, #128
-.endm
-
 .macro KERNEL_F32
 	KERNEL_F16 
 	KERNEL_F16 
-.endm
-
-
-.macro KERNEL_F32_L1CACHE
-	KERNEL_F16_L1CACHE
-	KERNEL_F16_L1CACHE
 .endm
 
 .macro INIT_S
@@ -169,65 +122,53 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	PROLOGUE
 
 	cmp	N, xzr
-	ble	.Ldaxpy_kernel_L999
+	ble	axpy_kernel_L999
 
 	fcmp	DA, #0.0
-	beq	.Ldaxpy_kernel_L999
+	beq	axpy_kernel_L999
 
 	cmp	INC_X, #1
-	bne	.Ldaxpy_kernel_S_BEGIN
+	bne	axpy_kernel_S_BEGIN
 	cmp	INC_Y, #1
-	bne	.Ldaxpy_kernel_S_BEGIN
+	bne	axpy_kernel_S_BEGIN
 
-.Ldaxpy_kernel_F_BEGIN:
+axpy_kernel_F_BEGIN:
 
 	asr	I, N, #5
 	cmp	I, xzr
-	beq	.Ldaxpy_kernel_F1
-
-	cmp	N, #2048
-	ble	.Ldaxpy_kernel_F32_L1CACHE
+	beq	axpy_kernel_F1
 
 	.align 5
-.Ldaxpy_kernel_F32:
+axpy_kernel_F32:
 
 	KERNEL_F32
 
 	subs	I, I, #1
-	bne	.Ldaxpy_kernel_F32
-	b	.Ldaxpy_kernel_F1
+	bne	axpy_kernel_F32
 
-	.align 5
-.Ldaxpy_kernel_F32_L1CACHE:
-
-	KERNEL_F32_L1CACHE
-
-	subs	I, I, #1
-	bne	.Ldaxpy_kernel_F32_L1CACHE
-
-.Ldaxpy_kernel_F1:
+axpy_kernel_F1:
 
 	ands	I, N, #31
-	ble	.Ldaxpy_kernel_L999
+	ble	axpy_kernel_L999
 
-.Ldaxpy_kernel_F10:
+axpy_kernel_F10:
 
 	KERNEL_F1
 
 	subs    I, I, #1
-        bne     .Ldaxpy_kernel_F10
+        bne     axpy_kernel_F10
 
-	b	.Ldaxpy_kernel_L999
+	b	axpy_kernel_L999
 
-.Ldaxpy_kernel_S_BEGIN:
+axpy_kernel_S_BEGIN:
 
 	INIT_S
 
 	asr	I, N, #2
 	cmp	I, xzr
-	ble	.Ldaxpy_kernel_S1
+	ble	axpy_kernel_S1
 
-.Ldaxpy_kernel_S4:
+axpy_kernel_S4:
 
 	KERNEL_S1
 	KERNEL_S1
@@ -235,21 +176,21 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	KERNEL_S1
 
 	subs	I, I, #1
-	bne	.Ldaxpy_kernel_S4
+	bne	axpy_kernel_S4
 
-.Ldaxpy_kernel_S1:
+axpy_kernel_S1:
 
 	ands	I, N, #3
-	ble	.Ldaxpy_kernel_L999
+	ble	axpy_kernel_L999
 
-.Ldaxpy_kernel_S10:
+axpy_kernel_S10:
 
 	KERNEL_S1
 
 	subs    I, I, #1
-        bne     .Ldaxpy_kernel_S10
+        bne     axpy_kernel_S10
 
-.Ldaxpy_kernel_L999:
+axpy_kernel_L999:
 
 	mov	w0, wzr
 	ret

@@ -65,9 +65,9 @@
 *>          DY1 is DOUBLE PRECISION
 *> \endverbatim
 *>
-*> \param[out] DPARAM
+*> \param[in,out] DPARAM
 *> \verbatim
-*>          DPARAM is DOUBLE PRECISION array, dimension (5)
+*>          DPARAM is DOUBLE PRECISION array, dimension 5
 *>     DPARAM(1)=DFLAG
 *>     DPARAM(2)=DH11
 *>     DPARAM(3)=DH21
@@ -83,17 +83,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION DD1,DD2,DX1,DY1

@@ -110,7 +110,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup double_lin
 *
@@ -118,10 +118,10 @@
       SUBROUTINE DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
      +                    D_WORK_DLANGE, D_WORK_DGEQRF, TAU )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, NN, NOUT
@@ -223,7 +223,7 @@
 *
                               IF ( IALPHA.EQ. 1) THEN
                                  ALPHA = ZERO
-                              ELSE IF ( IALPHA.EQ. 2) THEN
+                              ELSE IF ( IALPHA.EQ. 1) THEN
                                  ALPHA = ONE
                               ELSE
                                  ALPHA = DLARND( 2, ISEED )

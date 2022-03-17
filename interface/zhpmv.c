@@ -119,17 +119,11 @@ void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a,
 void CNAME(enum CBLAS_ORDER order,
 	   enum CBLAS_UPLO Uplo,
 	   blasint n,
-	   void *VALPHA,
-	   void  *va,
-	   void  *vx, blasint incx,
-	   void *VBETA,
-	   void  *vy, blasint incy){
-
-  FLOAT* ALPHA = (FLOAT*) VALPHA;
-  FLOAT* BETA = (FLOAT*) VBETA;
-  FLOAT* a = (FLOAT*) va;
-  FLOAT* x = (FLOAT*) vx;
-  FLOAT* y = (FLOAT*) vy;
+	   FLOAT *ALPHA,
+	   FLOAT  *a,
+	   FLOAT  *x, blasint incx,
+	   FLOAT *BETA,
+	   FLOAT  *y, blasint incy){
 
   FLOAT alpha_r	= ALPHA[0];
   FLOAT alpha_i	= ALPHA[1];
@@ -180,7 +174,7 @@ void CNAME(enum CBLAS_ORDER order,
 
   if (n == 0) return;
 
-  if ((beta_r != ONE) || (beta_i != ZERO)) SCAL_K(n, 0, 0, beta_r, beta_i, y, blasabs(incy), NULL, 0, NULL, 0);
+  if ((beta_r != ONE) || (beta_i != ZERO)) SCAL_K(n, 0, 0, beta_r, beta_i, y, abs(incy), NULL, 0, NULL, 0);
 
   if ((alpha_r == ZERO) && (alpha_i == ZERO)) return;
 

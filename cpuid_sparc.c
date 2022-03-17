@@ -49,7 +49,6 @@ void get_subdirname(void){
 }
 
 void get_cpuconfig(void){
-  printf("#define SPARC\n");
   printf("#define V9\n");
   printf("#define DTB_DEFAULT_ENTRIES 32\n");
 }
@@ -57,8 +56,3 @@ void get_cpuconfig(void){
 void get_libname(void){
   printf("v9\n");
 }
-
-char *get_corename(void){
-  return "sparc";
-}
-

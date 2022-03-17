@@ -155,10 +155,7 @@ void NAME(char *UPLO, char *TRANS, char *DIAG,
 
 void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
 	   enum CBLAS_TRANSPOSE TransA, enum CBLAS_DIAG Diag,
-	   blasint n, blasint k, void  *va, blasint lda, void  *vx, blasint incx) {
-
-  FLOAT *a = (FLOAT*) va;
-  FLOAT *x = (FLOAT*) vx;
+	   blasint n, blasint k, FLOAT  *a, blasint lda, FLOAT  *x, blasint incx) {
 
   int trans, uplo, unit;
   blasint info;

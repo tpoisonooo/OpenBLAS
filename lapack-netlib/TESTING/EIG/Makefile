@@ -1,10 +1,13 @@
+include ../../make.inc
+
 ########################################################################
 #  This is the makefile for the eigenvalue test program from LAPACK.
 #  The test files are organized as follows:
 #
 #     AEIGTST -- Auxiliary test routines used in all precisions
-#     SCIGTST -- Auxiliary test routines used in single precision
-#     DZIGTST -- Auxiliary test routines used in double precision
+#     SCIGTST -- Auxiliary test routines used in REAL and COMPLEX
+#     DZIGTST -- Auxiliary test routines used in DOUBLE PRECISION and
+#                COMPLEX*16
 #     SEIGTST -- Single precision real test routines
 #     CEIGTST -- Single precision complex test routines
 #     DEIGTST -- Double precision real test routines
@@ -21,18 +24,16 @@
 #  without any arguments creates all four test programs.
 #  The executable files are called
 #       xeigtsts, xeigtstd, xeigtstc, and xeigtstz
+#  and are created in the next higher directory level.
 #
 #  To remove the object files after the executable files have been
 #  created, enter
-#       make cleanobj
+#       make clean
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
 #
 ########################################################################
-
-TOPSRCDIR = ../..
-include $(TOPSRCDIR)/make.inc
 
 AEIGTST = \
    alahdg.o \
@@ -118,26 +119,32 @@ ZEIGTST = zchkee.o \
    zsgt01.o zslect.o \
    zstt21.o zstt22.o zunt01.o zunt03.o
 
-.PHONY: all
 all: single complex double complex16
 
-.PHONY: single complex double complex16
-single: xeigtsts
-complex: xeigtstc
-double: xeigtstd
-complex16: xeigtstz
+single: ../xeigtsts
+complex: ../xeigtstc
+double: ../xeigtstd
+complex16: ../xeigtstz
 
-xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) ../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(FFLAGS) $(LDFLAGS) -o $@ $^
+../xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) -o $@ \
+	$(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
+	../../$(LAPACKLIB) $(BLASLIB)
 
-xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) ../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(FFLAGS) $(LDFLAGS) -o $@ $^
+../xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) -o $@ \
+	$(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
+	../../$(LAPACKLIB) $(BLASLIB)
 
-xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) ../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(FFLAGS) $(LDFLAGS) -o $@ $^
+../xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) -o $@ \
+	$(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
+	../../$(LAPACKLIB) $(BLASLIB)
 
-xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) ../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(FFLAGS) $(LDFLAGS) -o $@ $^
+../xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) -o $@ \
+	$(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
+	../../$(LAPACKLIB) $(BLASLIB)
 
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
@@ -150,18 +157,17 @@ $(ZEIGTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
-.PHONY: clean cleanobj cleanexe
-clean: cleanobj cleanexe
-cleanobj:
+clean:
 	rm -f *.o
-cleanexe:
-	rm -f xeigtst*
 
-schkee.o: schkee.F
-	$(FC) $(FFLAGS_DRV) -c -o $@ $<
-dchkee.o: dchkee.F
-	$(FC) $(FFLAGS_DRV) -c -o $@ $<
-cchkee.o: cchkee.F
-	$(FC) $(FFLAGS_DRV) -c -o $@ $<
-zchkee.o: zchkee.F
-	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+schkee.o: schkee.f
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+dchkee.o: dchkee.f
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+cchkee.o: cchkee.f
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+zchkee.o: zchkee.f
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+
+.f.o:
+	$(FORTRAN) $(OPTS) -c -o $@ $<

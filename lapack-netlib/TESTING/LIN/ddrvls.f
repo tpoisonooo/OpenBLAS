@@ -183,7 +183,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup double_lin
 *
@@ -192,10 +192,10 @@
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, NOUT )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -233,8 +233,8 @@
       DOUBLE PRECISION   EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWQ( 1 )
-      DOUBLE PRECISION   RESULT( NTESTS ), WQ( 1 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWORKQUERY
+      DOUBLE PRECISION   RESULT( NTESTS ), WORKQUERY
 *     ..
 *     .. Allocatable Arrays ..
       DOUBLE PRECISION, ALLOCATABLE :: WORK (:)
@@ -321,76 +321,43 @@
       M = MMAX
       N = NMAX
       NRHS = NSMAX
+      LDA = MAX( 1, M )
+      LDB = MAX( 1, M, N )
       MNMIN = MAX( MIN( M, N ), 1 )
 *
 *     Compute workspace needed for routines
 *     DQRT14, DQRT17 (two side cases), DQRT15 and DQRT12
 *
-      LWORK = MAX( 1, ( M+N )*NRHS,
+      LWORK = MAX( ( M+N )*NRHS,
      $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
      $      MAX( M+MNMIN, NRHS*MNMIN,2*N+M ),
      $      MAX( M*N+4*MNMIN+MAX(M,N), M*N+2*MNMIN+4*N ) )
-      LIWORK = 1
 *
-*     Iterate through all test cases and compute necessary workspace
-*     sizes for ?GELS, ?GETSLS, ?GELSY, ?GELSS and ?GELSD routines.
-*
-      DO IM = 1, NM
-         M = MVAL( IM )
-         LDA = MAX( 1, M )
-         DO IN = 1, NN
-            N = NVAL( IN )
-            MNMIN = MAX(MIN( M, N ),1)
-            LDB = MAX( 1, M, N )
-            DO INS = 1, NNS
-               NRHS = NSVAL( INS )
-               DO IRANK = 1, 2
-                  DO ISCALE = 1, 3
-                     ITYPE = ( IRANK-1 )*3 + ISCALE
-                     IF( DOTYPE( ITYPE ) ) THEN
-                        IF( IRANK.EQ.1 ) THEN
-                           DO ITRAN = 1, 2
-                              IF( ITRAN.EQ.1 ) THEN
-                                 TRANS = 'N'
-                              ELSE
-                                 TRANS = 'T'
-                              END IF
-*
-*                             Compute workspace needed for DGELS
-                              CALL DGELS( TRANS, M, N, NRHS, A, LDA,
-     $                                    B, LDB, WQ, -1, INFO )
-                              LWORK_DGELS = INT ( WQ ( 1 ) )
-*                             Compute workspace needed for DGETSLS
-                              CALL DGETSLS( TRANS, M, N, NRHS, A, LDA,
-     $                                      B, LDB, WQ, -1, INFO )
-                              LWORK_DGETSLS = INT( WQ ( 1 ) )
-                           ENDDO
-                        END IF
-*                       Compute workspace needed for DGELSY
-                        CALL DGELSY( M, N, NRHS, A, LDA, B, LDB, IWQ,
-     $                               RCOND, CRANK, WQ, -1, INFO )
-                        LWORK_DGELSY = INT( WQ ( 1 ) )
-*                       Compute workspace needed for DGELSS
-                        CALL DGELSS( M, N, NRHS, A, LDA, B, LDB, S,
-     $                               RCOND, CRANK, WQ, -1 , INFO )
-                        LWORK_DGELSS = INT( WQ ( 1 ) )
-*                       Compute workspace needed for DGELSD
-                        CALL DGELSD( M, N, NRHS, A, LDA, B, LDB, S,
-     $                               RCOND, CRANK, WQ, -1, IWQ, INFO )
-                        LWORK_DGELSD = INT( WQ ( 1 ) )
-*                       Compute LIWORK workspace needed for DGELSY and DGELSD
-                        LIWORK = MAX( LIWORK, N, IWQ( 1 ) )
-*                       Compute LWORK workspace needed for all functions
-                        LWORK = MAX( LWORK, LWORK_DGELS, LWORK_DGETSLS,
-     $                               LWORK_DGELSY, LWORK_DGELSS,
-     $                               LWORK_DGELSD )
-                     END IF
-                  ENDDO
-               ENDDO
-            ENDDO
-         ENDDO
-      ENDDO
-*
+*     Compute workspace needed for DGELS
+      CALL DGELS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $            WORKQUERY, -1, INFO )
+      LWORK_DGELS = INT ( WORKQUERY )
+*     Compute workspace needed for DGETSLS
+      CALL DGETSLS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $              WORKQUERY, -1, INFO )
+      LWORK_DGETSLS = INT( WORKQUERY )
+*     Compute workspace needed for DGELSY
+      CALL DGELSY( M, N, NRHS, A, LDA, B, LDB, IWORKQUERY,
+     $             RCOND, CRANK, WORKQUERY, -1, INFO )
+      LWORK_DGELSY = INT( WORKQUERY )
+*     Compute workspace needed for DGELSS
+      CALL DGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1 , INFO )
+      LWORK_DGELSS = INT( WORKQUERY )
+*     Compute workspace needed for DGELSD
+      CALL DGELSD( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1, IWORKQUERY, INFO )
+      LWORK_DGELSD = INT( WORKQUERY )
+*     Compute LIWORK workspace needed for DGELSY and DGELSD
+      LIWORK = MAX( 1, N, IWORKQUERY )
+*     Compute LWORK workspace needed for all functions
+      LWORK = MAX( 1, LWORK, LWORK_DGELS, LWORK_DGETSLS, LWORK_DGELSY,
+     $             LWORK_DGELSS, LWORK_DGELSD )
       LWLSY = LWORK
 *
       ALLOCATE( WORK( LWORK ) )

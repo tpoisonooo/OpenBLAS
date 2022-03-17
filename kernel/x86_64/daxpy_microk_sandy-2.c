@@ -50,7 +50,7 @@ static void daxpy_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"subq	        $16, %1			             \n\t"		
 	"jz		2f		             \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            \n\t"
 
 	"vmulpd		%%ymm4, %%ymm0, %%ymm4		\n\t"
@@ -99,10 +99,10 @@ static void daxpy_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 
 	"vzeroupper					     \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (alpha)   // 4

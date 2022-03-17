@@ -103,7 +103,7 @@
 *
 *> \date December 2016
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup complex_eig
 *
 *  =====================================================================
       SUBROUTINE CLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )

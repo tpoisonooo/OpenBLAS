@@ -138,8 +138,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro KERNEL_F8X1
 
-	vldmia.f64	XO! ,  { d4 }
-	vldmia.f64	AO1 ,  { d8 - d15 }
+	fldmiad	XO! ,  { d4 }
+	fldmiad	AO1 ,  { d8 - d15 }
 
 	vmla.f64	d24 , d4 , d8
 	pld	[ AO2 , #A_PRE ]
@@ -158,7 +158,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_F8
 
-	vldmia.f64	YO,  { d16 - d23 }
+	fldmiad	YO,  { d16 - d23 }
 
 	vmla.f64	d16, d0, d24
 	vmla.f64	d17, d0, d25
@@ -169,7 +169,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	vmla.f64	d22, d0, d30
 	vmla.f64	d23, d0, d31
 
-	vstmia.f64	YO!, { d16 - d23 }
+	fstmiad	YO!, { d16 - d23 }
 
 .endm
 
@@ -184,8 +184,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro KERNEL_F1X1
 
-	vldmia.f64	XO! ,  { d4 }
-	vldmia.f64	AO1 ,  { d8 }
+	fldmiad	XO! ,  { d4 }
+	fldmiad	AO1 ,  { d8 }
 	vmla.f64	d24 , d4 , d8
 	add		AO1, AO1, LDA
 
@@ -193,9 +193,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_F1
 
-	vldmia.f64	YO,  { d16 }
+	fldmiad	YO,  { d16 }
 	vmla.f64	d16, d0, d24
-	vstmia.f64	YO!, { d16 }
+	fstmiad	YO!, { d16 }
 
 .endm
 
@@ -234,8 +234,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 	pld	[ AO2 , #A_PRE ]
 	pld	[ AO2 , #A_PRE+32 ]
-	vldmia.f64	XO ,  { d4 }
-	vldmia.f64	AO1 ,  { d8 - d15 }
+	fldmiad	XO ,  { d4 }
+	fldmiad	AO1 ,  { d8 - d15 }
 
 	vmla.f64	d24 , d4 , d8
 	vmla.f64	d25 , d4 , d9
@@ -253,44 +253,44 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_S8
 
-	vldmia.f64	YO,  { d16 }
+	fldmiad	YO,  { d16 }
 	vmla.f64	d16, d0, d24
-	vstmia.f64	YO,  { d16 }
+	fstmiad	YO,  { d16 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d17 }
+	fldmiad	YO,  { d17 }
 	vmla.f64	d17, d0, d25
-	vstmia.f64	YO,  { d17 }
+	fstmiad	YO,  { d17 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d18 }
+	fldmiad	YO,  { d18 }
 	vmla.f64	d18, d0, d26
-	vstmia.f64	YO,  { d18 }
+	fstmiad	YO,  { d18 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d19 }
+	fldmiad	YO,  { d19 }
 	vmla.f64	d19, d0, d27
-	vstmia.f64	YO,  { d19 }
+	fstmiad	YO,  { d19 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d20 }
+	fldmiad	YO,  { d20 }
 	vmla.f64	d20, d0, d28
-	vstmia.f64	YO,  { d20 }
+	fstmiad	YO,  { d20 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d21 }
+	fldmiad	YO,  { d21 }
 	vmla.f64	d21, d0, d29
-	vstmia.f64	YO,  { d21 }
+	fstmiad	YO,  { d21 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d22 }
+	fldmiad	YO,  { d22 }
 	vmla.f64	d22, d0, d30
-	vstmia.f64	YO,  { d22 }
+	fstmiad	YO,  { d22 }
 	add	YO, YO, INC_Y
 
-	vldmia.f64	YO,  { d23 }
+	fldmiad	YO,  { d23 }
 	vmla.f64	d23, d0, d31
-	vstmia.f64	YO,  { d23 }
+	fstmiad	YO,  { d23 }
 	add	YO, YO, INC_Y
 
 .endm
@@ -306,8 +306,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro KERNEL_S1X1
 
-	vldmia.f64	XO  ,  { d4 }
-	vldmia.f64	AO1 ,  { d8 }
+	fldmiad	XO  ,  { d4 }
+	fldmiad	AO1 ,  { d8 }
 	vmla.f64	d24 , d4 , d8
 	add		AO1, AO1, LDA
 	add	XO, XO, INC_X
@@ -316,9 +316,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_S1
 
-	vldmia.f64	YO,  { d16 }
+	fldmiad	YO,  { d16 }
 	vmla.f64	d16, d0, d24
-	vstmia.f64	YO,  { d16 }
+	fstmiad	YO,  { d16 }
 	add	YO, YO, INC_Y
 
 .endm
@@ -361,8 +361,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .macro KERNEL_F8X1
 
 	pld	[ AO2 , #A_PRE ]
-	vldmia.f32	XO! ,  { s4 }
-	vldmia.f32	AO1 ,  { s8 - s15 }
+	fldmias	XO! ,  { s4 }
+	fldmias	AO1 ,  { s8 - s15 }
 
 	vmla.f32	s24 , s4 , s8
 	vmla.f32	s25 , s4 , s9
@@ -379,7 +379,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_F8
 
-	vldmia.f32	YO,  { s16 - s23 }
+	fldmias	YO,  { s16 - s23 }
 
 	vmla.f32	s16, s0, s24
 	vmla.f32	s17, s0, s25
@@ -390,7 +390,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	vmla.f32	s22, s0, s30
 	vmla.f32	s23, s0, s31
 
-	vstmia.f32	YO!, { s16 - s23 }
+	fstmias	YO!, { s16 - s23 }
 
 .endm
 
@@ -405,8 +405,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro KERNEL_F1X1
 
-	vldmia.f32	XO! ,  { s4 }
-	vldmia.f32	AO1 ,  { s8 }
+	fldmias	XO! ,  { s4 }
+	fldmias	AO1 ,  { s8 }
 	vmla.f32	s24 , s4 , s8
 	add		AO1, AO1, LDA
 
@@ -414,9 +414,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_F1
 
-	vldmia.f32	YO,  { s16 }
+	fldmias	YO,  { s16 }
 	vmla.f32	s16, s0, s24
-	vstmia.f32	YO!, { s16 }
+	fstmias	YO!, { s16 }
 
 .endm
 
@@ -454,8 +454,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .macro KERNEL_S8X1
 
 	pld	[ AO2 , #A_PRE ]
-	vldmia.f32	XO ,  { s4 }
-	vldmia.f32	AO1 ,  { s8 - s15 }
+	fldmias	XO ,  { s4 }
+	fldmias	AO1 ,  { s8 - s15 }
 
 	vmla.f32	s24 , s4 , s8
 	vmla.f32	s25 , s4 , s9
@@ -473,44 +473,44 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_S8
 
-	vldmia.f32	YO,  { s16 }
+	fldmias	YO,  { s16 }
 	vmla.f32	s16, s0, s24
-	vstmia.f32	YO,  { s16 }
+	fstmias	YO,  { s16 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s17 }
+	fldmias	YO,  { s17 }
 	vmla.f32	s17, s0, s25
-	vstmia.f32	YO,  { s17 }
+	fstmias	YO,  { s17 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s18 }
+	fldmias	YO,  { s18 }
 	vmla.f32	s18, s0, s26
-	vstmia.f32	YO,  { s18 }
+	fstmias	YO,  { s18 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s19 }
+	fldmias	YO,  { s19 }
 	vmla.f32	s19, s0, s27
-	vstmia.f32	YO,  { s19 }
+	fstmias	YO,  { s19 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s20 }
+	fldmias	YO,  { s20 }
 	vmla.f32	s20, s0, s28
-	vstmia.f32	YO,  { s20 }
+	fstmias	YO,  { s20 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s21 }
+	fldmias	YO,  { s21 }
 	vmla.f32	s21, s0, s29
-	vstmia.f32	YO,  { s21 }
+	fstmias	YO,  { s21 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s22 }
+	fldmias	YO,  { s22 }
 	vmla.f32	s22, s0, s30
-	vstmia.f32	YO,  { s22 }
+	fstmias	YO,  { s22 }
 	add	YO, YO, INC_Y
 
-	vldmia.f32	YO,  { s23 }
+	fldmias	YO,  { s23 }
 	vmla.f32	s23, s0, s31
-	vstmia.f32	YO,  { s23 }
+	fstmias	YO,  { s23 }
 	add	YO, YO, INC_Y
 
 .endm
@@ -526,8 +526,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro KERNEL_S1X1
 
-	vldmia.f32	XO  ,  { s4 }
-	vldmia.f32	AO1 ,  { s8 }
+	fldmias	XO  ,  { s4 }
+	fldmias	AO1 ,  { s8 }
 	vmla.f32	s24 , s4 , s8
 	add		AO1, AO1, LDA
 	add	XO, XO, INC_X
@@ -536,9 +536,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 .macro	SAVE_S1
 
-	vldmia.f32	YO,  { s16 }
+	fldmias	YO,  { s16 }
 	vmla.f32	s16, s0, s24
-	vstmia.f32	YO,  { s16 }
+	fstmias	YO,  { s16 }
 	add	YO, YO, INC_Y
 
 .endm

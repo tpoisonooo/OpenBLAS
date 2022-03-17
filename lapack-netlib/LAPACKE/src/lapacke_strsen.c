@@ -50,16 +50,14 @@ lapack_int LAPACKE_strsen( int matrix_layout, char job, char compq,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_lsame( compq, 'v' ) ) {
-            if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
-                return -8;
-            }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_lsame( compq, 'v' ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
+            return -8;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
-            return -6;
-        }
+    }
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
+        return -6;
     }
 #endif
     /* Query optimal working array(s) size */
@@ -69,7 +67,7 @@ lapack_int LAPACKE_strsen( int matrix_layout, char job, char compq,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
     if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'v' ) ) {

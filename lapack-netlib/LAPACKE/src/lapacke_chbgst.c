@@ -47,14 +47,12 @@ lapack_int LAPACKE_chbgst( int matrix_layout, char vect, char uplo, lapack_int n
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
-            return -7;
-        }
-        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
-            return -9;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
+        return -7;
+    }
+    if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
+        return -9;
     }
 #endif
     /* Allocate memory for working array(s) */

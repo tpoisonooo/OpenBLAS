@@ -50,14 +50,12 @@ lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
-            return -6;
-        }
-        if( LAPACKE_s_nancheck( n - 1, e, 1 ) ) {
-            return -7;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+        return -6;
+    }
+    if( LAPACKE_s_nancheck( n - 1, e, 1 ) ) {
+        return -7;
     }
 #endif
     /* Allocate memory for work arrays */
@@ -73,8 +71,8 @@ lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
     }
     /* Call middle-level interface */
     info = LAPACKE_sbdsvdx_work( matrix_layout, uplo, jobz,  range,
-                                 n, d, e, vl, vu, il, iu, ns, s, z,
-                                 ldz, work, iwork);
+    				n, d, e, vl, vu, il, iu, ns, s, z,
+                                ldz, work, iwork);
     /* Backup significant data from working array(s) */
     for( i=0; i<12*n-1; i++ ) {
         superb[i] = iwork[i+1];

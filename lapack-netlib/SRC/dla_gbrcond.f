@@ -141,13 +141,13 @@
 *>     i > 0:  The ith argument is invalid.
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (5*N).
 *>     Workspace.
 *> \endverbatim
 *>
-*> \param[out] IWORK
+*> \param[in] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, dimension (N).
 *>     Workspace.

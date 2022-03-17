@@ -307,7 +307,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup double_eig
 *
@@ -316,10 +316,10 @@
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
@@ -363,7 +363,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLASET, DLASUM, DLATMR, DLATMS, DSBT21,
-     $                   DSBTRD, XERBLA, DSYTRD_SB2ST, DSTEQR
+     $                   DSBTRD, XERBLA, DSBTRD_SB2ST, DSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -670,8 +670,8 @@
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD.
 *            
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
                CALL DLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
@@ -743,8 +743,8 @@
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD. 
 *           
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
                CALL DLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH

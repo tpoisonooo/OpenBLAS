@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function chesv_rk
 * Author: Intel Corporation
-* Generated June 2017
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -48,14 +48,15 @@ lapack_int LAPACKE_chesv_rk( int matrix_layout, char uplo, lapack_int n,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_che_nancheck( matrix_layout, uplo, n, a, lda ) ) {
-            return -5;
-        }
-        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
-            return -10;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_che_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        return -5;
+    }
+    if( LAPACKE_c_nancheck( n, e, 1) ) {
+        return -7;
+    }
+    if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        return -10;
     }
 #endif
     /* Query optimal working array(s) size */

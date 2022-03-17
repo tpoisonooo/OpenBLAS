@@ -48,12 +48,8 @@ void NAME(blasint *N, FLOAT *ALPHA, FLOAT *x, blasint *INCX, FLOAT *BETA, FLOAT 
 
 #else
 
-void CNAME(blasint n, void *VALPHA, void *vx, blasint incx, void *VBETA, void *vy, blasint incy)
+void CNAME(blasint n, FLOAT *ALPHA, FLOAT *x, blasint incx, FLOAT *BETA, FLOAT *y, blasint incy)
 {
-  FLOAT* ALPHA = (FLOAT*) VALPHA;
-  FLOAT* BETA = (FLOAT*) VBETA;
-  FLOAT* x = (FLOAT*) vx;
-  FLOAT* y = (FLOAT*) vy;
 
 #endif
 

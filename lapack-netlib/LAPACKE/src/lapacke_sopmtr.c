@@ -47,18 +47,16 @@ lapack_int LAPACKE_sopmtr( int matrix_layout, char side, char uplo, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        r = LAPACKE_lsame( side, 'l' ) ? m : n;
-        if( LAPACKE_ssp_nancheck( r, ap ) ) {
-            return -7;
-        }
-        if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
-            return -9;
-        }
-        if( LAPACKE_s_nancheck( r-1, tau, 1 ) ) {
-            return -8;
-        }
+    /* Optionally check input matrices for NaNs */
+    r = LAPACKE_lsame( side, 'l' ) ? m : n;
+    if( LAPACKE_ssp_nancheck( r, ap ) ) {
+        return -7;
+    }
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        return -9;
+    }
+    if( LAPACKE_s_nancheck( m-1, tau, 1 ) ) {
+        return -8;
     }
 #endif
     /* Additional scalars initializations for work arrays */

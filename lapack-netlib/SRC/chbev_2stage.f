@@ -171,7 +171,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup complexOTHEReigen
 *
@@ -213,10 +213,10 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -242,13 +242,13 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
+      INTEGER            ILAENV
       REAL               SLAMCH, CLANHB
-      EXTERNAL           LSAME, SLAMCH, CLANHB, ILAENV2STAGE
+      EXTERNAL           LSAME, SLAMCH, CLANHB, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSTERF, XERBLA, CLASCL, CSTEQR,
-     $                   CHETRD_2STAGE, CHETRD_HB2ST
+     $                   CHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, SQRT
@@ -281,12 +281,9 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = ILAENV2STAGE( 2, 'CHETRD_HB2ST', JOBZ,
-     $                            N, KD, -1, -1 )
-            LHTRD = ILAENV2STAGE( 3, 'CHETRD_HB2ST', JOBZ,
-     $                            N, KD, IB, -1 )
-            LWTRD = ILAENV2STAGE( 4, 'CHETRD_HB2ST', JOBZ,
-     $                            N, KD, IB, -1 )
+            IB    = ILAENV( 18, 'CHETRD_HB2ST', JOBZ, N, KD, -1, -1 )
+            LHTRD = ILAENV( 19, 'CHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
+            LWTRD = ILAENV( 20, 'CHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
             LWMIN = LHTRD + LWTRD
             WORK( 1 )  = LWMIN
          ENDIF

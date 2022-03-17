@@ -407,7 +407,7 @@
 *        Matrix all zero. Return zero solution.
 *
          CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
-         CALL SLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
+         CALL SLASET( 'F', MINMN, 1, ZERO, ZERO, S, 1 )
          RANK = 0
          GO TO 70
       END IF

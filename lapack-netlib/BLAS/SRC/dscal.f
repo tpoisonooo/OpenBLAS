@@ -25,33 +25,7 @@
 *> \verbatim
 *>
 *>    DSCAL scales a vector by a constant.
-*>    uses unrolled loops for increment equal to 1.
-*> \endverbatim
-*
-*  Arguments:
-*  ==========
-*
-*> \param[in] N
-*> \verbatim
-*>          N is INTEGER
-*>         number of elements in input vector(s)
-*> \endverbatim
-*>
-*> \param[in] DA
-*> \verbatim
-*>          DA is DOUBLE PRECISION
-*>           On entry, DA specifies the scalar alpha.
-*> \endverbatim
-*>
-*> \param[in,out] DX
-*> \verbatim
-*>          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
-*> \endverbatim
-*>
-*> \param[in] INCX
-*> \verbatim
-*>          INCX is INTEGER
-*>         storage spacing between elements of DX
+*>    uses unrolled loops for increment equal to one.
 *> \endverbatim
 *
 *  Authors:
@@ -62,7 +36,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup double_blas_level1
 *
@@ -79,10 +53,10 @@
 *  =====================================================================
       SUBROUTINE DSCAL(N,DA,DX,INCX)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION DA

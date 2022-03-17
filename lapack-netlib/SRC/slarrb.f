@@ -91,7 +91,7 @@
 *>          RTOL2 is REAL
 *>          Tolerance for the convergence of the bisection intervals.
 *>          An interval [LEFT,RIGHT] has converged if
-*>          RIGHT-LEFT < MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
+*>          RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
 *>          where GAP is the (estimated) distance to the nearest
 *>          eigenvalue.
 *> \endverbatim
@@ -117,7 +117,7 @@
 *>          WGAP is REAL array, dimension (N-1)
 *>          On input, the (estimated) gaps between consecutive
 *>          eigenvalues of L D L^T, i.e., WGAP(I-OFFSET) is the gap between
-*>          eigenvalues I and I+1. Note that if IFIRST = ILAST
+*>          eigenvalues I and I+1. Note that if IFIRST.EQ.ILAST
 *>          then WGAP(IFIRST-OFFSET) must be set to ZERO.
 *>          On output, these gaps are refined.
 *> \endverbatim
@@ -178,7 +178,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -196,10 +196,10 @@
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, TWIST, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            IFIRST, ILAST, INFO, N, OFFSET, TWIST
@@ -236,12 +236,6 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-*
-*     Quick return if possible
-*
-      IF( N.LE.0 ) THEN
-         RETURN
-      END IF
 *
       MAXITR = INT( ( LOG( SPDIAM+PIVMIN )-LOG( PIVMIN ) ) /
      $           LOG( TWO ) ) + 2

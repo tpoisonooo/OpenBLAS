@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+*       SUBROUTINE DSYCONVF( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -189,7 +189,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup doubleSYcomputational
 *
@@ -198,7 +198,7 @@
 *>
 *> \verbatim
 *>
-*>  November 2017,  Igor Kozachenko,
+*>  December 2016,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -206,10 +206,10 @@
 *  =====================================================================
       SUBROUTINE DSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO, WAY
@@ -291,7 +291,7 @@
 *
 *           Convert PERMUTATIONS and IPIV
 *
-*           Apply permutations to submatrices of upper part of A
+*           Apply permutaions to submatrices of upper part of A
 *           in factorization order where i decreases from N to 1
 *
             I = N
@@ -344,7 +344,7 @@
 *
 *           Revert PERMUTATIONS and IPIV
 *
-*           Apply permutations to submatrices of upper part of A
+*           Apply permutaions to submatrices of upper part of A
 *           in reverse factorization order where i increases from 1 to N
 *
             I = 1
@@ -435,7 +435,7 @@
 *
 *           Convert PERMUTATIONS and IPIV
 *
-*           Apply permutations to submatrices of lower part of A
+*           Apply permutaions to submatrices of lower part of A
 *           in factorization order where k increases from 1 to N
 *
             I = 1
@@ -488,7 +488,7 @@
 *
 *           Revert PERMUTATIONS and IPIV
 *
-*           Apply permutations to submatrices of lower part of A
+*           Apply permutaions to submatrices of lower part of A
 *           in reverse factorization order where i decreases from N to 1
 *
             I = N

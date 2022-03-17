@@ -63,7 +63,7 @@
 #define PREFETCHSIZE 84
 #endif
 
-#if defined(NEHALEM) || defined(SANDYBRIDGE) || defined(HASWELL) || defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
+#if defined(NEHALEM) || defined(SANDYBRIDGE) || defined(HASWELL)
 #define PREFETCH	prefetcht1
 #define PREFETCHSIZE 84
 #endif

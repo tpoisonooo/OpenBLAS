@@ -109,35 +109,53 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "dgemm_ncopy_macros_4_power8.S"
 
-#define STACKSIZE 144
+#define STACKSIZE 384
 
 
 	PROLOGUE
 	PROFCODE
 
 	addi	SP, SP, -STACKSIZE
- 
 	li	r0, 0
 
-        std r14,   0(SP) 
-        std r15,   8(SP) 
-        std r16,  16(SP) 
-        std r17,  24(SP) 
-        std r18,  32(SP) 
-        std r19,  40(SP) 
-        std r20,  48(SP) 
-        std r21,  56(SP) 
-        std r22,  64(SP) 
-        std r23,  72(SP) 
-        std r24,  80(SP) 
-        std r25,  88(SP) 
-        std r26,  96(SP) 
-        std r27, 104(SP) 
-        std r28, 112(SP) 
-        std r29, 120(SP) 
-        std r30, 128(SP) 
-        std r31, 136(SP) 
+        stfd    f14,    0(SP)
+        stfd    f15,    8(SP)
+        stfd    f16,   16(SP)
+        stfd    f17,   24(SP)
+        stfd    f18,   32(SP)
+        stfd    f19,   40(SP)
+        stfd    f20,   48(SP)
+        stfd    f21,   56(SP)
+        stfd    f22,   64(SP)
+        stfd    f23,   72(SP)
+        stfd    f24,   80(SP)
+        stfd    f25,   88(SP)
+        stfd    f26,   96(SP)
+        stfd    f27,  104(SP)
+        stfd    f28,  112(SP)
+        stfd    f29,  120(SP)
+        stfd    f30,  128(SP)
+        stfd    f31,  136(SP)
 
+
+        std     r31,  144(SP)
+        std     r30,  152(SP)
+        std     r29,  160(SP)
+        std     r28,  168(SP)
+        std     r27,  176(SP)
+        std     r26,  184(SP)
+        std     r25,  192(SP)
+        std     r24,  200(SP)
+        std     r23,  208(SP)
+        std     r22,  216(SP)
+        std     r21,  224(SP)
+        std     r20,  232(SP)
+        std     r19,  240(SP)
+        std     r18,  248(SP)
+        std     r17,  256(SP)
+        std     r16,  264(SP)
+        std     r15,  272(SP)
+        std     r14,  280(SP)
 
 	cmpwi	cr0, M, 0
 	ble-	L999
@@ -147,8 +165,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	slwi	LDA, LDA, BASE_SHIFT
 
 	li	PREA,  384
-	li	PREB,  384 
-
+	li	PREB,  384
 
 	li	o8,	8
 	li	o16,	16
@@ -163,27 +180,48 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 L999:
 
-        ld r14,   0(SP) 
-        ld r15,   8(SP) 
-        ld r16,  16(SP) 
-        ld r17,  24(SP) 
-        ld r18,  32(SP) 
-        ld r19,  40(SP) 
-        ld r20,  48(SP) 
-        ld r21,  56(SP) 
-        ld r22,  64(SP) 
-        ld r23,  72(SP) 
-        ld r24,  80(SP) 
-        ld r25,  88(SP) 
-        ld r26,  96(SP) 
-        ld r27, 104(SP) 
-        ld r28, 112(SP) 
-        ld r29, 120(SP) 
-        ld r30, 128(SP) 
-        ld r31, 136(SP) 
+	li	r3, 0
+
+        lfd     f14,    0(SP)
+        lfd     f15,    8(SP)
+        lfd     f16,   16(SP)
+        lfd     f17,   24(SP)
+        lfd     f18,   32(SP)
+        lfd     f19,   40(SP)
+        lfd     f20,   48(SP)
+        lfd     f21,   56(SP)
+        lfd     f22,   64(SP)
+        lfd     f23,   72(SP)
+        lfd     f24,   80(SP)
+        lfd     f25,   88(SP)
+        lfd     f26,   96(SP)
+        lfd     f27,  104(SP)
+        lfd     f28,  112(SP)
+        lfd     f29,  120(SP)
+        lfd     f30,  128(SP)
+        lfd     f31,  136(SP)
+
+        ld      r31,  144(SP)
+        ld      r30,  152(SP)
+        ld      r29,  160(SP)
+        ld      r28,  168(SP)
+        ld      r27,  176(SP)
+        ld      r26,  184(SP)
+        ld      r25,  192(SP)
+        ld      r24,  200(SP)
+        ld      r23,  208(SP)
+        ld      r22,  216(SP)
+        ld      r21,  224(SP)
+        ld      r20,  232(SP)
+        ld      r19,  240(SP)
+        ld      r18,  248(SP)
+        ld      r17,  256(SP)
+        ld      r16,  264(SP)
+        ld      r15,  272(SP)
+        ld      r14,  280(SP)
 
 	addi	SP, SP, STACKSIZE
-//addi SP, SP, 208
+
 	blr
 	EPILOGUE
 

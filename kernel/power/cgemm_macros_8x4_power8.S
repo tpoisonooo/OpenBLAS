@@ -83,11 +83,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Macros for N=4 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD4x8_1', `
-#else
 .macro LOAD4x8_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -111,17 +107,9 @@ define(`LOAD4x8_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_I1', `
-#else
 .macro KERNEL4x8_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -184,17 +172,9 @@ define(`KERNEL4x8_I1', `
 	xvmulsp		vs63,	vs3,	vs15		// a3_r*b3_i, a3_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_1', `
-#else
 .macro KERNEL4x8_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -257,17 +237,9 @@ define(`KERNEL4x8_1', `
 	xvmaddasp	vs63,	vs3,	vs15		// a3_r*b3_i, a3_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_2', `
-#else
 .macro KERNEL4x8_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -330,17 +302,9 @@ define(`KERNEL4x8_2', `
 	xvmaddasp	vs63,	vs7,	vs23		// a7_r*b3_i, a7_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_E2', `
-#else
 .macro KERNEL4x8_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -380,17 +344,9 @@ define(`KERNEL4x8_E2', `
 	xvmaddasp	vs63,	vs7,	vs23		// a7_r*b3_i, a7_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_SUBI1', `
-#else
 .macro KERNEL4x8_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -453,17 +409,9 @@ define(`KERNEL4x8_SUBI1', `
 	xvmulsp		vs63,	vs3,	vs15		// a3_r*b3_i, a3_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x8_SUB1', `
-#else
 .macro KERNEL4x8_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -526,17 +474,9 @@ define(`KERNEL4x8_SUB1', `
 	xvmaddasp	vs63,	vs3,	vs15		// a3_r*b3_i, a3_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE4x8', `
-#else
 .macro SAVE4x8
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -1606,22 +1546,14 @@ define(`SAVE4x8', `
 
 	addi		CO,	CO,	64
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=4 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD4x4_1', `
-#else
 .macro LOAD4x4_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -1643,17 +1575,9 @@ define(`LOAD4x4_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_I1', `
-#else
 .macro KERNEL4x4_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -1698,17 +1622,9 @@ define(`KERNEL4x4_I1', `
 	xvmulsp		vs47,	vs1,	vs15		// a1_r*b3_i, a1_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_1', `
-#else
 .macro KERNEL4x4_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -1753,17 +1669,9 @@ define(`KERNEL4x4_1', `
 	xvmaddasp	vs47,	vs1,	vs15		// a1_r*b3_i, a1_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_2', `
-#else
 .macro KERNEL4x4_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -1808,17 +1716,9 @@ define(`KERNEL4x4_2', `
 	xvmaddasp	vs47,	vs5,	vs23		// a5_r*b3_i, a5_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_E2', `
-#else
 .macro KERNEL4x4_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -1842,17 +1742,9 @@ define(`KERNEL4x4_E2', `
 	xvmaddasp	vs47,	vs5,	vs23		// a5_r*b3_i, a5_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_SUBI1', `
-#else
 .macro KERNEL4x4_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -1897,17 +1789,9 @@ define(`KERNEL4x4_SUBI1', `
 	xvmulsp		vs47,	vs1,	vs15		// a1_r*b3_i, a1_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x4_SUB1', `
-#else
 .macro KERNEL4x4_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -1952,17 +1836,9 @@ define(`KERNEL4x4_SUB1', `
 	xvmaddasp	vs47,	vs1,	vs15		// a1_r*b3_i, a1_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE4x4', `
-#else
 .macro SAVE4x4
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -2512,22 +2388,14 @@ define(`SAVE4x4', `
 
 	addi		CO,	CO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=4 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD4x2_1', `
-#else
 .macro LOAD4x2_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 
@@ -2548,17 +2416,9 @@ define(`LOAD4x2_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_I1', `
-#else
 .macro KERNEL4x2_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -2594,17 +2454,9 @@ define(`KERNEL4x2_I1', `
 	xvmulsp		vs39,	vs0,	vs15		// a0_r*b3_i, a0_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_1', `
-#else
 .macro KERNEL4x2_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -2640,17 +2492,9 @@ define(`KERNEL4x2_1', `
 	xvmaddasp	vs39,	vs0,	vs15		// a0_r*b3_i, a0_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_2', `
-#else
 .macro KERNEL4x2_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -2686,17 +2530,9 @@ define(`KERNEL4x2_2', `
 	xvmaddasp	vs39,	vs4,	vs23		// a4_r*b3_i, a4_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_E2', `
-#else
 .macro KERNEL4x2_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -2712,17 +2548,9 @@ define(`KERNEL4x2_E2', `
 	xvmaddasp	vs39,	vs4,	vs23		// a4_r*b3_i, a4_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_SUBI1', `
-#else
 .macro KERNEL4x2_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -2758,17 +2586,9 @@ define(`KERNEL4x2_SUBI1', `
 	xvmulsp		vs39,	vs0,	vs15		// a0_r*b3_i, a0_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x2_SUB1', `
-#else
 .macro KERNEL4x2_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -2804,17 +2624,9 @@ define(`KERNEL4x2_SUB1', `
 	xvmaddasp	vs39,	vs0,	vs15		// a0_r*b3_i, a0_i*b3_i, a1_r*b3_i, a1_i*b3_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE4x2', `
-#else
 .macro SAVE4x2
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -3104,22 +2916,14 @@ define(`SAVE4x2', `
 
 	addi		CO,	CO,	16
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=4 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD4x1_1', `
-#else
 .macro LOAD4x1_1
-#endif
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
 	lxsspx		vs1,	o4,	AO		// load a0_i
@@ -3141,17 +2945,9 @@ define(`LOAD4x1_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_I1', `
-#else
 .macro KERNEL4x1_I1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -3196,17 +2992,9 @@ define(`KERNEL4x1_I1', `
 	xsmuldp		vs47,	vs1,	vs14		// a0_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_1', `
-#else
 .macro KERNEL4x1_1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -3251,17 +3039,9 @@ define(`KERNEL4x1_1', `
 	xsmaddadp	vs47,	vs1,	vs14		// a0_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_2', `
-#else
 .macro KERNEL4x1_2
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -3306,17 +3086,9 @@ define(`KERNEL4x1_2', `
 	xsmaddadp	vs47,	vs5,	vs22		// a4_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_E2', `
-#else
 .macro KERNEL4x1_E2
-#endif
 
 
 	xsmaddadp	vs32,	vs4,	vs16		// a4_r*b0_r
@@ -3340,17 +3112,9 @@ define(`KERNEL4x1_E2', `
 	xsmaddadp	vs47,	vs5,	vs22		// a4_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_SUBI1', `
-#else
 .macro KERNEL4x1_SUBI1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -3395,17 +3159,9 @@ define(`KERNEL4x1_SUBI1', `
 	xsmuldp		vs47,	vs1,	vs14		// a0_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL4x1_SUB1', `
-#else
 .macro KERNEL4x1_SUB1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -3450,17 +3206,9 @@ define(`KERNEL4x1_SUB1', `
 	xsmaddadp	vs47,	vs1,	vs14		// a0_i*b3_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE4x1', `
-#else
 .macro SAVE4x1
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -3634,22 +3382,14 @@ define(`SAVE4x1', `
 
 	addi		CO,	CO,	8
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=2 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD2x8_1', `
-#else
 .macro LOAD2x8_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -3666,17 +3406,9 @@ define(`LOAD2x8_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_I1', `
-#else
 .macro KERNEL2x8_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -3714,17 +3446,9 @@ define(`KERNEL2x8_I1', `
 	xvmulsp		vs47,	vs3,	vs11		// a3_r*b1_i, a3_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_1', `
-#else
 .macro KERNEL2x8_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -3762,17 +3486,9 @@ define(`KERNEL2x8_1', `
 	xvmaddasp	vs47,	vs3,	vs11		// a3_r*b1_i, a3_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_2', `
-#else
 .macro KERNEL2x8_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -3810,17 +3526,9 @@ define(`KERNEL2x8_2', `
 	xvmaddasp	vs47,	vs7,	vs19		// a7_r*b1_i, a7_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_E2', `
-#else
 .macro KERNEL2x8_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -3842,17 +3550,9 @@ define(`KERNEL2x8_E2', `
 	xvmaddasp	vs47,	vs7,	vs19		// a7_r*b1_i, a7_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_SUBI1', `
-#else
 .macro KERNEL2x8_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -3890,17 +3590,9 @@ define(`KERNEL2x8_SUBI1', `
 	xvmulsp		vs47,	vs3,	vs11		// a3_r*b1_i, a3_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x8_SUB1', `
-#else
 .macro KERNEL2x8_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -3938,17 +3630,9 @@ define(`KERNEL2x8_SUB1', `
 	xvmaddasp	vs47,	vs3,	vs11		// a3_r*b1_i, a3_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE2x8', `
-#else
 .macro SAVE2x8
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -4486,22 +4170,14 @@ define(`SAVE2x8', `
 
 	addi		CO,	CO,	64
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=2 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD2x4_1', `
-#else
 .macro LOAD2x4_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -4516,17 +4192,9 @@ define(`LOAD2x4_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_I1', `
-#else
 .macro KERNEL2x4_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -4554,17 +4222,9 @@ define(`KERNEL2x4_I1', `
 	xvmulsp		vs39,	vs1,	vs11		// a1_r*b1_i, a1_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_1', `
-#else
 .macro KERNEL2x4_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -4592,17 +4252,9 @@ define(`KERNEL2x4_1', `
 	xvmaddasp	vs39,	vs1,	vs11		// a1_r*b1_i, a1_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_2', `
-#else
 .macro KERNEL2x4_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -4630,17 +4282,9 @@ define(`KERNEL2x4_2', `
 	xvmaddasp	vs39,	vs5,	vs19		// a5_r*b1_i, a5_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_E2', `
-#else
 .macro KERNEL2x4_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -4654,17 +4298,9 @@ define(`KERNEL2x4_E2', `
 	xvmaddasp	vs39,	vs5,	vs19		// a5_r*b1_i, a5_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_SUBI1', `
-#else
 .macro KERNEL2x4_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -4692,17 +4328,9 @@ define(`KERNEL2x4_SUBI1', `
 	xvmulsp		vs39,	vs1,	vs11		// a1_r*b1_i, a1_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x4_SUB1', `
-#else
 .macro KERNEL2x4_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -4730,17 +4358,9 @@ define(`KERNEL2x4_SUB1', `
 	xvmaddasp	vs39,	vs1,	vs11		// a1_r*b1_i, a1_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE2x4', `
-#else
 .macro SAVE2x4
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -5018,22 +4638,14 @@ define(`SAVE2x4', `
 
 	addi		CO,	CO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=2 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD2x2_1', `
-#else
 .macro LOAD2x2_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 
@@ -5047,17 +4659,9 @@ define(`LOAD2x2_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_I1', `
-#else
 .macro KERNEL2x2_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -5080,17 +4684,9 @@ define(`KERNEL2x2_I1', `
 	xvmulsp		vs35,	vs0,	vs11		// a0_r*b1_i, a0_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_1', `
-#else
 .macro KERNEL2x2_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -5113,17 +4709,9 @@ define(`KERNEL2x2_1', `
 	xvmaddasp	vs35,	vs0,	vs11		// a0_r*b1_i, a0_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_2', `
-#else
 .macro KERNEL2x2_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5146,17 +4734,9 @@ define(`KERNEL2x2_2', `
 	xvmaddasp	vs35,	vs4,	vs19		// a4_r*b1_i, a4_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_E2', `
-#else
 .macro KERNEL2x2_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -5166,17 +4746,9 @@ define(`KERNEL2x2_E2', `
 	xvmaddasp	vs35,	vs4,	vs19		// a4_r*b1_i, a4_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_SUBI1', `
-#else
 .macro KERNEL2x2_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5199,17 +4771,9 @@ define(`KERNEL2x2_SUBI1', `
 	xvmulsp		vs35,	vs0,	vs11		// a0_r*b1_i, a0_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x2_SUB1', `
-#else
 .macro KERNEL2x2_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5232,17 +4796,9 @@ define(`KERNEL2x2_SUB1', `
 	xvmaddasp	vs35,	vs0,	vs11		// a0_r*b1_i, a0_i*b1_i, a1_r*b1_i, a1_i*b1_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE2x2', `
-#else
 .macro SAVE2x2
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -5390,22 +4946,14 @@ define(`SAVE2x2', `
 
 	addi		CO,	CO,	16
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=2 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD2x1_1', `
-#else
 .macro LOAD2x1_1
-#endif
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
 	lxsspx		vs1,	o4,	AO		// load a0_i
@@ -5420,17 +4968,9 @@ define(`LOAD2x1_1', `
 	addi		BO,	BO,	64
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_I1', `
-#else
 .macro KERNEL2x1_I1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -5458,17 +4998,9 @@ define(`KERNEL2x1_I1', `
 	xsmuldp		vs39,	vs1,	vs10		// a0_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_1', `
-#else
 .macro KERNEL2x1_1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -5496,17 +5028,9 @@ define(`KERNEL2x1_1', `
 	xsmaddadp	vs39,	vs1,	vs10		// a0_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_2', `
-#else
 .macro KERNEL2x1_2
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -5534,17 +5058,9 @@ define(`KERNEL2x1_2', `
 	xsmaddadp	vs39,	vs5,	vs18		// a4_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_E2', `
-#else
 .macro KERNEL2x1_E2
-#endif
 
 
 	xsmaddadp	vs32,	vs4,	vs16		// a4_r*b0_r
@@ -5558,17 +5074,9 @@ define(`KERNEL2x1_E2', `
 	xsmaddadp	vs39,	vs5,	vs18		// a4_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_SUBI1', `
-#else
 .macro KERNEL2x1_SUBI1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -5596,17 +5104,9 @@ define(`KERNEL2x1_SUBI1', `
 	xsmuldp		vs39,	vs1,	vs10		// a0_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL2x1_SUB1', `
-#else
 .macro KERNEL2x1_SUB1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -5634,17 +5134,9 @@ define(`KERNEL2x1_SUB1', `
 	xsmaddadp	vs39,	vs1,	vs10		// a0_i*b1_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE2x1', `
-#else
 .macro SAVE2x1
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -5734,22 +5226,14 @@ define(`SAVE2x1', `
 
 	addi		CO,	CO,	8
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=1 and M=8
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD1x8_1', `
-#else
 .macro LOAD1x8_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -5763,17 +5247,9 @@ define(`LOAD1x8_1', `
 
 	addi		BO,	BO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_I1', `
-#else
 .macro KERNEL1x8_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -5799,17 +5275,9 @@ define(`KERNEL1x8_I1', `
 	xvmulsp		vs39,	vs3,	vs9		// a3_r*b0_i, a3_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_1', `
-#else
 .macro KERNEL1x8_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -5835,17 +5303,9 @@ define(`KERNEL1x8_1', `
 	xvmaddasp	vs39,	vs3,	vs9		// a3_r*b0_i, a3_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_2', `
-#else
 .macro KERNEL1x8_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5871,17 +5331,9 @@ define(`KERNEL1x8_2', `
 	xvmaddasp	vs39,	vs7,	vs17		// a7_r*b0_i, a7_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_E2', `
-#else
 .macro KERNEL1x8_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -5894,17 +5346,9 @@ define(`KERNEL1x8_E2', `
 	xvmaddasp	vs39,	vs7,	vs17		// a7_r*b0_i, a7_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_SUBI1', `
-#else
 .macro KERNEL1x8_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5930,17 +5374,9 @@ define(`KERNEL1x8_SUBI1', `
 	xvmulsp		vs39,	vs3,	vs9		// a3_r*b0_i, a3_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x8_SUB1', `
-#else
 .macro KERNEL1x8_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -5966,17 +5402,9 @@ define(`KERNEL1x8_SUB1', `
 	xvmaddasp	vs39,	vs3,	vs9		// a3_r*b0_i, a3_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE1x8', `
-#else
 .macro SAVE1x8
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -6248,22 +5676,14 @@ define(`SAVE1x8', `
 
 	addi		CO,	CO,	64
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=1 and M=4
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD1x4_1', `
-#else
 .macro LOAD1x4_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 	lxvw4x		vs1,	o16,	AO		// load a2, a3
@@ -6275,17 +5695,9 @@ define(`LOAD1x4_1', `
 
 	addi		BO,	BO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_I1', `
-#else
 .macro KERNEL1x4_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -6305,17 +5717,9 @@ define(`KERNEL1x4_I1', `
 	xvmulsp		vs35,	vs1,	vs9		// a1_r*b0_i, a1_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_1', `
-#else
 .macro KERNEL1x4_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -6335,17 +5739,9 @@ define(`KERNEL1x4_1', `
 	xvmaddasp	vs35,	vs1,	vs9		// a1_r*b0_i, a1_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_2', `
-#else
 .macro KERNEL1x4_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6365,17 +5761,9 @@ define(`KERNEL1x4_2', `
 	xvmaddasp	vs35,	vs5,	vs17		// a5_r*b0_i, a5_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_E2', `
-#else
 .macro KERNEL1x4_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
@@ -6384,17 +5772,9 @@ define(`KERNEL1x4_E2', `
 	xvmaddasp	vs35,	vs5,	vs17		// a5_r*b0_i, a5_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_SUBI1', `
-#else
 .macro KERNEL1x4_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6414,17 +5794,9 @@ define(`KERNEL1x4_SUBI1', `
 	xvmulsp		vs35,	vs1,	vs9		// a1_r*b0_i, a1_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x4_SUB1', `
-#else
 .macro KERNEL1x4_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6444,17 +5816,9 @@ define(`KERNEL1x4_SUB1', `
 	xvmaddasp	vs35,	vs1,	vs9		// a1_r*b0_i, a1_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE1x4', `
-#else
 .macro SAVE1x4
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -6596,22 +5960,14 @@ define(`SAVE1x4', `
 
 	addi		CO,	CO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=1 and M=2
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD1x2_1', `
-#else
 .macro LOAD1x2_1
-#endif
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
 
@@ -6622,17 +5978,9 @@ define(`LOAD1x2_1', `
 
 	addi		BO,	BO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_I1', `
-#else
 .macro KERNEL1x2_I1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -6649,17 +5997,9 @@ define(`KERNEL1x2_I1', `
 	xvmulsp		vs33,	vs0,	vs9		// a0_r*b0_i, a0_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_1', `
-#else
 .macro KERNEL1x2_1
-#endif
 
 
 	lxvw4x		vs4,	o0,	AO		// load a0, a1
@@ -6676,17 +6016,9 @@ define(`KERNEL1x2_1', `
 	xvmaddasp	vs33,	vs0,	vs9		// a0_r*b0_i, a0_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_2', `
-#else
 .macro KERNEL1x2_2
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6703,34 +6035,18 @@ define(`KERNEL1x2_2', `
 	xvmaddasp	vs33,	vs4,	vs17		// a4_r*b0_i, a4_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_E2', `
-#else
 .macro KERNEL1x2_E2
-#endif
 
 
 	xvmaddasp	vs32,	vs4,	vs16		// a4_r*b0_r, a4_i*b0_r, a1_r*b0_r, a1_i*b0_r
 	xvmaddasp	vs33,	vs4,	vs17		// a4_r*b0_i, a4_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_SUBI1', `
-#else
 .macro KERNEL1x2_SUBI1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6747,17 +6063,9 @@ define(`KERNEL1x2_SUBI1', `
 	xvmulsp		vs33,	vs0,	vs9		// a0_r*b0_i, a0_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x2_SUB1', `
-#else
 .macro KERNEL1x2_SUB1
-#endif
 
 
 	lxvw4x		vs0,	o0,	AO		// load a0, a1
@@ -6774,17 +6082,9 @@ define(`KERNEL1x2_SUB1', `
 	xvmaddasp	vs33,	vs0,	vs9		// a0_r*b0_i, a0_i*b0_i, a1_r*b0_i, a1_i*b0_i
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE1x2', `
-#else
 .macro SAVE1x2
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -6861,22 +6161,14 @@ define(`SAVE1x2', `
 
 	addi		CO,	CO,	16
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /**********************************************************************************************
 * Macros for N=1 and M=1
 **********************************************************************************************/
 
-#if defined(_AIX)
-define(`LOAD1x1_1', `
-#else
 .macro LOAD1x1_1
-#endif
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
 	lxsspx		vs1,	o4,	AO		// load a0_i
@@ -6888,17 +6180,9 @@ define(`LOAD1x1_1', `
 
 	addi		BO,	BO,	32
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_I1', `
-#else
 .macro KERNEL1x1_I1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -6918,17 +6202,9 @@ define(`KERNEL1x1_I1', `
 	xsmuldp		vs35,	vs1,	vs8		// a0_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_1', `
-#else
 .macro KERNEL1x1_1
-#endif
 
 
 	lxsspx		vs4,	o0,	AO		// load a0_r
@@ -6948,17 +6224,9 @@ define(`KERNEL1x1_1', `
 	xsmaddadp	vs35,	vs1,	vs8		// a0_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_2', `
-#else
 .macro KERNEL1x1_2
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -6978,17 +6246,9 @@ define(`KERNEL1x1_2', `
 	xsmaddadp	vs35,	vs5,	vs16		// a4_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_E2', `
-#else
 .macro KERNEL1x1_E2
-#endif
 
 
 	xsmaddadp	vs32,	vs4,	vs16		// a4_r*b0_r
@@ -6997,17 +6257,9 @@ define(`KERNEL1x1_E2', `
 	xsmaddadp	vs35,	vs5,	vs16		// a4_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_SUBI1', `
-#else
 .macro KERNEL1x1_SUBI1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -7027,17 +6279,9 @@ define(`KERNEL1x1_SUBI1', `
 	xsmuldp		vs35,	vs1,	vs8		// a0_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`KERNEL1x1_SUB1', `
-#else
 .macro KERNEL1x1_SUB1
-#endif
 
 
 	lxsspx		vs0,	o0,	AO		// load a0_r
@@ -7057,17 +6301,9 @@ define(`KERNEL1x1_SUB1', `
 	xsmaddadp	vs35,	vs1,	vs8		// a0_i*b0_r
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
-#if defined(_AIX)
-define(`SAVE1x1', `
-#else
 .macro SAVE1x1
-#endif
 
 	mr		T1,	CO
 	xxlxor		vs24,	vs24,	vs24
@@ -7115,9 +6351,5 @@ define(`SAVE1x1', `
 
 	addi		CO,	CO,	8
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 

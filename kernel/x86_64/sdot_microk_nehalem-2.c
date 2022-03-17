@@ -41,7 +41,7 @@ static void sdot_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"xorps		%%xmm6, %%xmm6	             \n\t"
 	"xorps		%%xmm7, %%xmm7	             \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            \n\t"
         "movups                  (%2,%0,4), %%xmm12         \n\t"  // 4 * x
         "movups                  (%3,%0,4), %%xmm8          \n\t"  // 4 * x
@@ -75,10 +75,10 @@ static void sdot_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 
 	"movss	       %%xmm4,    (%4)	\n\t"
 
-	: 
-          "+r" (i),	// 0
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (dot)     // 4

@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dstevd
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -48,14 +48,12 @@ lapack_int LAPACKE_dstevd( int matrix_layout, char jobz, lapack_int n, double* d
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
-            return -4;
-        }
-        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
-            return -5;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        return -4;
+    }
+    if( LAPACKE_d_nancheck( n, e, 1 ) ) {
+        return -5;
     }
 #endif
     /* Query optimal working array(s) size */
@@ -64,7 +62,7 @@ lapack_int LAPACKE_dstevd( int matrix_layout, char jobz, lapack_int n, double* d
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );

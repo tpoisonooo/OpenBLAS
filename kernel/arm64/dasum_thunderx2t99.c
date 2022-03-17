@@ -141,58 +141,58 @@ static FLOAT dasum_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 	"	fmov	d6, "REG0"			\n"
 	"	fmov	d7, "REG0"			\n"
 	"	cmp	"N", xzr			\n"
-	"	ble	9f //asum_kernel_L999		\n"
+	"	ble	.Lasum_kernel_L999		\n"
 	"	cmp	"INC_X", xzr			\n"
-	"	ble	9f //asum_kernel_L999		\n"
+	"	ble	.Lasum_kernel_L999		\n"
 	"	cmp	"INC_X", #1			\n"
-	"	bne	5f //asum_kernel_S_BEGIN	\n"
+	"	bne	.Lasum_kernel_S_BEGIN		\n"
 
-	"1: //asum_kernel_F_BEGIN:			\n"
+	".Lasum_kernel_F_BEGIN:				\n"
 	"	asr	"J", "N", #5			\n"
 	"	cmp	"J", xzr			\n"
-	"	beq	3f //asum_kernel_F1		\n"
+	"	beq	.Lasum_kernel_F1		\n"
 
 	".align 5					\n"
-	"2: //asum_kernel_F32:				\n"
+	".Lasum_kernel_F32:				\n"
 	"	"KERNEL_F32"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	2b //asum_kernel_F32		\n"
+	"	bne	.Lasum_kernel_F32		\n"
 	"	"KERNEL_F32_FINALIZE"			\n"
 
-	"3: //asum_kernel_F1:				\n"
+	".Lasum_kernel_F1:				\n"
 	"	ands	"J", "N", #31			\n"
-	"	ble	9f //asum_kernel_L999		\n"
+	"	ble	.Lasum_kernel_L999		\n"
 
-	"4: //asum_kernel_F10:				\n"
+	".Lasum_kernel_F10:				\n"
 	"	"KERNEL_F1"				\n"
 	"	subs    "J", "J", #1			\n"
-	"	bne	4b //asum_kernel_F10		\n"
-	"	b	9f //asum_kernel_L999		\n"
+	"	bne	.Lasum_kernel_F10		\n"
+	"	b	.Lasum_kernel_L999		\n"
 
-	"5: //asum_kernel_S_BEGIN:			\n"
+	".Lasum_kernel_S_BEGIN:				\n"
 	"	"INIT_S"				\n"
 	"	asr	"J", "N", #2			\n"
 	"	cmp	"J", xzr			\n"
-	"	ble	7f //asum_kernel_S1		\n"
+	"	ble	.Lasum_kernel_S1		\n"
 
-	"6: //asum_kernel_S4:				\n"
+	".Lasum_kernel_S4:				\n"
 	"	"KERNEL_S1"				\n"
 	"	"KERNEL_S1"				\n"
 	"	"KERNEL_S1"				\n"
 	"	"KERNEL_S1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	6b //asum_kernel_S4		\n"
+	"	bne	.Lasum_kernel_S4		\n"
 
-	"7: //asum_kernel_S1:				\n"
+	".Lasum_kernel_S1:				\n"
 	"	ands	"J", "N", #3			\n"
-	"	ble	9f //asum_kernel_L999		\n"
+	"	ble	.Lasum_kernel_L999		\n"
 
-	"8: //asum_kernel_S10:				\n"
+	".Lasum_kernel_S10:				\n"
 	"	"KERNEL_S1"				\n"
 	"	subs	"J", "J", #1			\n"
-	"	bne	8b //asum_kernel_S10		\n"
+	"	bne	.Lasum_kernel_S10		\n"
 
-	"9: //asum_kernel_L999:				\n"
+	".Lasum_kernel_L999:				\n"
 	"	fmov	%[ASUM_], "SUMF"		\n"
 
 	: [ASUM_] "=r" (asum)		//%0
@@ -228,10 +228,13 @@ FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 	FLOAT asum = 0.0;
 
 #if defined(SMP)
-	if (inc_x == 0 || n <= 10000)
+	nthreads = num_cpu_avail(1);
+
+	if (inc_x == 0)
 		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
+
+	if (n <= 10000)
+		nthreads = 1;
 
 	if (nthreads == 1) {
 		asum = dasum_compute(n, x, inc_x);

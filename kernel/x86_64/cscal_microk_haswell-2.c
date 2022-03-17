@@ -54,7 +54,7 @@ static void cscal_kernel_16( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"subq	        $16, %0			            \n\t"		
 	"jz	2f					    \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 
 	//"prefetcht0     128(%1)				    \n\t"
@@ -116,11 +116,11 @@ static void cscal_kernel_16( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"vzeroupper					    \n\t"
 
 	:
-	  "+r" (n),  	// 0
-          "+r" (x)      // 1
-        :
+        : 
+	  "r" (n),  	// 0
+          "r" (x),      // 1
           "r" (alpha)   // 2
-	: "cc",
+	: "cc", //"0", "1",
 	  "%xmm0", "%xmm1", "%xmm2", "%xmm3", 
 	  "%xmm4", "%xmm5", "%xmm6", "%xmm7", 
 	  "%xmm8", "%xmm9", "%xmm10", "%xmm11", 
@@ -156,7 +156,7 @@ static void cscal_kernel_16_zero_r( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"subq	        $16, %0			            \n\t"		
 	"jz	2f					    \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 
 	//"prefetcht0     128(%1)				    \n\t"
@@ -208,9 +208,9 @@ static void cscal_kernel_16_zero_r( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"vzeroupper					    \n\t"
 
 	:
-	  "+r" (n),  	// 0
-          "+r" (x)      // 1
-        :
+        : 
+	  "r" (n),  	// 0
+          "r" (x),      // 1
           "r" (alpha)   // 2
 	: "cc", // "0", "1",
 	  "%xmm0", "%xmm1", "%xmm2", "%xmm3", 
@@ -245,7 +245,7 @@ static void cscal_kernel_16_zero_i( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"subq	        $16, %0			            \n\t"		
 	"jz	2f					    \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 
 	//"prefetcht0     128(%1)				    \n\t"
@@ -285,9 +285,9 @@ static void cscal_kernel_16_zero_i( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"vzeroupper					    \n\t"
 
 	:
-	  "+r" (n),  	// 0
-          "+r" (x)      // 1
-        :
+        : 
+	  "r" (n),  	// 0
+          "r" (x),      // 1
           "r" (alpha)   // 2
 	: "cc", //"%0", "%1",
 	  "%xmm0", "%xmm1", "%xmm2", "%xmm3", 
@@ -312,7 +312,7 @@ static void cscal_kernel_16_zero( BLASLONG n, FLOAT *alpha, FLOAT *x)
 
 	"addq	$128, %1				    \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 
 	//"prefetcht0     128(%1)				    \n\t"
@@ -329,12 +329,12 @@ static void cscal_kernel_16_zero( BLASLONG n, FLOAT *alpha, FLOAT *x)
 
 	"vzeroupper					    \n\t"
 
-	: 
-	  "+r" (n),  	// 0
-          "+r" (x)      // 1
-        :
+	:
+        : 
+	  "r" (n),  	// 0
+          "r" (x),      // 1
           "r" (alpha)   // 2
-	: "cc",
+	: "cc", //"0", "1",
 	  "%xmm0", "%xmm1", "%xmm2", "%xmm3", 
 	  "%xmm4", "%xmm5", "%xmm6", "%xmm7", 
 	  "%xmm8", "%xmm9", "%xmm10", "%xmm11", 

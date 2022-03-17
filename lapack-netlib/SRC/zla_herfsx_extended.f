@@ -66,11 +66,11 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by ILAPREC(P) where P is a CHARACTER and P
-*>          = 'S':  Single
+*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
+*>     P    = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
-*>          = 'X' or 'E':  Extra
+*>          = 'X', 'E':  Extra
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -161,7 +161,8 @@
 *>
 *> \param[in,out] Y
 *> \verbatim
-*>          Y is COMPLEX*16 array, dimension (LDY,NRHS)
+*>          Y is COMPLEX*16 array, dimension
+*>                    (LDY,NRHS)
 *>     On entry, the solution matrix X, as computed by ZHETRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
@@ -193,7 +194,8 @@
 *>
 *> \param[in,out] ERR_BNDS_NORM
 *> \verbatim
-*>          ERR_BNDS_NORM is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
+*>          ERR_BNDS_NORM is DOUBLE PRECISION array, dimension
+*>                    (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
@@ -239,7 +241,8 @@
 *>
 *> \param[in,out] ERR_BNDS_COMP
 *> \verbatim
-*>          ERR_BNDS_COMP is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
+*>          ERR_BNDS_COMP is DOUBLE PRECISION array, dimension
+*>                    (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:
@@ -254,7 +257,7 @@
 *>     information as described below. There currently are up to three
 *>     pieces of information returned for each right-hand side. If
 *>     componentwise accuracy is not requested (PARAMS(3) = 0.0), then
-*>     ERR_BNDS_COMP is not accessed.  If N_ERR_BNDS < 3, then at most
+*>     ERR_BNDS_COMP is not accessed.  If N_ERR_BNDS .LT. 3, then at most
 *>     the first (:,N_ERR_BNDS) entries are returned.
 *>
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
@@ -382,7 +385,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16HEcomputational
 *
@@ -395,10 +398,10 @@
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDAF, LDB, LDY, N, NRHS, PREC_TYPE,

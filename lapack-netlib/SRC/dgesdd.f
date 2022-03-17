@@ -267,9 +267,9 @@
      $                   XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE, LSAME, DISNAN
+      EXTERNAL           DLAMCH, DLANGE, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -322,7 +322,7 @@
 *
             IF( WNTQN ) THEN
 *              dbdsdc needs only 4*N (or 6*N for uplo=L for LAPACK <= 3.6)
-*              keep 7*N for backwards compatibility.
+*              keep 7*N for backwards compatability.
                BDSPAC = 7*N
             ELSE
                BDSPAC = 3*N*N + 4*N
@@ -448,7 +448,7 @@
 *
             IF( WNTQN ) THEN
 *              dbdsdc needs only 4*N (or 6*N for uplo=L for LAPACK <= 3.6)
-*              keep 7*N for backwards compatibility.
+*              keep 7*N for backwards compatability.
                BDSPAC = 7*M
             ELSE
                BDSPAC = 3*M*M + 4*M
@@ -599,10 +599,6 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = DLANGE( 'M', M, N, A, LDA, DUM )
-      IF( DISNAN( ANRM ) ) THEN
-          INFO = -4
-          RETURN
-      END IF
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1

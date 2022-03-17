@@ -42,11 +42,9 @@ lapack_int LAPACKE_dtfttr( int matrix_layout, char transr, char uplo,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dpf_nancheck( n, arf ) ) {
-            return -5;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_dpf_nancheck( n, arf ) ) {
+        return -5;
     }
 #endif
     return LAPACKE_dtfttr_work( matrix_layout, transr, uplo, n, arf, a, lda );

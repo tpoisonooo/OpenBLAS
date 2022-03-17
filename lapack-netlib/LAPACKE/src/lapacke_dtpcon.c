@@ -44,11 +44,9 @@ lapack_int LAPACKE_dtpcon( int matrix_layout, char norm, char uplo, char diag,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dtp_nancheck( matrix_layout, uplo, diag, n, ap ) ) {
-            return -6;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_dtp_nancheck( matrix_layout, uplo, diag, n, ap ) ) {
+        return -6;
     }
 #endif
     /* Allocate memory for working array(s) */

@@ -137,7 +137,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -145,10 +145,10 @@
       SUBROUTINE SLARRK( N, IW, GL, GU,
      $                    D, E2, PIVMIN, RELTOL, W, WERR, INFO)
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER   INFO, IW, N
@@ -178,13 +178,6 @@
       INTRINSIC          ABS, INT, LOG, MAX
 *     ..
 *     .. Executable Statements ..
-*
-*     Quick return if possible
-*
-      IF( N.LE.0 ) THEN
-         INFO = 0
-         RETURN
-      END IF
 *
 *     Get machine constants
       EPS = SLAMCH( 'P' )

@@ -26,7 +26,7 @@ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIA
 DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-kOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********************************************************************************/
@@ -78,8 +78,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <sys/sysinfo.h>
 #include <sys/syscall.h>
-#include <sys/types.h>
-#include <errno.h>
 #include <sys/shm.h>
 #include <fcntl.h>
 #include <sched.h>
@@ -90,11 +88,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if defined(BIGNUMA)
 // max number of nodes as defined in numa.h
-// max cpus as defined in most sched.h
-// cannot use CPU_SETSIZE directly as some
-// Linux distributors set it to 4096 
+// max cpus as defined in sched.h
 #define MAX_NODES	128
-#define MAX_CPUS	1024
+#define MAX_CPUS	CPU_SETSIZE
 #else
 #define MAX_NODES	16
 #define MAX_CPUS	256
@@ -237,7 +233,7 @@ static inline void get_cpumap(int node, unsigned long * node_info) {
     if(k!=0){
       name[k]='\0';
       affinity[count++] = strtoul(name, &dummy, 16);
-      // k=0;
+      k=0;
     }
     // 0-63bit -> node_info[0], 64-128bit -> node_info[1] ....
     // revert the sequence
@@ -293,7 +289,7 @@ static inline void get_share(int cpu, int level, unsigned long * share) {
     if(k!=0){
       name[k]='\0';
       affinity[count++] = strtoul(name, &dummy, 16);
-      // k=0;
+      k=0;
     }
     // 0-63bit -> node_info[0], 64-128bit -> node_info[1] ....
     // revert the sequence
@@ -633,12 +629,10 @@ static inline int is_dead(int id) {
   return shmctl(id, IPC_STAT, &ds);
 }
 
-static int open_shmem(void) {
+static void open_shmem(void) {
 
   int try = 0;
 
-  int err = 0;
-  
   do {
 
 #if defined(BIGNUMA)
@@ -656,53 +650,34 @@ static int open_shmem(void) {
 #endif
     }
 
-    if (shmid == -1) err = errno;
-    
     try ++;
 
   } while ((try < 10) && (shmid == -1));
 
   if (shmid == -1) {
-    fprintf (stderr, "Obtaining shared memory segment failed in open_shmem: %s\n",strerror(err));
-    fprintf (stderr, "Setting CPU affinity not possible without shared memory access.\n");
-    return (1);
+    fprintf(stderr, "GotoBLAS : Can't open shared memory. Terminated.\n");
+    exit(1);
   }
 
-  if (shmid != -1) {
-    if ( (common = shmat(shmid, NULL, 0)) == (void*)-1) {
-      perror ("Attaching shared memory segment failed in open_shmem");
-      fprintf (stderr, "Setting CPU affinity not possible without shared memory access.\n");
-      return (1);
-    }
-  }
+  if (shmid != -1) common = (shm_t *)shmat(shmid, NULL, 0);
+
 #ifdef DEBUG
   fprintf(stderr, "Shared Memory id = %x  Address = %p\n", shmid, common);
 #endif
-  return (0);
+
 }
 
-static int create_pshmem(void) {
+static void create_pshmem(void) {
 
   pshmid = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
 
-  if (pshmid == -1) {
-    perror ("Obtaining shared memory segment failed in create_pshmem");
-    fprintf (stderr, "Setting CPU affinity not possible without shared memory access.\n");
-    return(1);
-  }
-  
-  if ( (paddr = shmat(pshmid, NULL, 0)) == (void*)-1) {
-    perror ("Attaching shared memory segment failed in create_pshmem");
-    fprintf (stderr, "Setting CPU affinity not possible without shared memory access.\n");
-    return (1);
-  }  
-  
-  if (shmctl(pshmid, IPC_RMID, 0) == -1) return (1);
+  paddr = shmat(pshmid, NULL, 0);
+
+  shmctl(pshmid, IPC_RMID, 0);
 
 #ifdef DEBUG
   fprintf(stderr, "Private Shared Memory id = %x  Address = %p\n", pshmid, paddr);
 #endif
-  return(0);
 }
 
 static void local_cpu_map(void) {
@@ -765,7 +740,7 @@ int gotoblas_set_affinity(int pos) {
 
   int mynode = 1;
 
-  /* if number of threads is larger than initial condition */
+  /* if number of threads is larger than inital condition */
   if (pos < 0) {
       sched_setaffinity(0, sizeof(cpu_orig_mask), &cpu_orig_mask[0]);
       return 0;
@@ -803,11 +778,11 @@ static int initialized = 0;
 void gotoblas_affinity_init(void) {
 
   int cpu, num_avail;
-#ifndef USE_OPENMP
+#ifndef USE_OPENMP	
   cpu_set_t cpu_mask;
 #endif
   int i;
-
+	
   if (initialized) return;
 
   initialized = 1;
@@ -830,23 +805,17 @@ void gotoblas_affinity_init(void) {
     return;
   }
 
-  if (create_pshmem() != 0) {
-    disable_mapping = 1;
-    return;
-  }
-  
-  if (open_shmem() != 0) {
-    disable_mapping = 1;
-    return;
-  }
-  
+  create_pshmem();
+
+  open_shmem();
+
   while ((common -> lock) && (common -> magic != SH_MAGIC)) {
     if (is_dead(common -> shmid)) {
       common -> lock = 0;
       common -> shmid = 0;
       common -> magic = 0;
     } else {
-      YIELDING;
+      sched_yield();
     }
   }
 
@@ -857,14 +826,7 @@ void gotoblas_affinity_init(void) {
   common -> shmid = pshmid;
 
   if (common -> magic != SH_MAGIC) {
-
-#if defined(__GLIBC_PREREQ)
-#if __GLIBC_PREREQ(2, 7)
     cpu_set_t *cpusetp;
-#else
-    cpu_set_t cpuset;
-#endif
-#endif    
     int nums;
     int ret;
 
@@ -875,12 +837,8 @@ void gotoblas_affinity_init(void) {
     //returns the number of processors which are currently online
 
     nums = sysconf(_SC_NPROCESSORS_CONF);
-
-#if !defined(__GLIBC_PREREQ)
-    common->num_procs = nums;
-#else
-
-#if !__GLIBC_PREREQ(2, 3)
+     
+#if !defined(__GLIBC_PREREQ) || !__GLIBC_PREREQ(2, 3)
     common->num_procs = nums;
 #elif __GLIBC_PREREQ(2, 7)
     cpusetp = CPU_ALLOC(nums);
@@ -890,31 +848,30 @@ void gotoblas_affinity_init(void) {
         size_t size;
         size = CPU_ALLOC_SIZE(nums);
         ret = sched_getaffinity(0,size,cpusetp);
-        if (ret!=0)
+        if (ret!=0) 
             common->num_procs = nums;
         else
             common->num_procs = CPU_COUNT_S(size,cpusetp);
     }
     CPU_FREE(cpusetp);
 #else
-    ret = sched_getaffinity(0,sizeof(cpu_set_t), &cpuset);
+    ret = sched_getaffinity(0,sizeof(cpu_set_t), cpusetp);
     if (ret!=0) {
         common->num_procs = nums;
     } else {
-#if !__GLIBC_PREREQ(2, 6)
+#if !__GLIBC_PREREQ(2, 6)  
     int i;
     int n = 0;
     for (i=0;i<nums;i++)
-        if (CPU_ISSET(i,&cpuset)) n++;
+        if (CPU_ISSET(i,cpusetp)) n++;
     common->num_procs = n;
     }
 #else
-    common->num_procs = CPU_COUNT(&cpuset);
-    }
+    common->num_procs = CPU_COUNT(sizeof(cpu_set_t),cpusetp);
 #endif
 
-#endif
-#endif
+#endif 
+
     if(common -> num_procs > MAX_CPUS) {
       fprintf(stderr, "\nOpenBLAS Warning : The number of CPU/Cores(%d) is beyond the limit(%d). Terminated.\n", common->num_procs, MAX_CPUS);
       exit(1);
@@ -929,7 +886,7 @@ void gotoblas_affinity_init(void) {
     if (common -> num_nodes > 1) numa_mapping();
 
     common -> final_num_procs = 0;
-    for(i = 0; i < common -> avail_count; i++) common -> final_num_procs += rcount(common -> avail[i]) + 1;   //Make the max cpu number. 
+    for(i = 0; i < common -> avail_count; i++) common -> final_num_procs += rcount(common -> avail[i]) + 1;   //Make the max cpu number.
 
     for (cpu = 0; cpu < common -> final_num_procs; cpu ++) common -> cpu_use[cpu] =  0;
 

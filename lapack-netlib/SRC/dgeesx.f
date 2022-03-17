@@ -583,9 +583,7 @@
                      IF( N.GT.I+1 )
      $                  CALL DSWAP( N-I-1, A( I, I+2 ), LDA,
      $                              A( I+1, I+2 ), LDA )
-                     IF( WANTVS ) THEN
-                       CALL DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ), 1 )
-                     END IF
+                     CALL DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ), 1 )
                      A( I, I+1 ) = A( I+1, I )
                      A( I+1, I ) = ZERO
                   END IF

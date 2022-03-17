@@ -123,27 +123,28 @@
 *>
 *> \param[out] HOUS2
 *> \verbatim
-*>          HOUS2 is REAL array, dimension (LHOUS2)
-*>          Stores the Householder representation of the stage2
+*>          HOUS2 is REAL array, dimension LHOUS2, that
+*>          store the Householder representation of the stage2
 *>          band to tridiagonal.
 *> \endverbatim
 *>
 *> \param[in] LHOUS2
 *> \verbatim
 *>          LHOUS2 is INTEGER
-*>          The dimension of the array HOUS2.
-*>          If LWORK = -1, or LHOUS2 = -1,
+*>          The dimension of the array HOUS2. LHOUS2 = MAX(1, dimension)
+*>          If LWORK = -1, or LHOUS2=-1,
 *>          then a query is assumed; the routine
 *>          only calculates the optimal size of the HOUS2 array, returns
 *>          this value as the first entry of the HOUS2 array, and no error
 *>          message related to LHOUS2 is issued by XERBLA.
-*>          If VECT='N', LHOUS2 = max(1, 4*n);
-*>          if VECT='V', option not yet available.
+*>          LHOUS2 = MAX(1, dimension) where
+*>          dimension = 4*N if VECT='N'
+*>          not available now if VECT='H'
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (LWORK)
+*>          WORK is REAL array, dimension LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -182,7 +183,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup realSYcomputational
 *
@@ -226,10 +227,10 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          VECT, UPLO
@@ -252,8 +253,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -266,10 +267,10 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', VECT, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+      KD     = ILAENV( 17, 'SSYTRD_2STAGE', VECT, N, -1, -1, -1 )
+      IB     = ILAENV( 18, 'SSYTRD_2STAGE', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
 *      WRITE(*,*),'SSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
 *     $            LHMIN, LWMIN
 *

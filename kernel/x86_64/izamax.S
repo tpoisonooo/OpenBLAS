@@ -60,10 +60,6 @@
 	PROLOGUE
 	PROFCODE
 
-#ifdef WINDOWS_ABI
-	emms
-#endif
-
 	salq	$ZBASE_SHIFT, INCX
 
 	fldz

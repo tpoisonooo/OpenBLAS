@@ -1,58 +1,46 @@
 
-#if defined(_AIX)
-define(`INIT_16x4', `
-#else
 .macro INIT_16x4
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
-	XVMOVDP(vs40,vs0)
-	XVMOVDP(vs41,vs0)
-	XVMOVDP(vs42,vs0)
-	XVMOVDP(vs43,vs0)
-	XVMOVDP(vs44,vs0)
-	XVMOVDP(vs45,vs0)
-	XVMOVDP(vs46,vs0)
-	XVMOVDP(vs47,vs0)
-	XVMOVDP(vs48,vs0)
-	XVMOVDP(vs49,vs0)
-	XVMOVDP(vs50,vs0)
-	XVMOVDP(vs51,vs0)
-	XVMOVDP(vs52,vs0)
-	XVMOVDP(vs53,vs0)
-	XVMOVDP(vs54,vs0)
-	XVMOVDP(vs55,vs0)
-	XVMOVDP(vs56,vs0)
-	XVMOVDP(vs57,vs0)
-	XVMOVDP(vs58,vs0)
-	XVMOVDP(vs59,vs0)
-	XVMOVDP(vs60,vs0)
-	XVMOVDP(vs61,vs0)
-	XVMOVDP(vs62,vs0)
-	XVMOVDP(vs63,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
+	xvmovdp		vs40,	vs0
+	xvmovdp		vs41,	vs0
+	xvmovdp		vs42,	vs0
+	xvmovdp		vs43,	vs0
+	xvmovdp		vs44,	vs0
+	xvmovdp		vs45,	vs0
+	xvmovdp		vs46,	vs0
+	xvmovdp		vs47,	vs0
+	xvmovdp		vs48,	vs0
+	xvmovdp		vs49,	vs0
+	xvmovdp		vs50,	vs0
+	xvmovdp		vs51,	vs0
+	xvmovdp		vs52,	vs0
+	xvmovdp		vs53,	vs0
+	xvmovdp		vs54,	vs0
+	xvmovdp		vs55,	vs0
+	xvmovdp		vs56,	vs0
+	xvmovdp		vs57,	vs0
+	xvmovdp		vs58,	vs0
+	xvmovdp		vs59,	vs0
+	xvmovdp		vs60,	vs0
+	xvmovdp		vs61,	vs0
+	xvmovdp		vs62,	vs0
+	xvmovdp		vs63,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_16x4', `
-#else
 .macro KERNEL_16x4
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -110,51 +98,35 @@ define(`KERNEL_16x4', `
 	xvmaddadp	vs63,	vs7,	vs19
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_8x4', `
-#else
 .macro INIT_8x4
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
-	XVMOVDP(vs40,vs0)
-	XVMOVDP(vs41,vs0)
-	XVMOVDP(vs42,vs0)
-	XVMOVDP(vs43,vs0)
-	XVMOVDP(vs44,vs0)
-	XVMOVDP(vs45,vs0)
-	XVMOVDP(vs46,vs0)
-	XVMOVDP(vs47,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
+	xvmovdp		vs40,	vs0
+	xvmovdp		vs41,	vs0
+	xvmovdp		vs42,	vs0
+	xvmovdp		vs43,	vs0
+	xvmovdp		vs44,	vs0
+	xvmovdp		vs45,	vs0
+	xvmovdp		vs46,	vs0
+	xvmovdp		vs47,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_8x4', `
-#else
 .macro KERNEL_8x4
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -189,43 +161,27 @@ define(`KERNEL_8x4', `
 	xvmaddadp	vs47,	vs3,	vs19
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_4x4', `
-#else
 .macro INIT_4x4
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_4x4', `
-#else
 .macro KERNEL_4x4
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -250,39 +206,23 @@ define(`KERNEL_4x4', `
 	xvmaddadp	vs39,	vs1,	vs19
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_2x4', `
-#else
 .macro INIT_2x4
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_2x4', `
-#else
 .macro KERNEL_2x4
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -302,39 +242,23 @@ define(`KERNEL_2x4', `
 	xvmaddadp	vs35,	vs0,	vs19
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_1x4', `
-#else
 .macro INIT_1x4
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_1x4', `
-#else
 .macro KERNEL_1x4
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -354,22 +278,14 @@ define(`KERNEL_1x4', `
 	xvmaddadp	vs35,	vs0,	vs19
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 16x4
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_16x4', `
-#else
 .macro SOLVE_LT_16x4
-#endif
 
 //############### LOAD B #######################
 
@@ -1233,46 +1149,46 @@ define(`SOLVE_LT_16x4', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs34,	o8,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs36,	o16,	T1
-	XXSWAPD(vs36,vs36)
+	xxswapd		vs36,	vs36
 	stxsdx		vs38,	o24,	T1
-	XXSWAPD(vs38,vs38)
+	xxswapd		vs38,	vs38
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs40,	o0,	T1
-	XXSWAPD(vs40,vs40)
+	xxswapd		vs40,	vs40
 	stxsdx		vs42,	o8,	T1
-	XXSWAPD(vs42,vs42)
+	xxswapd		vs42,	vs42
 	stxsdx		vs44,	o16,	T1
-	XXSWAPD(vs44,vs44)
+	xxswapd		vs44,	vs44
 	stxsdx		vs46,	o24,	T1
-	XXSWAPD(vs46,vs46)
+	xxswapd		vs46,	vs46
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs48,	o0,	T1
-	XXSWAPD(vs48,vs48)
+	xxswapd		vs48,	vs48
 	stxsdx		vs50,	o8,	T1
-	XXSWAPD(vs50,vs50)
+	xxswapd		vs50,	vs50
 	stxsdx		vs52,	o16,	T1
-	XXSWAPD(vs52,vs52)
+	xxswapd		vs52,	vs52
 	stxsdx		vs54,	o24,	T1
-	XXSWAPD(vs54,vs54)
+	xxswapd		vs54,	vs54
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs56,	o0,	T1
-	XXSWAPD(vs56,vs56)
+	xxswapd		vs56,	vs56
 	stxsdx		vs58,	o8,	T1
-	XXSWAPD(vs58,vs58)
+	xxswapd		vs58,	vs58
 	stxsdx		vs60,	o16,	T1
-	XXSWAPD(vs60,vs60)
+	xxswapd		vs60,	vs60
 	stxsdx		vs62,	o24,	T1
-	XXSWAPD(vs62,vs62)
+	xxswapd		vs62,	vs62
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs34,	o8,	T2
@@ -1309,46 +1225,46 @@ define(`SOLVE_LT_16x4', `
 
 
 	stxsdx		vs33,	o0,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs35,	o8,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 	stxsdx		vs37,	o16,	T1
-	XXSWAPD(vs37,vs37)
+	xxswapd		vs37,	vs37
 	stxsdx		vs39,	o24,	T1
-	XXSWAPD(vs39,vs39)
+	xxswapd		vs39,	vs39
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs41,	o0,	T1
-	XXSWAPD(vs41,vs41)
+	xxswapd		vs41,	vs41
 	stxsdx		vs43,	o8,	T1
-	XXSWAPD(vs43,vs43)
+	xxswapd		vs43,	vs43
 	stxsdx		vs45,	o16,	T1
-	XXSWAPD(vs45,vs45)
+	xxswapd		vs45,	vs45
 	stxsdx		vs47,	o24,	T1
-	XXSWAPD(vs47,vs47)
+	xxswapd		vs47,	vs47
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs49,	o0,	T1
-	XXSWAPD(vs49,vs49)
+	xxswapd		vs49,	vs49
 	stxsdx		vs51,	o8,	T1
-	XXSWAPD(vs51,vs51)
+	xxswapd		vs51,	vs51
 	stxsdx		vs53,	o16,	T1
-	XXSWAPD(vs53,vs53)
+	xxswapd		vs53,	vs53
 	stxsdx		vs55,	o24,	T1
-	XXSWAPD(vs55,vs55)
+	xxswapd		vs55,	vs55
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs57,	o0,	T1
-	XXSWAPD(vs57,vs57)
+	xxswapd		vs57,	vs57
 	stxsdx		vs59,	o8,	T1
-	XXSWAPD(vs59,vs59)
+	xxswapd		vs59,	vs59
 	stxsdx		vs61,	o16,	T1
-	XXSWAPD(vs61,vs61)
+	xxswapd		vs61,	vs61
 	stxsdx		vs63,	o24,	T1
-	XXSWAPD(vs63,vs63)
+	xxswapd		vs63,	vs63
 
 	stxsdx		vs33,	o0,	T2
 	stxsdx		vs35,	o8,	T2
@@ -1376,22 +1292,14 @@ define(`SOLVE_LT_16x4', `
 	stxsdx		vs61,	o16,	T2
 	stxsdx		vs63,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 8x4
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_8x4', `
-#else
 .macro SOLVE_LT_8x4
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs34,	vs35,	0
@@ -1695,24 +1603,24 @@ define(`SOLVE_LT_8x4', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs34,	o8,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs36,	o16,	T1
-	XXSWAPD(vs36,vs36)
+	xxswapd		vs36,	vs36
 	stxsdx		vs38,	o24,	T1
-	XXSWAPD(vs38,vs38)
+	xxswapd		vs38,	vs38
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs40,	o0,	T1
-	XXSWAPD(vs40,vs40)
+	xxswapd		vs40,	vs40
 	stxsdx		vs42,	o8,	T1
-	XXSWAPD(vs42,vs42)
+	xxswapd		vs42,	vs42
 	stxsdx		vs44,	o16,	T1
-	XXSWAPD(vs44,vs44)
+	xxswapd		vs44,	vs44
 	stxsdx		vs46,	o24,	T1
-	XXSWAPD(vs46,vs46)
+	xxswapd		vs46,	vs46
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs34,	o8,	T2
@@ -1735,24 +1643,24 @@ define(`SOLVE_LT_8x4', `
 
 
 	stxsdx		vs33,	o0,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs35,	o8,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 	stxsdx		vs37,	o16,	T1
-	XXSWAPD(vs37,vs37)
+	xxswapd		vs37,	vs37
 	stxsdx		vs39,	o24,	T1
-	XXSWAPD(vs39,vs39)
+	xxswapd		vs39,	vs39
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs41,	o0,	T1
-	XXSWAPD(vs41,vs41)
+	xxswapd		vs41,	vs41
 	stxsdx		vs43,	o8,	T1
-	XXSWAPD(vs43,vs43)
+	xxswapd		vs43,	vs43
 	stxsdx		vs45,	o16,	T1
-	XXSWAPD(vs45,vs45)
+	xxswapd		vs45,	vs45
 	stxsdx		vs47,	o24,	T1
-	XXSWAPD(vs47,vs47)
+	xxswapd		vs47,	vs47
 
 	stxsdx		vs33,	o0,	T2
 	stxsdx		vs35,	o8,	T2
@@ -1766,22 +1674,14 @@ define(`SOLVE_LT_8x4', `
 	stxsdx		vs45,	o16,	T2
 	stxsdx		vs47,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 4x4
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_4x4', `
-#else
 .macro SOLVE_LT_4x4
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs34,	vs35,	0
@@ -1913,13 +1813,13 @@ define(`SOLVE_LT_4x4', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs34,	o8,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs36,	o16,	T1
-	XXSWAPD(vs36,vs36)
+	xxswapd		vs36,	vs36
 	stxsdx		vs38,	o24,	T1
-	XXSWAPD(vs38,vs38)
+	xxswapd		vs38,	vs38
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs34,	o8,	T2
@@ -1935,35 +1835,27 @@ define(`SOLVE_LT_4x4', `
 
 
 	stxsdx		vs33,	o0,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs35,	o8,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 	stxsdx		vs37,	o16,	T1
-	XXSWAPD(vs37,vs37)
+	xxswapd		vs37,	vs37
 	stxsdx		vs39,	o24,	T1
-	XXSWAPD(vs39,vs39)
+	xxswapd		vs39,	vs39
 
 	stxsdx		vs33,	o0,	T2
 	stxsdx		vs35,	o8,	T2
 	stxsdx		vs37,	o16,	T2
 	stxsdx		vs39,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 2x4
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_2x4', `
-#else
 .macro SOLVE_LT_2x4
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs34,	vs35,	0
@@ -2033,9 +1925,9 @@ define(`SOLVE_LT_2x4', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs34,	o8,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs34,	o8,	T2
@@ -2049,29 +1941,21 @@ define(`SOLVE_LT_2x4', `
 
 
 	stxsdx		vs33,	o0,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs35,	o8,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 
 	stxsdx		vs33,	o0,	T2
 	stxsdx		vs35,	o8,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 1x4
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_1x4', `
-#else
 .macro SOLVE_LT_1x4
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs34,	vs35,	0
@@ -2117,7 +2001,7 @@ define(`SOLVE_LT_1x4', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 
 	stxsdx		vs32,	o0,	T2
 
@@ -2130,55 +2014,39 @@ define(`SOLVE_LT_1x4', `
 
 
 	stxsdx		vs33,	o0,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 
 	stxsdx		vs33,	o0,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_16x2', `
-#else
 .macro INIT_16x2
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
-	XVMOVDP(vs40,vs0)
-	XVMOVDP(vs41,vs0)
-	XVMOVDP(vs42,vs0)
-	XVMOVDP(vs43,vs0)
-	XVMOVDP(vs44,vs0)
-	XVMOVDP(vs45,vs0)
-	XVMOVDP(vs46,vs0)
-	XVMOVDP(vs47,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
+	xvmovdp		vs40,	vs0
+	xvmovdp		vs41,	vs0
+	xvmovdp		vs42,	vs0
+	xvmovdp		vs43,	vs0
+	xvmovdp		vs44,	vs0
+	xvmovdp		vs45,	vs0
+	xvmovdp		vs46,	vs0
+	xvmovdp		vs47,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_16x2', `
-#else
 .macro KERNEL_16x2
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -2218,43 +2086,27 @@ define(`KERNEL_16x2', `
 	xvmaddadp	vs47,	vs7,	vs17
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_8x2', `
-#else
 .macro INIT_8x2
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_8x2', `
-#else
 .macro KERNEL_8x2
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -2279,39 +2131,23 @@ define(`KERNEL_8x2', `
 	xvmaddadp	vs39,	vs3,	vs17
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_4x2', `
-#else
 .macro INIT_4x2
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_4x2', `
-#else
 .macro KERNEL_4x2
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -2330,37 +2166,21 @@ define(`KERNEL_4x2', `
 	xvmaddadp	vs35,	vs1,	vs17
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_2x2', `
-#else
 .macro INIT_2x2
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_2x2', `
-#else
 .macro KERNEL_2x2
-#endif
 
 
 	lxvd2x		vs0,	o0,	AO
@@ -2376,37 +2196,21 @@ define(`KERNEL_2x2', `
 	xvmaddadp	vs33,	vs0,	vs17
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_1x2', `
-#else
 .macro INIT_1x2
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_1x2', `
-#else
 .macro KERNEL_1x2
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -2422,22 +2226,14 @@ define(`KERNEL_1x2', `
 	xvmaddadp	vs33,	vs0,	vs17
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 16x2
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_16x2', `
-#else
 .macro SOLVE_LT_16x2
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs32,	vs33,	3
@@ -3025,46 +2821,46 @@ define(`SOLVE_LT_16x2', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs33,	o8,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs34,	o16,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs35,	o24,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs36,	o0,	T1
-	XXSWAPD(vs36,vs36)
+	xxswapd		vs36,	vs36
 	stxsdx		vs37,	o8,	T1
-	XXSWAPD(vs37,vs37)
+	xxswapd		vs37,	vs37
 	stxsdx		vs38,	o16,	T1
-	XXSWAPD(vs38,vs38)
+	xxswapd		vs38,	vs38
 	stxsdx		vs39,	o24,	T1
-	XXSWAPD(vs39,vs39)
+	xxswapd		vs39,	vs39
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs40,	o0,	T1
-	XXSWAPD(vs40,vs40)
+	xxswapd		vs40,	vs40
 	stxsdx		vs41,	o8,	T1
-	XXSWAPD(vs41,vs41)
+	xxswapd		vs41,	vs41
 	stxsdx		vs42,	o16,	T1
-	XXSWAPD(vs42,vs42)
+	xxswapd		vs42,	vs42
 	stxsdx		vs43,	o24,	T1
-	XXSWAPD(vs43,vs43)
+	xxswapd		vs43,	vs43
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs44,	o0,	T1
-	XXSWAPD(vs44,vs44)
+	xxswapd		vs44,	vs44
 	stxsdx		vs45,	o8,	T1
-	XXSWAPD(vs45,vs45)
+	xxswapd		vs45,	vs45
 	stxsdx		vs46,	o16,	T1
-	XXSWAPD(vs46,vs46)
+	xxswapd		vs46,	vs46
 	stxsdx		vs47,	o24,	T1
-	XXSWAPD(vs47,vs47)
+	xxswapd		vs47,	vs47
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs33,	o8,	T2
@@ -3092,22 +2888,14 @@ define(`SOLVE_LT_16x2', `
 	stxsdx		vs46,	o16,	T2
 	stxsdx		vs47,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 8x2
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_8x2', `
-#else
 .macro SOLVE_LT_8x2
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs32,	vs33,	3
@@ -3323,24 +3111,24 @@ define(`SOLVE_LT_8x2', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs33,	o8,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs34,	o16,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs35,	o24,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 
 	addi		T1,	T1,	32
 
 	stxsdx		vs36,	o0,	T1
-	XXSWAPD(vs36,vs36)
+	xxswapd		vs36,	vs36
 	stxsdx		vs37,	o8,	T1
-	XXSWAPD(vs37,vs37)
+	xxswapd		vs37,	vs37
 	stxsdx		vs38,	o16,	T1
-	XXSWAPD(vs38,vs38)
+	xxswapd		vs38,	vs38
 	stxsdx		vs39,	o24,	T1
-	XXSWAPD(vs39,vs39)
+	xxswapd		vs39,	vs39
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs33,	o8,	T2
@@ -3354,22 +3142,14 @@ define(`SOLVE_LT_8x2', `
 	stxsdx		vs38,	o16,	T2
 	stxsdx		vs39,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 4x2
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_4x2', `
-#else
 .macro SOLVE_LT_4x2
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs32,	vs33,	3
@@ -3465,35 +3245,27 @@ define(`SOLVE_LT_4x2', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs33,	o8,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 	stxsdx		vs34,	o16,	T1
-	XXSWAPD(vs34,vs34)
+	xxswapd		vs34,	vs34
 	stxsdx		vs35,	o24,	T1
-	XXSWAPD(vs35,vs35)
+	xxswapd		vs35,	vs35
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs33,	o8,	T2
 	stxsdx		vs34,	o16,	T2
 	stxsdx		vs35,	o24,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 2x2
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_2x2', `
-#else
 .macro SOLVE_LT_2x2
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 	xxpermdi	vs1,	vs32,	vs33,	3
@@ -3550,29 +3322,21 @@ define(`SOLVE_LT_2x2', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 	stxsdx		vs33,	o8,	T1
-	XXSWAPD(vs33,vs33)
+	xxswapd		vs33,	vs33
 
 	stxsdx		vs32,	o0,	T2
 	stxsdx		vs33,	o8,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 1x2
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_1x2', `
-#else
 .macro SOLVE_LT_1x2
-#endif
 
 	xxpermdi	vs0,	vs32,	vs33,	0
 
@@ -3612,55 +3376,39 @@ define(`SOLVE_LT_1x2', `
 
 
 	stxsdx		vs32,	o0,	T1
-	XXSWAPD(vs32,vs32)
+	xxswapd		vs32,	vs32
 
 	stxsdx		vs32,	o0,	T2
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_16x1', `
-#else
 .macro INIT_16x1
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
-	XVMOVDP(vs40,vs0)
-	XVMOVDP(vs41,vs0)
-	XVMOVDP(vs42,vs0)
-	XVMOVDP(vs43,vs0)
-	XVMOVDP(vs44,vs0)
-	XVMOVDP(vs45,vs0)
-	XVMOVDP(vs46,vs0)
-	XVMOVDP(vs47,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
+	xvmovdp		vs40,	vs0
+	xvmovdp		vs41,	vs0
+	xvmovdp		vs42,	vs0
+	xvmovdp		vs43,	vs0
+	xvmovdp		vs44,	vs0
+	xvmovdp		vs45,	vs0
+	xvmovdp		vs46,	vs0
+	xvmovdp		vs47,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_16x1', `
-#else
 .macro KERNEL_16x1
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -3713,43 +3461,27 @@ define(`KERNEL_16x1', `
 	xvmaddadp	vs47,	vs15,	vs16
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_8x1', `
-#else
 .macro INIT_8x1
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
-	XVMOVDP(vs36,vs0)
-	XVMOVDP(vs37,vs0)
-	XVMOVDP(vs38,vs0)
-	XVMOVDP(vs39,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
+	xvmovdp		vs36,	vs0
+	xvmovdp		vs37,	vs0
+	xvmovdp		vs38,	vs0
+	xvmovdp		vs39,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_8x1', `
-#else
 .macro KERNEL_8x1
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -3780,39 +3512,23 @@ define(`KERNEL_8x1', `
 	xvmaddadp	vs39,	vs7,	vs16
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_4x1', `
-#else
 .macro INIT_4x1
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
-	XVMOVDP(vs34,vs0)
-	XVMOVDP(vs35,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
+	xvmovdp		vs34,	vs0
+	xvmovdp		vs35,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_4x1', `
-#else
 .macro KERNEL_4x1
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -3832,37 +3548,21 @@ define(`KERNEL_4x1', `
 	xvmaddadp	vs35,	vs3,	vs16
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_2x1', `
-#else
 .macro INIT_2x1
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
-	XVMOVDP(vs33,vs0)
+	xvmovdp		vs32,	vs0
+	xvmovdp		vs33,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_2x1', `
-#else
 .macro KERNEL_2x1
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -3878,36 +3578,20 @@ define(`KERNEL_2x1', `
 	xvmaddadp	vs33,	vs1,	vs16
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`INIT_1x1', `
-#else
 .macro INIT_1x1
-#endif
 
 
 	xxlxor		vs0,	vs0,	vs0
 
-	XVMOVDP(vs32,vs0)
+	xvmovdp		vs32,	vs0
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
-#if defined(_AIX)
-define(`KERNEL_1x1', `
-#else
 .macro KERNEL_1x1
-#endif
 
 
 	lxvdsx		vs0,	o0,	AO
@@ -3921,39 +3605,31 @@ define(`KERNEL_1x1', `
 	xvmaddadp	vs32,	vs0,	vs16
 
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 16x1
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_16x1', `
-#else
 .macro SOLVE_LT_16x1
-#endif
 
-	XXSWAPD(vs0,vs32)
-	XXSWAPD(vs1,vs33)
-	XXSWAPD(vs2,vs34)
-	XXSWAPD(vs3,vs35)
-	XXSWAPD(vs4,vs36)
-	XXSWAPD(vs5,vs37)
-	XXSWAPD(vs6,vs38)
-	XXSWAPD(vs7,vs39)
-	XXSWAPD(vs8,vs40)
-	XXSWAPD(vs9,vs41)
-	XXSWAPD(vs10,vs42)
-	XXSWAPD(vs11,vs43)
-	XXSWAPD(vs12,vs44)
-	XXSWAPD(vs13,vs45)
-	XXSWAPD(vs14,vs46)
-	XXSWAPD(vs15,vs47)
+	xxswapd		vs0,	vs32
+	xxswapd		vs1,	vs33
+	xxswapd		vs2,	vs34
+	xxswapd		vs3,	vs35
+	xxswapd		vs4,	vs36
+	xxswapd		vs5,	vs37
+	xxswapd		vs6,	vs38
+	xxswapd		vs7,	vs39
+	xxswapd		vs8,	vs40
+	xxswapd		vs9,	vs41
+	xxswapd		vs10,	vs42
+	xxswapd		vs11,	vs43
+	xxswapd		vs12,	vs44
+	xxswapd		vs13,	vs45
+	xxswapd		vs14,	vs46
+	xxswapd		vs15,	vs47
 
 //############### LOAD B #######################
 
@@ -4539,31 +4215,23 @@ define(`SOLVE_LT_16x1', `
 	stxsdx		vs46,	o16,	T1
 	stxsdx		vs47,	o24,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 8x1
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_8x1', `
-#else
 .macro SOLVE_LT_8x1
-#endif
 
-	XXSWAPD(vs0,vs32)
-	XXSWAPD(vs1,vs33)
-	XXSWAPD(vs2,vs34)
-	XXSWAPD(vs3,vs35)
-	XXSWAPD(vs4,vs36)
-	XXSWAPD(vs5,vs37)
-	XXSWAPD(vs6,vs38)
-	XXSWAPD(vs7,vs39)
+	xxswapd		vs0,	vs32
+	xxswapd		vs1,	vs33
+	xxswapd		vs2,	vs34
+	xxswapd		vs3,	vs35
+	xxswapd		vs4,	vs36
+	xxswapd		vs5,	vs37
+	xxswapd		vs6,	vs38
+	xxswapd		vs7,	vs39
 
 //############### LOAD B #######################
 
@@ -4775,27 +4443,19 @@ define(`SOLVE_LT_8x1', `
 	stxsdx		vs38,	o16,	T1
 	stxsdx		vs39,	o24,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 4x1
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_4x1', `
-#else
 .macro SOLVE_LT_4x1
-#endif
 
-	XXSWAPD(vs0,vs32)
-	XXSWAPD(vs1,vs33)
-	XXSWAPD(vs2,vs34)
-	XXSWAPD(vs3,vs35)
+	xxswapd		vs0,	vs32
+	xxswapd		vs1,	vs33
+	xxswapd		vs2,	vs34
+	xxswapd		vs3,	vs35
 
 //############### LOAD B #######################
 
@@ -4886,25 +4546,17 @@ define(`SOLVE_LT_4x1', `
 	stxsdx		vs34,	o16,	T1
 	stxsdx		vs35,	o24,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 2x1
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_2x1', `
-#else
 .macro SOLVE_LT_2x1
-#endif
 
-	XXSWAPD(vs0,vs32)
-	XXSWAPD(vs1,vs33)
+	xxswapd		vs0,	vs32
+	xxswapd		vs1,	vs33
 
 //############### LOAD B #######################
 
@@ -4957,24 +4609,16 @@ define(`SOLVE_LT_2x1', `
 	stxsdx		vs32,	o0,	T1
 	stxsdx		vs33,	o8,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 
 
 /*##########################################################################################
 			 SOLVE_LT 1x1
 ##########################################################################################*/
 
-#if defined(_AIX)
-define(`SOLVE_LT_1x1', `
-#else
 .macro SOLVE_LT_1x1
-#endif
 
-	XXSWAPD(vs0,vs32)
+	xxswapd		vs0,	vs32
 
 //############### LOAD B #######################
 
@@ -5011,9 +4655,5 @@ define(`SOLVE_LT_1x1', `
 
 	stxsdx		vs32,	o0,	T1
 
-#if defined(_AIX)
-')
-#else
 .endm
-#endif
 

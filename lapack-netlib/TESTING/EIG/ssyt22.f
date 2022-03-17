@@ -41,8 +41,7 @@
 *>
 *>      Specifically, if ITYPE=1, then:
 *>
-*>              RESULT(1) = | U**T A U - S | / ( |A| m ulp ) and
-*>              RESULT(2) = | I - U**T U | / ( m ulp )
+*>              RESULT(1) = | U' A U - S | / ( |A| m ulp ) *andC>              RESULT(2) = | I - U'U | / ( m ulp )
 *> \endverbatim
 *
 *  Arguments:
@@ -52,8 +51,7 @@
 *>  ITYPE   INTEGER
 *>          Specifies the type of tests to be performed.
 *>          1: U expressed as a dense orthogonal matrix:
-*>             RESULT(1) = | A - U S U**T | / ( |A| n ulp ) and
-*>             RESULT(2) = | I - U U**T | / ( n ulp )
+*>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
 *>
 *>  UPLO    CHARACTER
 *>          If UPLO='U', the upper triangle of A will be used and the
@@ -124,7 +122,7 @@
 *>
 *>  TAU     REAL array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)**T in the Householder transformation H(j) of
+*>          v(j) v(j)' in the Householder transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *>          Not modified.
@@ -209,7 +207,7 @@
 *
 *     Compute error matrix:
 *
-*     ITYPE=1: error = U**T A U - S
+*     ITYPE=1: error = U' A U - S
 *
       CALL SSYMM( 'L', UPLO, N, M, ONE, A, LDA, U, LDU, ZERO, WORK, N )
       NN = N*N
@@ -242,7 +240,7 @@
 *
 *     Do Test 2
 *
-*     Compute  U**T U - I
+*     Compute  U'U - I
 *
       IF( ITYPE.EQ.1 )
      $   CALL SORT01( 'Columns', N, M, U, LDU, WORK, 2*N*N,

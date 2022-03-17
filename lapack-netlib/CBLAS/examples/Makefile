@@ -1,21 +1,14 @@
-TOPSRCDIR = ../..
-include $(TOPSRCDIR)/make.inc
+include ../../make.inc
 
-.SUFFIXES: .c .o
-.c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+all: example1 example2
 
-.PHONY: all
-all: cblas_ex1 cblas_ex2
+example1:
+	$(CC) $(CFLAGS) -I../include -c cblas_example1.c
+	$(LOADER) $(LOADOPTS) -o cblas_ex1 cblas_example1.o $(CBLASLIB) $(BLASLIB)
 
-cblas_ex1: cblas_example1.o $(CBLASLIB) $(BLASLIB)
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
-cblas_ex2: cblas_example2.o $(CBLASLIB) $(BLASLIB)
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+example2:
+	$(CC) $(CFLAGS) -I../include -c cblas_example2.c
+	$(LOADER) $(LOADOPTS) -o cblas_ex2 cblas_example2.o $(CBLASLIB) $(BLASLIB)
 
-.PHONY: clean cleanobj cleanexe
-clean: cleanobj cleanexe
-cleanobj:
-	rm -f *.o
-cleanexe:
-	rm -f cblas_ex1 cblas_ex2
+cleanall:
+	rm -f *.o cblas_ex1 cblas_ex2

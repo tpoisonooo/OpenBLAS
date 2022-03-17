@@ -41,7 +41,7 @@ lapack_int LAPACKE_ctprfb( int matrix_layout, char side, char trans, char direct
                            lapack_complex_float* a, lapack_int lda,
                            lapack_complex_float* b, lapack_int ldb )
 {
-    lapack_int ncols_v, nrows_v, ncols_a, nrows_a;
+    lapack_int ncols_v, nrows_v;
     lapack_int info = 0;
     lapack_int ldwork;
     lapack_int work_size;
@@ -51,55 +51,40 @@ lapack_int LAPACKE_ctprfb( int matrix_layout, char side, char trans, char direct
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs
-         * V is m-by-k (left,  columnwise)
-         *   or n-by-k (right, columnwise)
-         *   or k-by-m (left,  rowwise)
-         *   or k-by-n (right, rowwise)
-         * T is k-by-k
-         * A is k-by-n (left)
-         *   or m-by-k (right)
-         * B is m-by-n
-         */
-        if( LAPACKE_lsame( storev, 'C' ) ) {
-            ncols_v = k;
-            nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
-                      LAPACKE_lsame( side, 'R' ) ? n : 0;
-        } else if( LAPACKE_lsame( storev, 'R' ) ) {
-            ncols_v = LAPACKE_lsame( side, 'L' ) ? m :
-                      LAPACKE_lsame( side, 'R' ) ? n : 0;
-            nrows_v = k;
-        } else {
-            ncols_v = 0;
-            nrows_v = 0;
-        }
-        nrows_a = LAPACKE_lsame( side, 'L' ) ? k :
-                  LAPACKE_lsame( side, 'R' ) ? m : 0;
-        ncols_a = LAPACKE_lsame( side, 'L' ) ? n :
-                  LAPACKE_lsame( side, 'R' ) ? k : 0;
-        if( LAPACKE_cge_nancheck( matrix_layout, ncols_a, nrows_a, a, lda ) ) {
-            return -14;
-        }
-        if( LAPACKE_cge_nancheck( matrix_layout, m, n, b, ldb ) ) {
-            return -16;
-        }
-        if( LAPACKE_cge_nancheck( matrix_layout, k, k, t, ldt ) ) {
-            return -12;
-        }
-        if( LAPACKE_cge_nancheck( matrix_layout, nrows_v, ncols_v, v, ldv ) ) {
-            return -10;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_lsame( storev, 'C' ) ) {
+        ncols_v = k;
+        nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
+                             ( LAPACKE_lsame( side, 'R' ) ? n : 0 );
+    } else if( LAPACKE_lsame( storev, 'R' ) ) {
+        ncols_v = LAPACKE_lsame( side, 'L' ) ? m :
+                             ( LAPACKE_lsame( side, 'R' ) ? n : 0 );
+        nrows_v = k;
+    } else {
+        ncols_v = 0;
+        nrows_v = 0;
+    }
+    if( LAPACKE_cge_nancheck( matrix_layout, k, m, a, lda ) ) {
+        return -14;
+    }
+    if( LAPACKE_cge_nancheck( matrix_layout, m, n, b, ldb ) ) {
+        return -16;
+    }
+    if( LAPACKE_cge_nancheck( matrix_layout, k, k, t, ldt ) ) {
+        return -12;
+    }
+    if( LAPACKE_cge_nancheck( matrix_layout, nrows_v, ncols_v, v, ldv ) ) {
+        return -10;
     }
 #endif
     if (side=='l' ||  side=='L') {
-        ldwork = k;
-        work_size = MAX(1,ldwork) * MAX(1,n);
-    }
+       ldwork = k;
+       work_size = MAX(1,ldwork) * MAX(1,n);
+       }
     else {
-        ldwork = m;
-        work_size = MAX(1,ldwork) * MAX(1,k);
-    }
+       ldwork = m;
+       work_size = MAX(1,ldwork) * MAX(1,k);
+       }
     /* Allocate memory for working array(s) */
     work = (lapack_complex_float*)
         LAPACKE_malloc( sizeof(lapack_complex_float) * work_size );

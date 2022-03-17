@@ -1,10 +1,9 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_BINARY_DIR})
 
-list (REMOVE_ITEM FLOAT_TYPES "BFLOAT16")
 
 set(LAPACK_SOURCES
+  getrf/getrf_single.c
   potrf/potrf_U_single.c
   potrf/potrf_L_single.c
   lauum/lauum_U_single.c
@@ -42,25 +41,11 @@ set(UNIT_SOURCES2
 GenerateNamedObjects("${LAPACK_SOURCES}")
 GenerateNamedObjects("${LAPACK_MANGLED_SOURCES}" "" "" false "" "" false 3)
 
-GenerateNamedObjects("laswp/generic/laswp_k_4.c" "" "laswp_plus" false "" ""  false 3)
-GenerateNamedObjects("laswp/generic/laswp_k_4.c" "MINUS" "laswp_minus" false "" ""  false 3)
+# TODO: laswp needs arch specific code
+GenerateNamedObjects("laswp/generic/laswp_k.c" "" "laswp_plus" false "" "" false 3)
+GenerateNamedObjects("laswp/generic/laswp_k.c" "MINUS" "laswp_minus" false "" "" false 3)
 
-foreach (float_type ${FLOAT_TYPES})
-if (${float_type} STREQUAL "HALF")
- continue()
-endif()
-GenerateNamedObjects("getrf/getrf_single.c" "UNIT" "getrf_single" false "" "" false ${float_type})
-endforeach ()
-
-# dynamic_arch laswp needs arch specific code ?
-#foreach(TARGET_CORE ${DYNAMIC_CORE})
-#      set(TSUFFIX "_${TARGET_CORE}")
-#
-#GenerateNamedObjects("laswp/generic/laswp_k_4.c" "" "laswp_plus" false "" ${TSUFFIX}  false 3)
-#GenerateNamedObjects("laswp/generic/laswp_k_4.c" "MINUS" "laswp_minus" false "" ${TSUFFIX}  false 3)
-#endforeach ()
-
-if (USE_THREAD)
+if (SMP)
 
   if (USE_OPENMP)
     set(GETRF_SRC getrf/getrf_parallel_omp.c)
@@ -70,6 +55,7 @@ if (USE_THREAD)
 
   # these do not have 'z' versions
   set(PARALLEL_SOURCES
+    ${GETRF_SRC}
     lauum/lauum_U_parallel.c
     lauum/lauum_L_parallel.c
     potrf/potrf_U_parallel.c
@@ -86,10 +72,6 @@ if (USE_THREAD)
     trtri/trtri_U_parallel.c
     trtri/trtri_L_parallel.c
   )
-
-  foreach (float_type ${FLOAT_TYPES})
-    GenerateNamedObjects("${GETRF_SRC}" "UNIT" "getrf_parallel" false "" "" false ${float_type})
-  endforeach()
 
   GenerateNamedObjects("${PARALLEL_SOURCES}")
 endif ()

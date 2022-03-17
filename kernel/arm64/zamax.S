@@ -137,10 +137,10 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	fadd	v3.2d, v3.2d, v4.2d
 #if defined(USE_MIN)
 	fmin	v1.2d, v1.2d, v3.2d
-	fminp	TMPF, v1.2d
+	fminp	MAXF, v1.2d
 #else
 	fmax	v1.2d, v1.2d, v3.2d
-	fmaxp	TMPF, v1.2d
+	fmaxp	MAXF, v1.2d
 #endif
 #endif
 	fcmp	MAXF, TMPF
@@ -184,62 +184,62 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	PROLOGUE
 
 	cmp	N, xzr
-	ble	.Lzamax_kernel_zero
+	ble	amax_kernel_zero
 	cmp	INC_X, xzr
-	ble	.Lzamax_kernel_zero
+	ble	amax_kernel_zero
 
 	cmp	INC_X, #1
-	bne	.Lzamax_kernel_S_BEGIN
+	bne	amax_kernel_S_BEGIN
 
-.Lzamax_kernel_F_BEGIN:
+amax_kernel_F_BEGIN:
 
 	asr	I, N, #2
 	cmp	I, xzr
-	beq	.Lzamax_kernel_F1_INIT
+	beq	amax_kernel_F1_INIT
 
 	INIT_F4
 	subs	I, I, #1
-	beq	.Lzamax_kernel_F1
+	beq	amax_kernel_F1
 
-.Lzamax_kernel_F4:
+amax_kernel_F4:
 
 	KERNEL_F4
 
 	subs	I, I, #1
-	bne	.Lzamax_kernel_F4
+	bne	amax_kernel_F4
 
-.Lzamax_kernel_F1:
+amax_kernel_F1:
 
 	ands	I, N, #3
-	ble	.Lzamax_kernel_L999
+	ble	amax_kernel_L999
 
-.Lzamax_kernel_F10:
+amax_kernel_F10:
 
 	KERNEL_F1
 
 	subs    I, I, #1
-        bne     .Lzamax_kernel_F10
+        bne     amax_kernel_F10
 
 	ret
 
-.Lzamax_kernel_F1_INIT:
+amax_kernel_F1_INIT:
 
 	INIT_F1
 	subs	N, N, #1
-	b	.Lzamax_kernel_F1
+	b	amax_kernel_F1
 
-.Lzamax_kernel_S_BEGIN:
+amax_kernel_S_BEGIN:
 
 	INIT_S
 
 	subs	N, N, #1
-	ble	.Lzamax_kernel_L999
+	ble	amax_kernel_L999
 
 	asr	I, N, #2
 	cmp	I, xzr
-	ble	.Lzamax_kernel_S1
+	ble	amax_kernel_S1
 
-.Lzamax_kernel_S4:
+amax_kernel_S4:
 
 	KERNEL_S1
 	KERNEL_S1
@@ -247,25 +247,25 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	KERNEL_S1
 
 	subs	I, I, #1
-	bne	.Lzamax_kernel_S4
+	bne	amax_kernel_S4
 
-.Lzamax_kernel_S1:
+amax_kernel_S1:
 
 	ands	I, N, #3
-	ble	.Lzamax_kernel_L999
+	ble	amax_kernel_L999
 
-.Lzamax_kernel_S10:
+amax_kernel_S10:
 
 	KERNEL_S1
 
 	subs    I, I, #1
-        bne     .Lzamax_kernel_S10
+        bne     amax_kernel_S10
 
-.Lzamax_kernel_L999:
+amax_kernel_L999:
 
 	ret
 
-.Lzamax_kernel_zero:
+amax_kernel_zero:
 
 	fmov	MAXF, REG0
 	ret

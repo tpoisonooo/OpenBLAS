@@ -56,23 +56,21 @@ lapack_int LAPACKE_ztgsen( int matrix_layout, lapack_int ijob,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
-            return -7;
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        return -7;
+    }
+    if( LAPACKE_zge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        return -9;
+    }
+    if( wantq ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, q, ldq ) ) {
+            return -13;
         }
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, b, ldb ) ) {
-            return -9;
-        }
-        if( wantq ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, n, q, ldq ) ) {
-                return -13;
-            }
-        }
-        if( wantz ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, n, z, ldz ) ) {
-                return -15;
-            }
+    }
+    if( wantz ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, z, ldz ) ) {
+            return -15;
         }
     }
 #endif
@@ -84,7 +82,7 @@ lapack_int LAPACKE_ztgsen( int matrix_layout, lapack_int ijob,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = LAPACK_Z2INT( work_query );
     /* Allocate memory for work arrays */
     if( ijob != 0 ) {

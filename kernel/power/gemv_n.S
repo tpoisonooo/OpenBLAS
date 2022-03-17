@@ -39,7 +39,7 @@
 #define ASSEMBLER
 #include "common.h"
 
-#if defined(linux) || defined(__FreeBSD__)
+#ifdef linux
 #ifndef __64BIT__
 #define M	r3
 #define	N	r4
@@ -159,11 +159,6 @@
 #define PREFETCHSIZE_C  16
 #endif
 
-#ifdef POWER3
-#define PREFETCHSIZE_A  16
-#define PREFETCHSIZE_C  16
-#endif
-
 #ifdef POWER4
 #define PREFETCHSIZE_A  16
 #define PREFETCHSIZE_C  16
@@ -257,7 +252,7 @@
 	stw	r27,   196(SP)
 #endif
 
-#if defined(linux) || defined(__FreeBSD__)
+#ifdef linux
 #ifndef __64BIT__
 	lwz	INCY,    FRAMESLOT(0) + STACKSIZE(SP)
 	lwz	BUFFER,  FRAMESLOT(1) + STACKSIZE(SP)

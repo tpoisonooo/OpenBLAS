@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE ZGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+*     SUBROUTINE CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
 *    $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
 *    $                    LWORK, RWORK, IWORK, INFO )
 *
@@ -270,7 +270,7 @@
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -308,8 +308,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEBRD, ZGELQF, ZGEQRF, ZLASCL, ZLASET, ZLACPY,
-     $                   ZUNMLQ, ZUNMBR, ZUNMQR, DBDSVDX, DLASCL, XERBLA
+      EXTERNAL           ZGEBRD, ZGELQF, ZGEQRF, ZLASCL, ZLASET,
+     $                   DLASCL, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

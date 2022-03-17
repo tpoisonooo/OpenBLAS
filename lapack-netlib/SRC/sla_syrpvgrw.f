@@ -101,7 +101,7 @@
 *>     as determined by SSYTRF.
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
 *>          WORK is REAL array, dimension (2*N)
 *> \endverbatim

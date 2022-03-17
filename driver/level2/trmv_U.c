@@ -59,7 +59,7 @@ int CNAME(BLASLONG m, FLOAT *a, BLASLONG lda, FLOAT *b, BLASLONG incb, FLOAT *bu
     min_i = MIN(m - is, DTB_ENTRIES);
 
 #ifndef TRANSA
-    if (is > 0){ 
+    if (is > 0){
       GEMV_N(is, min_i, 0, dp1,
 	     a + is * lda,  lda,
 	     B + is, 1,

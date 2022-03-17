@@ -71,17 +71,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
       INTEGER FUNCTION ILASLC( M, N, A, LDA )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            M, N, LDA
@@ -94,7 +94,7 @@
 *
 *     .. Parameters ..
       REAL             ZERO
-      PARAMETER ( ZERO = 0.0E+0 )
+      PARAMETER ( ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER I

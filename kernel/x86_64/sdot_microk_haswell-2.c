@@ -41,7 +41,7 @@ static void sdot_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"vxorps		%%ymm6, %%ymm6, %%ymm6	             \n\t"
 	"vxorps		%%ymm7, %%ymm7, %%ymm7	             \n\t"
 
-	".p2align 4				             \n\t"
+	".align 16				             \n\t"
 	"1:				             \n\t"
         "vmovups                  (%2,%0,4), %%ymm12         \n\t"  // 2 * x
         "vmovups                32(%2,%0,4), %%ymm13         \n\t"  // 2 * x
@@ -53,11 +53,9 @@ static void sdot_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"vfmadd231ps    64(%3,%0,4), %%ymm14, %%ymm6 \n\t"  // 2 * y
 	"vfmadd231ps    96(%3,%0,4), %%ymm15, %%ymm7 \n\t"  // 2 * y
 
-#ifndef DSDOT
 	"addq		$32 , %0	  	     \n\t"
 	"subq	        $32 , %1		     \n\t"		
 	"jnz		1b		             \n\t"
-#endif
 
 	"vextractf128	$1 , %%ymm4 , %%xmm12	     \n\t"
 	"vextractf128	$1 , %%ymm5 , %%xmm13	     \n\t"
@@ -79,17 +77,16 @@ static void sdot_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"vmovss		%%xmm4,    (%4)		\n\t"
 	"vzeroupper				\n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (dot)     // 4
 	: "cc", 
-	  "%xmm0", "%xmm1", "%xmm2", "%xmm3",
-	  "%xmm4", "%xmm5", "%xmm6", "%xmm7",
-	  "%xmm8", "%xmm9", "%xmm10", "%xmm11",
+	  "%xmm4", "%xmm5", 
+	  "%xmm6", "%xmm7", 
 	  "%xmm12", "%xmm13", "%xmm14", "%xmm15",
 	  "memory"
 	);

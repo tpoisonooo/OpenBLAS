@@ -55,8 +55,6 @@
 	PROFCODE
 
 #ifdef WINDOWS_ABI
-	emms
-
 	movq	40(%rsp), INCY
 #endif
 

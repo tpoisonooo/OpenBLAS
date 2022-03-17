@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cstegr
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -51,26 +51,24 @@ lapack_int LAPACKE_cstegr( int matrix_layout, char jobz, char range,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
-            return -11;
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
+        return -11;
+    }
+    if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+        return -5;
+    }
+    if( LAPACKE_s_nancheck( n, e, 1 ) ) {
+        return -6;
+    }
+    if( LAPACKE_lsame( range, 'v' ) ) {
+        if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
+            return -7;
         }
-        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
-            return -5;
-        }
-        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
-            return -6;
-        }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
-                return -7;
-            }
-        }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
-                return -8;
-            }
+    }
+    if( LAPACKE_lsame( range, 'v' ) ) {
+        if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
+            return -8;
         }
     }
 #endif
@@ -81,7 +79,7 @@ lapack_int LAPACKE_cstegr( int matrix_layout, char jobz, char range,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );

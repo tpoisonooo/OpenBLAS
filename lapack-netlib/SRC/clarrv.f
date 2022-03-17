@@ -143,7 +143,7 @@
 *>          RTOL2 is REAL
 *>           Parameters for bisection.
 *>           An interval [LEFT,RIGHT] has converged if
-*>           RIGHT-LEFT < MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
+*>           RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
 *> \endverbatim
 *>
 *> \param[in,out] W
@@ -199,7 +199,7 @@
 *>
 *> \param[out] Z
 *> \verbatim
-*>          Z is COMPLEX array, dimension (LDZ, max(1,M) )
+*>          Z is array, dimension (LDZ, max(1,M) )
 *>          If INFO = 0, the first M columns of Z contain the
 *>          orthonormal eigenvectors of the matrix T
 *>          corresponding to the input eigenvalues, with the i-th
@@ -286,7 +286,7 @@
      $                   IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
      $                   WORK, IWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -348,13 +348,6 @@
 *     ..
 
       INFO = 0
-*
-*     Quick return if possible
-*
-      IF( (N.LE.0) .OR. (M.LE.0) ) THEN
-         RETURN
-      END IF
-*
 *     The first N entries of WORK are reserved for the eigenvalues
       INDLD = N+1
       INDLLD= 2*N+1

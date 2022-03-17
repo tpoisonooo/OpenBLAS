@@ -32,12 +32,7 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-TOPSRCDIR = ../..
-include $(TOPSRCDIR)/make.inc
-
-.SUFFIXES: .c .o
-.c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+include ../../make.inc
 
 OBJ = lapacke_cgb_nancheck.o \
       lapacke_cgb_trans.o \
@@ -188,15 +183,14 @@ OBJ = lapacke_cgb_nancheck.o \
       lapacke_make_complex_float.o \
       lapacke_make_complex_double.o
 
-.PHONY: all
 all: lib
 
-.PHONY: lib
 lib: $(OBJ)
-	$(AR) $(ARFLAGS) $(LAPACKELIB) $^
-	$(RANLIB) $(LAPACKELIB)
+	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(OBJ)
+	$(RANLIB) ../../$(LAPACKELIB)
 
-.PHONY: clean cleanobj
-clean: cleanobj
-cleanobj:
+.c.o:
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+
+clean:
 	rm -f *.o

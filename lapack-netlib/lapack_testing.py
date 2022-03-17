@@ -12,8 +12,8 @@ import os, sys, math
 import getopt
 # Arguments
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hd:b:srep:t:n",
-                               ["help", "dir", "bin", "short", "run", "error","prec=","test=","number"])
+    opts, args = getopt.getopt(sys.argv[1:], "hd:srep:t:n",
+                               ["help", "dir", "short", "run", "error","prec=","test=","number"])
 
 except getopt.error as msg:
     print(msg)
@@ -29,13 +29,14 @@ only_numbers=0
 test_dir='TESTING'
 bin_dir='bin/Release'
 
+abs_bin_dir=os.path.normpath(os.path.join(os.getcwd(),bin_dir))
+
 for o, a in opts:
     if o in ("-h", "--help"):
         print(sys.argv[0]+" [-h|--help] [-d dir |--dir dir] [-s |--short] [-r |--run] [-e |--error] [-p p |--prec p] [-t test |--test test] [-n | --number]")
         print("     - h is to print this message")
         print("     - r is to use to run the LAPACK tests then analyse the output (.out files). By default, the script will not run all the LAPACK tests")
         print("     - d [dir] is to indicate where is the LAPACK testing directory (.out files). By default, the script will use .")
-        print("     - b [bin] is to indicate where is the LAPACK binary files are located. By default, the script will use .")
         print(" LEVEL OF OUTPUT")
         print("     - x is to print a detailed summary")
         print("     - e is to print only the error summary")
@@ -74,8 +75,6 @@ for o, a in opts:
             just_errors = 1
         if o in ( '-p', '--prec' ):
             prec = a
-        if o in ( '-b', '--bin' ):
-            bin_dir = a
         if o in ( '-d', '--dir' ):
             test_dir = a
         if o in ( '-t', '--test' ):
@@ -85,8 +84,6 @@ for o, a in opts:
             short_summary = 1
 
 # process options
-
-abs_bin_dir=os.path.normpath(os.path.join(os.getcwd(),bin_dir))
 
 os.chdir(test_dir)
 
@@ -117,7 +114,10 @@ def run_summary_test( f, cmdline, short_summary):
             pipe = open(cmdline,'r')
             r=0
     else:
-        cmdline = os.path.join(abs_bin_dir, cmdline)
+        if os.name != 'nt':
+            cmdline='./' + cmdline
+        else :
+            cmdline=abs_bin_dir+os.path.sep+cmdline
 
         outfile=cmdline.split()[4]
         #pipe = open(outfile,'w')
@@ -232,12 +232,12 @@ for dtype in range_prec:
     letter+"bb","glm","gqr",
     "gsv","csd","lse",
     letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp"),
-    ("Nonsymmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem-2-stage", "Singular-Value-Decomposition",
-    "Eigen-Condition","Nonsymmetric-Eigenvalue","Nonsymmetric-Generalized-Eigenvalue-Problem",
-    "Nonsymmetric-Generalized-Eigenvalue-Problem-driver", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Generalized-Problem",
-    "Banded-Singular-Value-Decomposition-routines", "Generalized-Linear-Regression-Model-routines", "Generalized-QR-and-RQ-factorization-routines",
-    "Generalized-Singular-Value-Decomposition-routines", "CS-Decomposition-routines", "Constrained-Linear-Least-Squares-routines",
-    "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines"),
+    ("Nonsymmetric Eigenvalue Problem", "Symmetric Eigenvalue Problem", "Symmetric Eigenvalue Problem 2 stage", "Singular Value Decomposition",
+    "Eigen Condition","Nonsymmetric Eigenvalue","Nonsymmetric Generalized Eigenvalue Problem",
+    "Nonsymmetric Generalized Eigenvalue Problem driver", "Symmetric Eigenvalue Problem", "Symmetric Eigenvalue Generalized Problem",
+    "Banded Singular Value Decomposition routines", "Generalized Linear Regression Model routines", "Generalized QR and RQ factorization routines",
+    "Generalized Singular Value Decomposition routines", "CS Decomposition routines", "Constrained Linear Least Squares routines",
+    "Linear Equation routines", "Mixed Precision linear equation routines","RFP linear equation routines"),
     (letter+"nep", letter+"sep", letter+"se2", letter+"svd",
     letter+"ec",letter+"ed",letter+"gg",
     letter+"gd",letter+"sb",letter+"sg",
@@ -257,18 +257,18 @@ for dtype in range_prec:
         else:
             if dtest==16:
                 # LIN TESTS
-                cmdbase="LIN/xlintst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+                cmdbase="xlintst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             elif dtest==17:
                 # PROTO LIN TESTS
-                cmdbase="LIN/xlintst"+letter+dtypes[0][dtype-1]+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+                cmdbase="xlintst"+letter+dtypes[0][dtype-1]+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             elif dtest==18:
                 # PROTO LIN TESTS
-                cmdbase="LIN/xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+                cmdbase="xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             else:
                 # EIG TESTS
-                cmdbase="EIG/xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+                cmdbase="xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
         if (not just_errors and not short_summary):
-            print("Testing "+name+" "+dtests[1][dtest]+"-"+cmdbase, end=' ')
+            print("-->  Testing "+name+" "+dtests[1][dtest]+" [ "+cmdbase+" ]")
         # Run the process: either to read the file or run the LAPACK testing
         nb_test = run_summary_test(f, cmdbase, short_summary)
         list_results[0][dtype]+=nb_test[0]
@@ -279,13 +279,13 @@ for dtype in range_prec:
 
         if (not short_summary):
             if (nb_test[0]>0 and just_errors==0):
-                print("passed: "+str(nb_test[0]))
+                print("-->  Tests passed: "+str(nb_test[0]))
             if (nb_test[1]>0):
-                print("failing to pass the threshold: "+str(nb_test[1]))
+                print("-->  Tests failing to pass the threshold: "+str(nb_test[1]))
             if (nb_test[2]>0):
-                print("Illegal Error: "+str(nb_test[2]))
+                print("-->  Illegal Error: "+str(nb_test[2]))
             if (nb_test[3]>0):
-                print("Info Error: "+str(nb_test[3]))
+                print("-->  Info Error: "+str(nb_test[3]))
             if (got_error>0 and just_errors==1):
                 print("ERROR IS LOCATED IN "+name+" "+dtests[1][dtest]+" [ "+cmdbase+" ]")
                 print("")

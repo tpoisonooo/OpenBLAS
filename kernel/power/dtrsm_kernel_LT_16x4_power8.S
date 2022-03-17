@@ -47,9 +47,9 @@
 #endif
 
 #ifdef __64BIT__
-#define STACKSIZE 520
-#define ALPHA   296+200(SP)
-#define FZERO	304+200(SP)
+#define STACKSIZE 320
+#define ALPHA   296(SP)
+#define FZERO	304(SP)
 #else
 #define STACKSIZE 240
 #define ALPHA   224(SP)
@@ -60,7 +60,7 @@
 #define	N	r4
 #define	K	r5
 
-#if defined(linux) || defined(__FreeBSD__)
+#ifdef linux
 #ifndef __64BIT__
 #define A	r6
 #define	B	r7
@@ -111,8 +111,6 @@
 #define o32	r29
 #define o48	r30
 #define T1	r31
-
-#define VECSAVE r11
 
 #include "dtrsm_macros_LT_16x4_power8.S"
 
@@ -165,7 +163,6 @@
 	std	r17,  256(SP)
 	std	r16,  264(SP)
 	std	r15,  272(SP)
-	addi r11,SP,288
 #else
 	stw	r31,  144(SP)
 	stw	r30,  148(SP)
@@ -181,32 +178,7 @@
 	stw	r20,  188(SP)
 	stw	r19,  192(SP)
 	stw	r18,  196(SP)
-	addi r11,SP,208
 #endif
-        stvx    v20,  r11,r0
-addi r11,r11,16
-        stvx    v21,  r11,r0
-addi r11,r11,16
-        stvx    v22,  r11,r0
-addi r11,r11,16
-        stvx    v23,  r11,r0
-addi r11,r11,16
-        stvx    v24,  r11,r0
-addi r11,r11,16
-        stvx    v25,  r11,r0
-addi r11,r11,16
-        stvx    v26,  r11,r0
-addi r11,r11,16
-        stvx    v27,  r11,r0
-addi r11,r11,16
-        stvx    v28,  r11,r0
-addi r11,r11,16
-        stvx    v29,  r11,r0
-addi r11,r11,16
-        stvx    v30,  r11,r0
-addi r11,r11,16
-        stvx    v31,  r11,r0
-li r11,0
 
 
 #if defined(_AIX) || defined(__APPLE__)
@@ -216,7 +188,7 @@ li r11,0
 #endif
 
 
-#if (defined(linux) || defined(__FreeBSD__)) && defined(__64BIT__)
+#if defined(linux) && defined(__64BIT__)
 	ld	OFFSET,  FRAMESLOT(0) + STACKSIZE(SP)
 #endif
 
@@ -297,7 +269,6 @@ L999:
 	ld	r17,  256(SP)
 	ld	r16,  264(SP)
 	ld	r15,  272(SP)
-        addi r11,SP,288
 #else
 	lwz	r31,  144(SP)
 	lwz	r30,  148(SP)
@@ -313,35 +284,10 @@ L999:
 	lwz	r20,  188(SP)
 	lwz	r19,  192(SP)
 	lwz	r18,  196(SP)
-        addi r11,SP,208
 #endif
-        lvx    v20,  r11,r3
-addi r11,r11,16
-        lvx    v21,  r11,r3
-addi r11,r11,16
-        lvx    v22,  r11,r3
-addi r11,r11,16
-        lvx    v23,  r11,r3
-addi r11,r11,16
-        lvx    v24,  r11,r3
-addi r11,r11,16
-        lvx    v25,  r11,r3
-addi r11,r11,16
-        lvx    v26,  r11,r3
-addi r11,r11,16
-        lvx    v27,  r11,r3
-addi r11,r11,16
-        lvx    v28,  r11,r3
-addi r11,r11,16
-        lvx    v29,  r11,r3
-addi r11,r11,16
-        lvx    v30,  r11,r3
-addi r11,r11,16
-        lvx    v31,  r11,r3
-li r11,0
-
 
 	addi	SP, SP, STACKSIZE
+
 	blr
 
 	EPILOGUE

@@ -1,6 +1,5 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_BINARY_DIR})
 
 # sources that need to be compiled twice, once with no flags and once with LOWER
 set(UL_SOURCES
@@ -73,7 +72,7 @@ GenerateNamedObjects("zgbmv_k.c" "TRANS;CONJ;XCONJ" "gbmv_d" false "" "" "" 2)
 # special defines for complex
 foreach (float_type ${FLOAT_TYPES})
 
-  if (USE_THREAD)
+  if (SMP)
     GenerateNamedObjects("gemv_thread.c" "" "gemv_thread_n" false "" "" false ${float_type})
     GenerateNamedObjects("gemv_thread.c" "TRANSA" "gemv_thread_t" false "" "" false ${float_type})
 
@@ -81,7 +80,6 @@ foreach (float_type ${FLOAT_TYPES})
     GenerateNamedObjects("gbmv_thread.c" "TRANSA" "gbmv_thread_t" false "" "" false ${float_type})
   endif ()
 
-# special defines for complex
   if (${float_type} STREQUAL "COMPLEX" OR ${float_type} STREQUAL "ZCOMPLEX")
 
     foreach (u_source ${U_SOURCES})
@@ -108,7 +106,7 @@ foreach (float_type ${FLOAT_TYPES})
       GenerateNamedObjects("z${ulvm_source}" "LOWER;HEMVREV" "${op_name}_M" false "" "" false ${float_type})
     endforeach()
 
-    if (USE_THREAD)
+    if (SMP)
 
       GenerateNamedObjects("gemv_thread.c" "CONJ" "gemv_thread_r" false "" "" false ${float_type})
       GenerateNamedObjects("gemv_thread.c" "CONJ;TRANSA" "gemv_thread_c" false "" "" false ${float_type})
@@ -187,7 +185,7 @@ foreach (float_type ${FLOAT_TYPES})
       GenerateCombinationObjects("${l_source}" "UNIT" "N" "TRANSA" 0 "${op_name}_TU" false ${float_type})
     endforeach ()
 
-    if (USE_THREAD)
+    if (SMP)
       GenerateNamedObjects("ger_thread.c" "" "" false "" "" false ${float_type})
       foreach(nu_smp_source ${NU_SMP_SOURCES})
         string(REGEX MATCH "[a-z]+_[a-z]+" op_name ${nu_smp_source})
@@ -198,27 +196,7 @@ foreach (float_type ${FLOAT_TYPES})
   endif ()
 endforeach ()
 
-if (BUILD_BFLOAT16)
-  if (USE_THREAD)
-    GenerateNamedObjects("sbgemv_thread.c" "" "gemv_thread_n" false "" "" false "BFLOAT16")
-    GenerateNamedObjects("sbgemv_thread.c" "TRANSA" "gemv_thread_t" false "" "" false "BFLOAT16")
-  endif ()
-endif ()
-
-if ( BUILD_COMPLEX AND NOT  BUILD_SINGLE)
-  if (USE_THREAD)
-	  GenerateNamedObjects("gemv_thread.c" "" "gemv_thread_n" false "" "" false "SINGLE")
-	  GenerateNamedObjects("gemv_thread.c" "TRANSA" "gemv_thread_t" false "" "" false "SINGLE")
-  endif ()
-endif ()
-if ( BUILD_COMPLEX16 AND NOT  BUILD_DOUBLE)
-  if (USE_THREAD)
-	  GenerateNamedObjects("gemv_thread.c" "" "gemv_thread_n" false "" "" false "DOUBLE")
-	  GenerateNamedObjects("gemv_thread.c" "TRANSA" "gemv_thread_t" false "" "" false "DOUBLE")
-  endif ()
-endif ()
-
-if (USE_THREAD)
+if (SMP)
   GenerateCombinationObjects("${UL_SMP_SOURCES}" "LOWER" "U" "" 2)
 endif ()
 

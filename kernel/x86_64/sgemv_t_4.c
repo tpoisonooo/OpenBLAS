@@ -36,9 +36,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sgemv_t_microk_sandy-4.c"
 #elif defined(HASWELL) || defined(ZEN)
 #include "sgemv_t_microk_haswell-4.c"
-#elif defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
-#include "sgemv_t_microk_haswell-4.c"
-#include "sgemv_t_microk_skylakex.c"
 #endif
 
 #if defined(STEAMROLLER) || defined(EXCAVATOR)
@@ -142,9 +139,9 @@ static void sgemv_kernel_4x2(BLASLONG n, FLOAT *ap0, FLOAT *ap1, FLOAT *x, FLOAT
 	"movss	       %%xmm11,4(%2)	        \n\t"
 
         :
-	"+r" (i),	 // 0
-	"+r" (n)	 // 1
-	:
+   	:
+	"r" (i),	 // 0
+	"r" (n),	 // 1
         "r" (y),         // 2    
         "r" (ap0),       // 3
         "r" (ap1),       // 4
@@ -211,9 +208,9 @@ static void sgemv_kernel_4x1(BLASLONG n, FLOAT *ap, FLOAT *x, FLOAT *y)
 	"movss	       %%xmm10, (%2)	        \n\t"
 
         :
-	"+r" (i),	 // 0
-	"+r" (n)	 // 1
-	:
+   	:
+	"r" (i),	 // 0
+	"r" (n),	 // 1
         "r" (y),         // 2    
         "r" (ap),        // 3
         "r" (x)          // 4
@@ -275,9 +272,9 @@ static void add_y(BLASLONG n, FLOAT da , FLOAT *src, FLOAT *dest, BLASLONG inc_d
         "jnz            1b              \n\t"
 
         :
-	"+r" (i),	  // 0
-	"+r" (n)	  // 1
-	:
+   	:
+	"r" (i),	  // 0
+	"r" (n),	  // 1
         "r" (&da),        // 2    
         "r" (src),        // 3
         "r" (dest)        // 4
@@ -307,37 +304,6 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 
         if ( m < 1 ) return(0);
         if ( n < 1 ) return(0);
-
-	#ifdef HAVE_SGEMV_T_SKYLAKE_KERNEL
-    if (lda == m && n <= 16384 && m <= 8)
-    {
-        FLOAT * xbuffer_align = x;
-        FLOAT * ybuffer_align = y;
-
-        if (inc_x != 1) {
-            xbuffer_align = buffer;
-            for(BLASLONG i=0; i<m; i++) {
-                 xbuffer_align[i] = x[i*inc_x];
-            }
-        }
-
-        if (inc_y != 1) {
-            ybuffer_align = buffer + m;
-            for(BLASLONG i=0; i<n; i++) {
-                ybuffer_align[i] = y[i*inc_y];
-            }
-        }
-        sgemv_kernel_t(m, n , alpha, a, xbuffer_align, ybuffer_align);
-
-        if(inc_y != 1) {
-            for(BLASLONG i=0; i<n; i++) {
-                   y[i*inc_y] = ybuffer_align[i];
-            }
-        }
-        return(0);
-    }
-
-    #endif
 
 	xbuffer = buffer;
 	ytemp   = buffer + (m < NBMAX ? m : NBMAX);
@@ -440,9 +406,9 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 		{
 
 			sgemv_kernel_4x1(NB,a_ptr,xbuffer,ybuffer);
-			// a_ptr  += lda;
+			a_ptr  += lda;
 			*y_ptr += ybuffer[0] * alpha;
-			// y_ptr  += inc_y;
+			y_ptr  += inc_y;
 
 		}
 		a += NB;

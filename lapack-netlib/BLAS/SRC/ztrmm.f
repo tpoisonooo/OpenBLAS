@@ -109,7 +109,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension ( LDA, k ), where k is m
+*>          A is COMPLEX*16 array of DIMENSION ( LDA, k ), where k is m
 *>           when  SIDE = 'L' or 'l'  and is  n  when  SIDE = 'R' or 'r'.
 *>           Before entry  with  UPLO = 'U' or 'u',  the  leading  k by k
 *>           upper triangular part of the array  A must contain the upper
@@ -132,9 +132,9 @@
 *>           then LDA must be at least max( 1, n ).
 *> \endverbatim
 *>
-*> \param[in,out] B
+*> \param[in] B
 *> \verbatim
-*>          B is COMPLEX*16 array, dimension ( LDB, N ).
+*>          B is (input/output) COMPLEX*16 array of DIMENSION ( LDB, n ).
 *>           Before entry,  the leading  m by n part of the array  B must
 *>           contain the matrix  B,  and  on exit  is overwritten  by the
 *>           transformed matrix.

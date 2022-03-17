@@ -83,17 +83,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
       SUBROUTINE DLARTGS( X, Y, SIGMA, CS, SN )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION        CS, SIGMA, SN, X, Y
@@ -107,9 +107,6 @@
 *     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION        R, S, THRESH, W, Z
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DLARTGP
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION        DLAMCH

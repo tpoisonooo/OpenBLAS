@@ -34,8 +34,6 @@ int CNAME(BLASLONG bm,BLASLONG bn,BLASLONG bk,FLOAT alpha,FLOAT* ba,FLOAT* bb,FL
 
 #if !defined(LEFT)
    off = -offset;
-#else
-   off = 0;
 #endif
 
 

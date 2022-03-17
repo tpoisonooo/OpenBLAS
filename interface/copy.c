@@ -54,13 +54,7 @@ void NAME(blasint *N, FLOAT *x, blasint *INCX, FLOAT *y, blasint *INCY){
 
 #else
 
-#ifdef COMPLEX
-void CNAME(blasint n, void *vx, blasint incx, void *vy, blasint incy){
-FLOAT *x = (FLOAT*) vx;
-FLOAT *y = (FLOAT*) vy;
-#else
 void CNAME(blasint n, FLOAT *x, blasint incx, FLOAT *y, blasint incy){
-#endif
 
   PRINT_DEBUG_CNAME;
 

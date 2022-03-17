@@ -49,38 +49,11 @@ int blas_level1_thread(int mode, BLASLONG m, BLASLONG n, BLASLONG k, void *alpha
   blas_arg_t   args [MAX_CPU_NUMBER];
 
   BLASLONG i, width, astride, bstride;
-  int num_cpu, calc_type_a, calc_type_b;
+  int num_cpu, calc_type;
 
-  switch (mode & BLAS_PREC) {
-  case BLAS_INT8    :
-  case BLAS_BFLOAT16:
-  case BLAS_SINGLE  :
-  case BLAS_DOUBLE  :
-  case BLAS_XDOUBLE :
-    calc_type_a = calc_type_b = (mode & BLAS_PREC) + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_STOBF16 :
-    calc_type_a = 2 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 1 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_DTOBF16 :
-    calc_type_a = 3 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 1 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_BF16TOS :
-    calc_type_a = 1 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 2 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_BF16TOD :
-    calc_type_a = 1 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 3 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  default:
-    calc_type_a = calc_type_b = 0;
-    break;
-  }
+  calc_type = (mode & BLAS_PREC) + ((mode & BLAS_COMPLEX) != 0) + 2;
 
-  if(!(mode & BLAS_PTHREAD)) mode |= BLAS_LEGACY;
+  mode |= BLAS_LEGACY;
 
   for (i = 0; i < nthreads; i++) blas_queue_init(&queue[i]);
 
@@ -104,8 +77,8 @@ int blas_level1_thread(int mode, BLASLONG m, BLASLONG n, BLASLONG k, void *alpha
       bstride = width;
     }
 
-    astride <<= calc_type_a;
-    bstride <<= calc_type_b;
+    astride <<= calc_type;
+    bstride <<= calc_type;
 
     args[num_cpu].m = width;
     args[num_cpu].n = n;
@@ -147,36 +120,9 @@ int blas_level1_thread_with_return_value(int mode, BLASLONG m, BLASLONG n, BLASL
   blas_arg_t   args [MAX_CPU_NUMBER];
 
   BLASLONG i, width, astride, bstride;
-  int num_cpu, calc_type_a, calc_type_b;
+  int num_cpu, calc_type;
 
-  switch (mode & BLAS_PREC) {
-  case BLAS_INT8    :
-  case BLAS_BFLOAT16:
-  case BLAS_SINGLE  :
-  case BLAS_DOUBLE  :
-  case BLAS_XDOUBLE :
-    calc_type_a = calc_type_b = (mode & BLAS_PREC) + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_STOBF16 :
-    calc_type_a = 2 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 1 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_DTOBF16 :
-    calc_type_a = 3 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 1 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_BF16TOS :
-    calc_type_a = 1 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 2 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  case BLAS_BF16TOD :
-    calc_type_a = 1 + ((mode & BLAS_COMPLEX) != 0);
-    calc_type_b = 3 + ((mode & BLAS_COMPLEX) != 0);
-    break;
-  default:
-    calc_type_a = calc_type_b = 0;
-    break;
-  }
+  calc_type = (mode & BLAS_PREC) + ((mode & BLAS_COMPLEX) != 0) + 2;
 
   mode |= BLAS_LEGACY;
 
@@ -202,8 +148,8 @@ int blas_level1_thread_with_return_value(int mode, BLASLONG m, BLASLONG n, BLASL
       bstride = width;
     }
 
-    astride <<= calc_type_a;
-    bstride <<= calc_type_b;
+    astride <<= calc_type;
+    bstride <<= calc_type;
 
     args[num_cpu].m = width;
     args[num_cpu].n = n;

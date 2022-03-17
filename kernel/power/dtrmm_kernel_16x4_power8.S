@@ -82,20 +82,20 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #ifdef __64BIT__
-#define STACKSIZE 520
-#define ALPHA_SP   296+200(SP)
-#define FZERO	304+200(SP)
+#define STACKSIZE 320
+#define ALPHA_SP   296(SP)
+#define FZERO	304(SP)
 #else
-#define STACKSIZE 436
-#define ALPHA_SP   224+196(SP)
-#define FZERO	232+196(SP)
+#define STACKSIZE 240
+#define ALPHA_SP   224(SP)
+#define FZERO	232(SP)
 #endif
 
 #define	M	r3
 #define	N	r4
 #define	K	r5
 
-#if defined(linux) || defined(__FreeBSD__)
+#ifdef linux
 #ifndef __64BIT__
 #define A	r6
 #define	B	r7
@@ -152,8 +152,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define PRE	r30
 #define T2	r31
 
-#define VECSAVE r11
-
 #include "dtrmm_macros_16x4_power8.S"
 
 
@@ -208,7 +206,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	std	r15,  272(SP)
 	std	r14,  280(SP)
 	std	r13,  288(SP)
-        addi    r11, SP, 304
 #else
 	stw	r31,  144(SP)
 	stw	r30,  148(SP)
@@ -229,32 +226,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	stw	r15,  208(SP)
 	stw	r14,  212(SP)
 	stw	r13,  216(SP)
-        addi    r11, r0, 224
 #endif
-        stvx    v20, r11, r0
-        addi    r11, r11, 16
-        stvx    v21, r11, r0
-        addi    r11, r11, 16
-        stvx    v22, r11, r0
-        addi    r11, r11, 16
-        stvx    v23, r11, r0
-        addi    r11, r11, 16
-        stvx    v24, r11, r0
-        addi    r11, r11, 16
-        stvx    v25, r11, r0
-        addi    r11, r11, 16
-        stvx    v26, r11, r0
-        addi    r11 ,r11, 16
-        stvx    v27, r11, r0
-        addi    r11, r11, 16
-        stvx    v28, r11, r0
-        addi    r11, r11, 16
-        stvx    v29, r11, r0
-        addi    r11, r11, 16
-        stvx    v30, r11, r0
-        addi    r11, r11, 16
-        stvx    v31, r11, r0
-        li r11,0
 
 	stfd	f1,  ALPHA_SP
 	stw	r0,  FZERO
@@ -268,7 +240,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	slwi	LDC, LDC, BASE_SHIFT
 
 #if defined(TRMMKERNEL)
-#if (defined(linux) || defined(__FreeBSD__)) && defined(__64BIT__)
+#if defined(linux) && defined(__64BIT__)
 	ld	OFFSET,  FRAMESLOT(0) + STACKSIZE(SP)
 #endif
 
@@ -298,9 +270,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	ble	.L999_H1
 
 #ifdef __64BIT__
-	addi	ALPHA, SP, 296+200
+	addi	ALPHA, SP, 296
 #else
-	addi	ALPHA, SP, 224+196
+	addi	ALPHA, SP, 224
 #endif
 
 	li	PRE, 256 
@@ -360,7 +332,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	ld	r15,  272(SP)
 	ld	r14,  280(SP)
 	ld	r13,  288(SP)
-        addi    r11, SP, 304
 #else
 	lwz	r31,  144(SP)
 	lwz	r30,  148(SP)
@@ -381,34 +352,10 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	lwz	r15,  208(SP)
 	lwz	r14,  212(SP)
 	lwz	r13,  216(SP)
-        addi    r11, SP, 224
 #endif
-        lvx     v20, r11, r3
-        addi    r11, r11, 16
-        lvx     v21, r11, r3
-        addi    r11, r11, 16
-        lvx     v22, r11, r3
-        addi    r11, r11, 16
-        lvx     v23, r11, r3
-        addi    r11, r11, 16
-        lvx     v24, r11, r3
-        addi    r11, r11, 16
-        lvx     v25, r11, r3
-        addi    r11, r11, 16
-        lvx     v26, r11, r3
-        addi    r11, r11, 16
-        lvx     v27, r11, r3
-        addi    r11, r11, 16
-        lvx     v28, r11, r3
-        addi    r11, r11, 16
-        lvx     v29, r11, r3
-        addi    r11, r11, 16
-        lvx     v30, r11, r3
-        addi    r11, r11, 16
-        lvx     v31, r11, r3
-        li      r11, 0
 
 	addi	SP, SP, STACKSIZE
+
 	blr
 
 	EPILOGUE

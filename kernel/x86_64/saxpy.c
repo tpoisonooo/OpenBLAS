@@ -33,8 +33,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "saxpy_microk_nehalem-2.c"
 #elif defined(HASWELL) || defined(ZEN)
 #include "saxpy_microk_haswell-2.c"
-#elif defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
-#include "saxpy_microk_skylakex-2.c"
 #elif defined(SANDYBRIDGE)
 #include "saxpy_microk_sandy-2.c"
 #elif defined(PILEDRIVER) || defined(STEAMROLLER) || defined(EXCAVATOR)

@@ -28,16 +28,15 @@
 *>
 *> SSBT21  generally checks a decomposition of the form
 *>
-*>         A = U S U**T
+*>         A = U S U'
 *>
-*> where **T means transpose, A is symmetric banded, U is
+*> where ' means transpose, A is symmetric banded, U is
 *> orthogonal, and S is diagonal (if KS=0) or symmetric
 *> tridiagonal (if KS=1).
 *>
 *> Specifically:
 *>
-*>         RESULT(1) = | A - U S U**T | / ( |A| n ulp ) and
-*>         RESULT(2) = | I - U U**T | / ( n ulp )
+*>         RESULT(1) = | A - U S U' | / ( |A| n ulp ) *andC>         RESULT(2) = | I - UU' | / ( n ulp )
 *> \endverbatim
 *
 *  Arguments:
@@ -215,7 +214,7 @@
 *
       ANORM = MAX( SLANSB( '1', CUPLO, N, IKA, A, LDA, WORK ), UNFL )
 *
-*     Compute error matrix:    Error = A - U S U**T
+*     Compute error matrix:    Error = A - U S U'
 *
 *     Copy A from SB to SP storage format.
 *
@@ -266,7 +265,7 @@
 *
 *     Do Test 2
 *
-*     Compute  U U**T - I
+*     Compute  UU' - I
 *
       CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            N )

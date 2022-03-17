@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+*       SUBROUTINE ZLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
 *            INFO, PATH)
 *
 *       .. Scalar Arguments ..
@@ -56,7 +56,7 @@
 *>
 *> \param[in] NRHS
 *> \verbatim
-*>          NRHS is INTEGER
+*>          NRHS is NRHS
 *>          The requested number of right-hand sides.
 *> \endverbatim
 *>
@@ -126,18 +126,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+      SUBROUTINE ZLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
      $     INFO, PATH)
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER N, NRHS, LDA, LDX, LDB, INFO
@@ -164,7 +164,7 @@
       INTEGER NMAX_EXACT, NMAX_APPROX, SIZE_D
       PARAMETER (NMAX_EXACT = 6, NMAX_APPROX = 11, SIZE_D = 8)
 *
-*     d's are generated from random permutation of those eight elements.
+*     d's are generated from random permuation of those eight elements.
       COMPLEX*16 d1(8), d2(8), invd1(8), invd2(8)
       DATA D1 /(-1,0),(0,1),(-1,-1),(0,-1),(1,0),(-1,1),(1,1),(1,-1)/
       DATA D2 /(-1,0),(0,-1),(-1,1),(0,1),(1,0),(-1,-1),(1,-1),(1,1)/
@@ -220,8 +220,7 @@
       END DO
 *
 *     Generate the scaled Hilbert matrix in A
-*     If we are testing SY routines,
-*        take D1_i = D2_i, else, D1_i = D2_i*
+*     If we are testing SY routines, take D1_i = D2_i, else, D1_i = D2_i*
       IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, N
             DO I = 1, N
@@ -251,9 +250,8 @@
          WORK(J) = (  ( (WORK(J-1)/(J-1)) * (J-1 - N) ) /(J-1)  )
      $        * (N +J -1)
       END DO
-
-*     If we are testing SY routines,
-*           take D1_i = D2_i, else, D1_i = D2_i*
+*
+*     If we are testing SY routines, take D1_i = D2_i, else, D1_i = D2_i*
       IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, NRHS
             DO I = 1, N

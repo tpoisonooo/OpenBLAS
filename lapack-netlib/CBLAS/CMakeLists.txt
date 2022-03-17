@@ -12,10 +12,8 @@ FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/cblas_mangling.h
                          SYMBOL_NAMESPACE "F77_")
 if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
   message(WARNING "Reverting to pre-defined include/lapacke_mangling.h")
-    configure_file(include/lapacke_mangling_with_flags.h.in
-                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
-    configure_file(include/cblas_mangling_with_flags.h.in
-                 ${LAPACK_BINARY_DIR}/include/cblas_mangling.h)
+  configure_file(include/lapacke_mangling_with_flags.h.in
+                 ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
 endif()
 
 include_directories(include ${LAPACK_BINARY_DIR}/include)
@@ -30,10 +28,7 @@ endforeach()
 endmacro()
 
 append_subdir_files(CBLAS_INCLUDE "include")
-install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  COMPONENT Development
-  )
+install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include)
 
 # --------------------------------------------------
 if(BUILD_TESTING)
@@ -50,9 +45,7 @@ endif()
 set(_cblas_config_install_guard_target "")
 if(ALL_TARGETS)
   install(EXPORT cblas-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cblas-${LAPACK_VERSION}
-    COMPONENT Development
-    )
+    DESTINATION ${LIBRARY_DIR}/cmake/cblas-${LAPACK_VERSION})
   # Choose one of the cblas targets to use as a guard for
   # cblas-config.cmake to load targets from the install tree.
   list(GET ALL_TARGETS 0 _cblas_config_install_guard_target)
@@ -85,10 +78,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-install.cmake.in
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/cblas-config.cmake
   ${LAPACK_BINARY_DIR}/cblas-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cblas-${LAPACK_VERSION}
+  DESTINATION ${LIBRARY_DIR}/cmake/cblas-${LAPACK_VERSION}
   )
 
 #install(EXPORT cblas-targets
-#  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cblas-${LAPACK_VERSION}
-#  COMPONENT Development
-#  )
+#  DESTINATION ${LIBRARY_DIR}/cmake/cblas-${LAPACK_VERSION})

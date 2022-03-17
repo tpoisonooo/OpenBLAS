@@ -1,4 +1,3 @@
-*> \brief \b CGELQ
 *
 *  Definition:
 *  ===========
@@ -18,17 +17,7 @@
 *  =============
 *>
 *> \verbatim
-*>
-*> CGELQ computes an LQ factorization of a complex M-by-N matrix A:
-*>
-*>    A = ( L 0 ) *  Q
-*>
-*> where:
-*>
-*>    Q is a N-by-N orthogonal matrix;
-*>    L is a lower-triangular M-by-M matrix;
-*>    0 is a M-by-(N-M) zero matrix, if M < N.
-*>
+*> CGELQ computes a LQ factorization of an M-by-N matrix A.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,7 +138,7 @@
 *> \verbatim
 *>
 *> These details are particular for this LAPACK implementation. Users should not 
-*> take them for granted. These details may change in the future, and are not likely
+*> take them for granted. These details may change in the future, and are unlikely not
 *> true for another LAPACK implementation. These details are relevant if one wants
 *> to try to understand the code. They are not part of the interface.
 *>
@@ -170,10 +159,10 @@
       SUBROUTINE CGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
 *
-*  -- LAPACK computational routine (version 3.9.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*     November 2019
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N, TSIZE, LWORK
@@ -187,7 +176,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, LMINWS, MINT, MINW
-      INTEGER            MB, NB, MINTSZ, NBLCKS, LWMIN, LWOPT, LWREQ
+      INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -243,31 +232,19 @@
 *
 *     Determine if the workspace size satisfies minimal size
 *
-      IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-         LWMIN = MAX( 1, N )
-         LWOPT = MAX( 1, MB*N )
-      ELSE
-         LWMIN = MAX( 1, M )
-         LWOPT = MAX( 1, MB*M )
-      END IF
       LMINWS = .FALSE.
-      IF( ( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) .OR. LWORK.LT.LWOPT )
-     $    .AND. ( LWORK.GE.LWMIN ) .AND. ( TSIZE.GE.MINTSZ )
+      IF( ( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) .OR. LWORK.LT.MB*M )
+     $    .AND. ( LWORK.GE.M ) .AND. ( TSIZE.GE.MINTSZ )
      $    .AND. ( .NOT.LQUERY ) ) THEN
         IF( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) ) THEN
           LMINWS = .TRUE.
           MB = 1
           NB = N
         END IF
-        IF( LWORK.LT.LWOPT ) THEN
+        IF( LWORK.LT.MB*M ) THEN
           LMINWS = .TRUE.
           MB = 1
         END IF
-      END IF
-      IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-         LWREQ = MAX( 1, MB*N )
-      ELSE
-         LWREQ = MAX( 1, MB*M )
       END IF
 *
       IF( M.LT.0 ) THEN
@@ -279,7 +256,7 @@
       ELSE IF( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 )
      $   .AND. ( .NOT.LQUERY ) .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -6
-      ELSE IF( ( LWORK.LT.LWREQ ) .AND .( .NOT.LQUERY )
+      ELSE IF( ( LWORK.LT.MAX( 1, M*MB ) ) .AND .( .NOT.LQUERY )
      $   .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -8
       END IF
@@ -293,9 +270,9 @@
         T( 2 ) = MB
         T( 3 ) = NB
         IF( MINW ) THEN
-          WORK( 1 ) = LWMIN
+          WORK( 1 ) = MAX( 1, N )
         ELSE
-          WORK( 1 ) = LWREQ
+          WORK( 1 ) = MAX( 1, MB*M )
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
@@ -320,7 +297,7 @@
      $                LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = LWREQ
+      WORK( 1 ) = MAX( 1, MB*M )
 *
       RETURN
 *

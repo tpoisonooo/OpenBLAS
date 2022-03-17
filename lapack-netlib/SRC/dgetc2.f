@@ -85,7 +85,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           = 0: successful exit
-*>           > 0: if INFO = k, U(k, k) is likely to produce overflow if
+*>           > 0: if INFO = k, U(k, k) is likely to produce owerflow if
 *>                we try to solve for x in Ax = b. So U is perturbed to
 *>                avoid the overflow.
 *> \endverbatim
@@ -111,7 +111,7 @@
 *  =====================================================================
       SUBROUTINE DGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.8.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -135,7 +135,7 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DSWAP, DLABAD
+      EXTERNAL           DGER, DSWAP
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH

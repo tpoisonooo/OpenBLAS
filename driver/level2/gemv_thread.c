@@ -62,36 +62,9 @@
 #endif
 #endif
 
-#ifndef thread_local
-# if __STDC_VERSION__ >= 201112 && !defined __STDC_NO_THREADS__
-#  define thread_local _Thread_local
-# elif defined _WIN32 && ( \
-       defined _MSC_VER || \
-       defined __ICL || \
-       defined __DMC__ || \
-       defined __BORLANDC__ )
-#  define thread_local __declspec(thread) 
-/* note that ICC (linux) and Clang are covered by __GNUC__ */
-# elif (defined __GNUC__ || \
-       defined __SUNPRO_C || \
-       defined __xlC__) && !defined(__APPLE__)
-#  define thread_local __thread
-# else
-# define UNSAFE
-#endif
-#endif
-#if defined USE_OPENMP
-#undef UNSAFE
-#endif
-
-#if !defined(TRANSA) && !defined(UNSAFE)
+#ifndef TRANSA
 #define Y_DUMMY_NUM 1024
-#if defined(USE_OPENMP)
 static FLOAT y_dummy[Y_DUMMY_NUM];
-#pragma omp threadprivate(y_dummy)
-# else
-static thread_local FLOAT y_dummy[Y_DUMMY_NUM];
-# endif
 #endif
 
 static int gemv_kernel(blas_arg_t *args, BLASLONG *range_m, BLASLONG *range_n, FLOAT *dummy1, FLOAT *buffer, BLASLONG pos){
@@ -132,12 +105,10 @@ static int gemv_kernel(blas_arg_t *args, BLASLONG *range_m, BLASLONG *range_n, F
 #ifdef TRANSA
     y += n_from * incy * COMPSIZE;
 #else
-# ifndef UNSAFE
     //for split matrix row (n) direction and vector x of gemv_n
     x += n_from * incx * COMPSIZE;
     //store partial result for every thread
     y += (m_to - m_from) * 1 * COMPSIZE * pos;
-# endif
 #endif
   }
 
@@ -165,7 +136,7 @@ int CNAME(BLASLONG m, BLASLONG n, FLOAT *alpha, FLOAT *a, BLASLONG lda, FLOAT *x
 
   BLASLONG width, i, num_cpu;
 
-#if !defined(TRANSA) && !defined(UNSAFE)
+#ifndef TRANSA
   int split_x=0;
 #endif
 
@@ -241,7 +212,7 @@ int CNAME(BLASLONG m, BLASLONG n, FLOAT *alpha, FLOAT *a, BLASLONG lda, FLOAT *x
     i -= width;
   }
 
-#if !defined(TRANSA) && !defined(UNSAFE) 
+#ifndef TRANSA
   //try to split matrix on row direction and x.
   //Then, reduction.
   if (num_cpu < nthreads) {
@@ -301,7 +272,7 @@ int CNAME(BLASLONG m, BLASLONG n, FLOAT *alpha, FLOAT *a, BLASLONG lda, FLOAT *x
     exec_blas(num_cpu, queue);
   }
 
-#if !defined(TRANSA) && !defined(UNSAFE)
+#ifndef TRANSA
   if(split_x==1){
     //reduction
     for(i=0; i<num_cpu; i++){

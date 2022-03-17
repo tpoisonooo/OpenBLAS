@@ -35,11 +35,6 @@ DASUMKERNEL  = ../arm/asum.c
 CASUMKERNEL  = ../arm/zasum.c
 ZASUMKERNEL  = ../arm/zasum.c
 
-SSUMKERNEL  = ../arm/sum.c
-DSUMKERNEL  = ../arm/sum.c
-CSUMKERNEL  = ../arm/zsum.c
-ZSUMKERNEL  = ../arm/zsum.c
-
 SAXPYKERNEL  = ../arm/axpy.c
 DAXPYKERNEL  = ../arm/axpy.c
 CAXPYKERNEL  = ../arm/zaxpy.c
@@ -54,7 +49,6 @@ SDOTKERNEL   = ../arm/dot.c
 DDOTKERNEL   = ../arm/dot.c
 CDOTKERNEL   = ../arm/zdot.c
 ZDOTKERNEL   = ../arm/zdot.c
-DSDOTKERNEL  = ../generic/dot.c
 
 SNRM2KERNEL  = ../arm/nrm2.c
 DNRM2KERNEL  = ../arm/nrm2.c

@@ -37,7 +37,7 @@
 *> CHETRF_AA computes the factorization of a complex hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
-*>    A = U**H*T*U  or  A = L*T*L**H
+*>    A = U*T*U**H  or  A = L*T*L**H
 *>
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is a hermitian tridiagonal matrix.
@@ -114,7 +114,11 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, D(i,i) is exactly zero.  The factorization
+*>                has been completed, but the block diagonal matrix D is
+*>                exactly singular, and division by zero will occur if it
+*>                is used to solve a system of equations.
 *> \endverbatim
 *
 *  Authors:
@@ -125,17 +129,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
       SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
       IMPLICIT NONE
 *
@@ -155,7 +159,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL      LQUERY, UPPER
-      INTEGER      J, LWKOPT
+      INTEGER      J, LWKOPT, IINFO
       INTEGER      NB, MJ, NJ, K1, K2, J1, J2, J3, JB
       COMPLEX      ALPHA
 *     ..
@@ -165,7 +169,7 @@
       EXTERNAL     LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     CLAHEF_AA, CGEMM, CCOPY, CSWAP, CSCAL, XERBLA
+      EXTERNAL     XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    REAL, CONJG, MAX
@@ -174,7 +178,7 @@
 *
 *     Determine the block size
 *
-      NB = ILAENV( 1, 'CHETRF_AA', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CHETRF', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *
@@ -211,10 +215,13 @@
       IPIV( 1 ) = 1
       IF ( N.EQ.1 ) THEN
          A( 1, 1 ) = REAL( A( 1, 1 ) )
+         IF ( A( 1, 1 ).EQ.ZERO ) THEN
+            INFO = 1
+         END IF
          RETURN
       END IF
 *
-*     Adjust block size based on the workspace size
+*     Adjubst block size based on the workspace size
 *
       IF( LWORK.LT.((1+NB)*N) ) THEN
          NB = ( LWORK-N ) / N
@@ -223,7 +230,7 @@
       IF( UPPER ) THEN
 *
 *        .....................................................
-*        Factorize A as U**H*D*U using the upper triangle of A
+*        Factorize A as L*D*L**H using the upper triangle of A
 *        .....................................................
 *
 *        copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N))
@@ -254,9 +261,13 @@
 *
          CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
-     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
+     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
+     $                      IINFO )
+         IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
+             INFO = IINFO+J
+         ENDIF
 *
-*        Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot)
+*        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
@@ -374,9 +385,12 @@
 *
          CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
-     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
+     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
+         IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
+            INFO = IINFO+J
+         ENDIF
 *
-*        Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot)
+*        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J

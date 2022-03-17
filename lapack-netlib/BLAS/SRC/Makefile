@@ -1,3 +1,5 @@
+include ../../make.inc
+
 #######################################################################
 #  This is the makefile to create a library for the BLAS.
 #  The files are grouped as follows:
@@ -40,7 +42,7 @@
 #  top-level make.inc
 #
 #  To remove the object files after the library is created, enter
-#       make cleanobj
+#       make clean
 #  To force the source files to be recompiled, enter, for example,
 #       make single FRC=FRC
 #
@@ -53,10 +55,6 @@
 #
 #######################################################################
 
-TOPSRCDIR = ../..
-include $(TOPSRCDIR)/make.inc
-
-.PHONY: all
 all: $(BLASLIB)
 
 #---------------------------------------------------------
@@ -140,32 +138,34 @@ ALLOBJ = $(SBLAS1) $(SBLAS2) $(SBLAS3) $(DBLAS1) $(DBLAS2) $(DBLAS3) \
 	$(ZBLAS2) $(ZBLAS3) $(ALLBLAS)
 
 $(BLASLIB): $(ALLOBJ)
-	$(AR) $(ARFLAGS) $@ $^
+	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
 	$(RANLIB) $@
 
-.PHONY: single double complex complex16
 single: $(SBLAS1) $(ALLBLAS) $(SBLAS2) $(SBLAS3)
-	$(AR) $(ARFLAGS) $(BLASLIB) $^
+	$(ARCH) $(ARCHFLAGS) $(BLASLIB) $(SBLAS1) $(ALLBLAS) \
+	$(SBLAS2) $(SBLAS3)
 	$(RANLIB) $(BLASLIB)
 
 double: $(DBLAS1) $(ALLBLAS) $(DBLAS2) $(DBLAS3)
-	$(AR) $(ARFLAGS) $(BLASLIB) $^
+	$(ARCH) $(ARCHFLAGS) $(BLASLIB) $(DBLAS1) $(ALLBLAS) \
+	$(DBLAS2) $(DBLAS3)
 	$(RANLIB) $(BLASLIB)
 
 complex: $(CBLAS1) $(CB1AUX) $(ALLBLAS) $(CBLAS2) $(CBLAS3)
-	$(AR) $(ARFLAGS) $(BLASLIB) $^
+	$(ARCH) $(ARCHFLAGS) $(BLASLIB) $(CBLAS1) $(CB1AUX) \
+	$(ALLBLAS) $(CBLAS2) $(CBLAS3)
 	$(RANLIB) $(BLASLIB)
 
 complex16: $(ZBLAS1) $(ZB1AUX) $(ALLBLAS) $(ZBLAS2) $(ZBLAS3)
-	$(AR) $(ARFLAGS) $(BLASLIB) $^
+	$(ARCH) $(ARCHFLAGS) $(BLASLIB) $(ZBLAS1) $(ZB1AUX) \
+	$(ALLBLAS) $(ZBLAS2) $(ZBLAS3)
 	$(RANLIB) $(BLASLIB)
 
 FRC:
 	@FRC=$(FRC)
 
-.PHONY: clean cleanobj cleanlib
-clean: cleanobj cleanlib
-cleanobj:
+clean:
 	rm -f *.o
-cleanlib:
-	#rm -f $(BLASLIB)  # May point to a system lib, e.g. -lblas
+
+.f.o:
+	$(FORTRAN) $(OPTS) -c -o $@ $<

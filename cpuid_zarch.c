@@ -27,11 +27,47 @@
 
 #include <string.h>
 
-#include "cpuid_zarch.h"
+#define CPU_GENERIC    	0
+#define CPU_Z13       	1
 
+static char *cpuname[] = {
+  "ZARCH_GENERIC",
+  "Z13"
+};
+
+static char *cpuname_lower[] = {
+  "zarch_generic",
+  "z13"
+};
+
+int detect(void)
+{
+  FILE *infile;
+  char buffer[512], *p;
+
+  p = (char *)NULL;
+  infile = fopen("/proc/sysinfo", "r");
+  while (fgets(buffer, sizeof(buffer), infile)){
+    if (!strncmp("Type", buffer, 4)){
+        p = strchr(buffer, ':') + 2;
+#if 0
+        fprintf(stderr, "%s\n", p);
+#endif
+        break;
+      }
+  }
+
+  fclose(infile);
+
+  if (strstr(p, "2964")) return CPU_Z13;
+  if (strstr(p, "2965")) return CPU_Z13;
+
+  return CPU_GENERIC;
+}
 
 void get_libname(void)
 {
+
 	int d = detect();
 	printf("%s", cpuname_lower[d]);
 }
@@ -70,17 +106,6 @@ void get_cpuconfig(void)
 	case CPU_Z13:
 	  printf("#define Z13\n");
 	  printf("#define DTB_DEFAULT_ENTRIES 64\n");
-	  break;
-	case CPU_Z14:
-	  printf("#define Z14\n");
-	  printf("#define L1_DATA_SIZE 131072\n");
-	  printf("#define L1_DATA_LINESIZE 256\n");
-	  printf("#define L1_DATA_ASSOCIATIVE 8\n");
-	  printf("#define L2_SIZE 4194304\n");
-	  printf("#define L2_LINESIZE 256\n");
-	  printf("#define L2_ASSOCIATIVE 8\n");
-	  printf("#define DTB_DEFAULT_ENTRIES 64\n");
-	  printf("#define DTB_SIZE 4096\n");
 	  break;
 	}
 }

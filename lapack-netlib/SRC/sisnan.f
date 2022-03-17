@@ -21,7 +21,7 @@
 *       LOGICAL FUNCTION SISNAN( SIN )
 *
 *       .. Scalar Arguments ..
-*       REAL, INTENT(IN) :: SIN
+*       REAL               SIN
 *       ..
 *
 *
@@ -52,20 +52,20 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       LOGICAL FUNCTION SISNAN( SIN )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
-      REAL, INTENT(IN) :: SIN
+      REAL               SIN
 *     ..
 *
 *  =====================================================================

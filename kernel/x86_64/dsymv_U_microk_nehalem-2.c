@@ -50,7 +50,7 @@ static void dsymv_kernel_4x4(BLASLONG n, FLOAT *a0, FLOAT *a1, FLOAT *a2, FLOAT 
 
 	"xorq		%0,%0			     \n\t"
 
-	".p2align 4		  		       \n\t"
+	".align 16		  		       \n\t"
 	"1:				       \n\t"
 	"movups	            (%4,%0,8), %%xmm12	       \n\t"	// 2 * a
 	"movups	            (%2,%0,8), %%xmm8	       \n\t"	// 2 * x
@@ -101,9 +101,9 @@ static void dsymv_kernel_4x4(BLASLONG n, FLOAT *a0, FLOAT *a1, FLOAT *a2, FLOAT 
 	"movsd         %%xmm3 , 24(%9)		\n\t"	// save temp2
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (a0),     // 4

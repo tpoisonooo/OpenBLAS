@@ -707,10 +707,9 @@
                      CALL CLACPY( 'Full', N, NRHS, BSAV, LDA, B, LDA )
 
                      IF( .NOT.PREFAC )
-     $                  CALL CLASET( 'Full', N, N, CMPLX( ZERO ),
-     $                               CMPLX( ZERO ), AFAC, LDA )
-                     CALL CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
-     $                            CMPLX( ZERO ), X, LDA )
+     $                  CALL CLASET( 'Full', N, N, ZERO, ZERO, AFAC,
+     $                               LDA )
+                     CALL CLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and

@@ -37,9 +37,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sgemv_n_microk_sandy-4.c"
 #elif defined(HASWELL) || defined(ZEN)
 #include "sgemv_n_microk_haswell-4.c"
-#elif defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
-#include "sgemv_n_microk_haswell-4.c"
-#include "sgemv_n_microk_skylakex-8.c"
 #endif
 
 #if defined(STEAMROLLER)  || defined(EXCAVATOR)
@@ -115,8 +112,6 @@ static void sgemv_kernel_4x4(BLASLONG n, FLOAT **ap, FLOAT *xo, FLOAT *y, FLOAT 
 	
 #endif
 
-#ifndef HAVE_SGEMV_N_SKYLAKE_KERNEL				
-
 #ifndef HAVE_KERNEL_4x2
 
 static void sgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y, FLOAT *alpha) __attribute__ ((noinline));
@@ -154,9 +149,9 @@ static void sgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y, FLOAT 
 	"jnz		1b		       \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap[0]),  // 4
@@ -172,7 +167,6 @@ static void sgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y, FLOAT 
 
 } 
 
-#endif
 #endif
 
 #ifndef HAVE_KERNEL_4x1
@@ -229,9 +223,9 @@ static void sgemv_kernel_4x1(BLASLONG n, FLOAT *ap, FLOAT *x, FLOAT *y, FLOAT *a
 
         "3:      			 \n\t" 
         :
-          "+r" (i),     // 0    
-          "+r" (n1)     // 1
         :
+          "r" (i),      // 0    
+          "r" (n1),     // 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap),     // 4
@@ -283,9 +277,9 @@ static void add_y(BLASLONG n, FLOAT *src, FLOAT *dest, BLASLONG inc_dest)
         "jnz            1b              \n\t"
 
         :
-        "+r" (i),         // 0
-        "+r" (n)          // 1
         :
+        "r" (i),          // 0
+        "r" (n),          // 1
         "r" (src),        // 2
         "r" (dest)        // 3
         : "cc",
@@ -297,39 +291,8 @@ static void add_y(BLASLONG n, FLOAT *src, FLOAT *dest, BLASLONG inc_dest)
 
 int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLONG lda, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y, FLOAT *buffer)
 {
-    if ( m < 1 || n < 1) return(0);
-
-    #ifdef HAVE_SGEMV_N_SKYLAKE_KERNEL
-    if (m <= 16384 && n <= 48 && !(n == 4))
-    {
-        FLOAT * xbuffer_align = x;
-        FLOAT * ybuffer_align = y;
-
-        if (inc_x != 1) {
-            xbuffer_align = buffer;
-            for(BLASLONG i=0; i<n; i++) {
-                 xbuffer_align[i] = x[i*inc_x];
-            }
-        }
-
-        if (inc_y != 1) {
-            ybuffer_align = buffer + n;
-            for(BLASLONG i=0; i<m; i++) {
-                ybuffer_align[i] = y[i*inc_y];
-            }
-        }
-        sgemv_kernel_n_128(m, n , alpha, a, lda, xbuffer_align, ybuffer_align);
-
-        if(inc_y != 1) {
-            for(BLASLONG i=0; i<m; i++) {
-                   y[i*inc_y] = ybuffer_align[i];
-            }
-        }
-        return(0);
-    }
-
-    #endif
 	BLASLONG i;
+	BLASLONG j;
 	FLOAT *a_ptr;
 	FLOAT *x_ptr;
 	FLOAT *y_ptr;
@@ -342,6 +305,9 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 	BLASLONG lda4 =  lda << 2;
 	BLASLONG lda8 =  lda << 3;
 	FLOAT xbuffer[8],*ybuffer;
+
+        if ( m < 1 ) return(0);
+        if ( n < 1 ) return(0);
 
 	ybuffer = buffer;
 	
@@ -357,9 +323,10 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 
 	}
 	
-    m3 = m & 3  ;
-    m1 = m & -4 ;
-    m2 = (m & (NBMAX-1)) - m3 ;
+        m3 = m & 3  ;
+        m1 = m & -4 ;
+        m2 = (m & (NBMAX-1)) - m3 ;
+
 
 	y_ptr = y;
 
@@ -417,11 +384,7 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 
 			if ( n2 & 2 )
 			{
-#ifdef HAVE_SGEMV_N_SKYLAKE_KERNEL				
-				sgemv_kernel_n_64(NB, 2, alpha, a_ptr, lda, x_ptr, ybuffer);
-#else
 				sgemv_kernel_4x2(NB,ap,x_ptr,ybuffer,&alpha);
-#endif
 				a_ptr += lda*2;
 				x_ptr += 2;	
 			}
@@ -429,13 +392,9 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 
 			if ( n2 & 1 )
 			{
-#ifdef HAVE_SGEMV_N_SKYLAKE_KERNEL
-				sgemv_kernel_n_64(NB, 1, alpha, a_ptr, lda, x_ptr, ybuffer);
-#else
 				sgemv_kernel_4x1(NB,a_ptr,x_ptr,ybuffer,&alpha);
-#endif
-				/* a_ptr += lda;
-				x_ptr += 1a; */
+				a_ptr += lda;
+				x_ptr += 1;	
 
 			}
 

@@ -85,7 +85,7 @@
 *>          RTOL is REAL
 *>          Tolerance for the convergence of the bisection intervals.
 *>          An interval [LEFT,RIGHT] has converged if
-*>          RIGHT-LEFT < RTOL*MAX(|LEFT|,|RIGHT|).
+*>          RIGHT-LEFT.LT.RTOL*MAX(|LEFT|,|RIGHT|).
 *> \endverbatim
 *>
 *> \param[in] OFFSET
@@ -150,7 +150,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -168,10 +168,10 @@
      $                   RTOL, OFFSET, W, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            IFIRST, ILAST, INFO, N, OFFSET
@@ -203,12 +203,6 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-*
-*     Quick return if possible
-*
-      IF( N.LE.0 ) THEN
-         RETURN
-      END IF
 *
       MAXITR = INT( ( LOG( SPDIAM+PIVMIN )-LOG( PIVMIN ) ) /
      $           LOG( TWO ) ) + 2

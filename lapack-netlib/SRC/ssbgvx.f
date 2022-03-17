@@ -241,12 +241,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (7*N)
+*>          WORK is REAL array, dimension (7N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (5*N)
+*>          IWORK is INTEGER array, dimension (5N)
 *> \endverbatim
 *>
 *> \param[out] IFAIL
@@ -261,11 +261,11 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          = 0 : successful exit
+*>          < 0 : if INFO = -i, the i-th argument had an illegal value
 *>          <= N: if INFO = i, then i eigenvectors failed to converge.
 *>                  Their indices are stored in IFAIL.
-*>          > N:  SPBSTF returned an error code; i.e.,
+*>          > N : SPBSTF returned an error code; i.e.,
 *>                if INFO = N + i, for 1 <= i <= N, then the leading
 *>                minor of order i of B is not positive definite.
 *>                The factorization of B could not be completed and
@@ -294,7 +294,7 @@
      $                   LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                   LDZ, WORK, IWORK, IFAIL, INFO )
 *
-*  -- LAPACK driver routine (version 3.7.1) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016

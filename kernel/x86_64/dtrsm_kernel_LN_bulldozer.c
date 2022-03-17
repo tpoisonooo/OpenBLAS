@@ -438,9 +438,7 @@ static inline void solve(BLASLONG m, BLASLONG n, FLOAT *a, FLOAT *b, FLOAT *c, B
       *(cj + i) = bb;
       b ++;
 
-/*
       BLASLONG i1 = i & -4 ;
-*/
       FLOAT t0,t1,t2,t3;
 
       k=0;

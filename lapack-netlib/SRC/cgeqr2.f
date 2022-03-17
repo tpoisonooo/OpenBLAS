@@ -33,17 +33,8 @@
 *>
 *> \verbatim
 *>
-*> CGEQR2 computes a QR factorization of a complex m-by-n matrix A:
-*>
-*>    A = Q * ( R ),
-*>            ( 0 )
-*>
-*> where:
-*>
-*>    Q is a m-by-m orthogonal matrix;
-*>    R is an upper-triangular n-by-n matrix;
-*>    0 is a (m-n)-by-n zero matrix, if m > n.
-*>
+*> CGEQR2 computes a QR factorization of a complex m by n matrix A:
+*> A = Q * R.
 *> \endverbatim
 *
 *  Arguments:
@@ -105,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2019
+*> \date December 2016
 *
 *> \ingroup complexGEcomputational
 *
@@ -130,10 +121,10 @@
 *  =====================================================================
       SUBROUTINE CGEQR2( M, N, A, LDA, TAU, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.9.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2019
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N

@@ -47,7 +47,7 @@ static void zgemv_kernel_4x4( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
 	"vbroadcastsd	56(%2), %%ymm7                  \n\t"  // imag part x3
 
 
-	".p2align 4				        \n\t"
+	".align 16				        \n\t"
 	"1:				        \n\t"
 
         //"prefetcht0      256(%4,%0,8)                   \n\t"
@@ -127,9 +127,9 @@ static void zgemv_kernel_4x4( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
 	"vzeroupper			 \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
         : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap[0]),  // 4
@@ -164,7 +164,7 @@ static void zgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
 	"vbroadcastsd	16(%2), %%ymm2                  \n\t"  // real part x1
 	"vbroadcastsd	24(%2), %%ymm3                  \n\t"  // imag part x1
 
-	".p2align 4				        \n\t"
+	".align 16				        \n\t"
 	"1:				        \n\t"
 
         // "prefetcht0      256(%4,%0,8)                   \n\t"
@@ -220,9 +220,9 @@ static void zgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
 	"vzeroupper			 \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
         : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap[0]),  // 4
@@ -253,7 +253,7 @@ static void zgemv_kernel_4x1( BLASLONG n, FLOAT *ap, FLOAT *x, FLOAT *y)
 	"vbroadcastsd	  (%2), %%ymm0                  \n\t"  // real part x0
 	"vbroadcastsd	 8(%2), %%ymm1                  \n\t"  // imag part x0
 
-	".p2align 4				        \n\t"
+	".align 16				        \n\t"
 	"1:				        \n\t"
 
         // "prefetcht0      256(%4,%0,8)                   \n\t"
@@ -295,9 +295,9 @@ static void zgemv_kernel_4x1( BLASLONG n, FLOAT *ap, FLOAT *x, FLOAT *y)
 	"vzeroupper			 \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
         : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap)      // 4
@@ -355,7 +355,7 @@ static void add_y(BLASLONG n, FLOAT *src, FLOAT *dest, BLASLONG inc_dest,FLOAT a
 	"vbroadcastsd	  (%4), %%ymm0                  \n\t"  // alpha_r
 	"vbroadcastsd	  (%5), %%ymm1                  \n\t"  // alpha_i
 
-	".p2align 4				        \n\t"
+	".align 16				        \n\t"
 	"1:				        \n\t"
 	// "prefetcht0      192(%2,%0,8)			\n\t"
 	"vmovups	(%2,%0,8), %%ymm8	        \n\t" // 2 complex values from src
@@ -396,9 +396,9 @@ static void add_y(BLASLONG n, FLOAT *src, FLOAT *dest, BLASLONG inc_dest,FLOAT a
 	"vzeroupper			 \n\t"
 
 	:
-          "+r" (i),	      // 0	
-	  "+r" (n)  	      // 1
         : 
+          "r" (i),	      // 0	
+	  "r" (n),  	      // 1
           "r" (src),          // 2
           "r" (dest),         // 3
           "r" (&alpha_r),     // 4

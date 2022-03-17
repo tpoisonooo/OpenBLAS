@@ -36,7 +36,7 @@
 *>    ZLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
 *>
 *>    This works for all extant IBM's hex and binary floating point
-*>    arithmetic, but not for decimal.
+*>    arithmetics, but not for decimal.
 *> \endverbatim
 *
 *  Arguments:

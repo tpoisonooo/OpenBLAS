@@ -6,11 +6,6 @@ TOPDIR = ..
 include $(TOPDIR)/Makefile.system
 
 override CFLAGS += -DADD$(BU) -DCBLAS
-ifeq ($(F_COMPILER),GFORTRAN)
-	override FFLAGS += -fno-tree-vectorize
-endif
-override TARGET_ARCH=
-override TARGET_MACH=
 
 LIB = $(TOPDIR)/$(LIBNAME)
 
@@ -19,6 +14,8 @@ stestl1o = c_sblas1.o
 stestl2o = c_sblas2.o c_s2chke.o auxiliary.o c_xerbla.o constant.o
 
 stestl3o = c_sblas3.o c_s3chke.o auxiliary.o c_xerbla.o constant.o
+
+stestl3o_mygemm = c_sblas3_mygemm.o c_s3chke.o auxiliary.o c_xerbla.o constant.o
 
 dtestl1o = c_dblas1.o
 
@@ -43,161 +40,62 @@ ztestl3o = c_zblas3.o c_z3chke.o auxiliary.o c_xerbla.o constant.o
 ztestl3o_3m = c_zblas3_3m.o c_z3chke_3m.o auxiliary.o c_xerbla.o constant.o
 
 
-ifeq ($(NOFORTRAN),1)
-all ::
-else
-all :: all1 all2 all3
-endif
 
-ifeq ($(BUILD_SINGLE),1)
-all1targets += xscblat1
-endif
-ifeq ($(BUILD_DOUBLE),1)
-all1targets += xdcblat1
-endif
-ifeq ($(BUILD_COMPLEX),1)
-all1targets += xccblat1
-endif
-ifeq ($(BUILD_COMPLEX16),1)
-all1targets += xzcblat1
-endif
+#all :: all1 all2 all3
+all :: all_mysgemm
 
-all1: $(all1targets)
-
-ifneq ($(CROSS), 1)
+all1: xscblat1 xdcblat1 xccblat1 xzcblat1
+ifndef CROSS
 ifeq ($(USE_OPENMP), 1)
-ifeq ($(BUILD_SINGLE),1)
 	OMP_NUM_THREADS=2 ./xscblat1
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OMP_NUM_THREADS=2 ./xdcblat1
-endif	
-ifeq ($(BUILD_COMPLEX),1)
 	OMP_NUM_THREADS=2 ./xccblat1
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OMP_NUM_THREADS=2 ./xzcblat1
-endif
 else
-ifeq ($(BUILD_SINGLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xscblat1
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xdcblat1
-endif
-ifeq ($(BUILD_COMPLEX),1)
 	OPENBLAS_NUM_THREADS=2 ./xccblat1
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OPENBLAS_NUM_THREADS=2 ./xzcblat1
 endif
 endif
-endif
 
-ifeq ($(BUILD_SINGLE),1)
-all2targets += xscblat2
-endif
-ifeq ($(BUILD_DOUBLE),1)
-all2targets += xdcblat2
-endif
-ifeq ($(BUILD_COMPLEX),1)
-all2targets += xccblat2
-endif
-ifeq ($(BUILD_COMPLEX16),1)
-all2targets += xzcblat2
-endif
-
-all2: $(all2targets)
-
-ifneq ($(CROSS), 1)
+all2: xscblat2 xdcblat2 xccblat2 xzcblat2
+ifndef CROSS
 ifeq ($(USE_OPENMP), 1)
-ifeq ($(BUILD_SINGLE),1)
 	OMP_NUM_THREADS=2 ./xscblat2 < sin2
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OMP_NUM_THREADS=2 ./xdcblat2 < din2
-endif
-ifeq ($(BUILD_COMPLEX),1)
 	OMP_NUM_THREADS=2 ./xccblat2 < cin2
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OMP_NUM_THREADS=2 ./xzcblat2 < zin2
-endif
 else
-ifeq ($(BUILD_SINGLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xscblat2 < sin2
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xdcblat2 < din2
-endif
-ifeq ($(BUILD_COMPLEX),1)
 	OPENBLAS_NUM_THREADS=2 ./xccblat2 < cin2
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OPENBLAS_NUM_THREADS=2 ./xzcblat2 < zin2
 endif
 endif
-endif
 
-
-ifeq ($(BUILD_SINGLE),1)
-all3targets += xscblat3
-endif
-ifeq ($(BUILD_DOUBLE),1)
-all3targets += xdcblat3
-endif
-ifeq ($(BUILD_COMPLEX),1)
-all3targets += xccblat3
-endif
-ifeq ($(BUILD_COMPLEX16),1)
-all3targets += xzcblat3
-endif
-
-all3: $(all3targets)
-
-ifneq ($(CROSS), 1)
+all3: xscblat3 xdcblat3 xccblat3 xzcblat3
+ifndef CROSS
 ifeq ($(USE_OPENMP), 1)
-ifeq ($(BUILD_SINGLE),1)
 	OMP_NUM_THREADS=2 ./xscblat3 < sin3
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OMP_NUM_THREADS=2 ./xdcblat3 < din3
-endif
-ifeq ($(BUILD_COMPLEX),1)
 	OMP_NUM_THREADS=2 ./xccblat3 < cin3
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OMP_NUM_THREADS=2 ./xzcblat3 < zin3
-endif
 else
-ifeq ($(BUILD_SINGLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xscblat3 < sin3
-endif
-ifeq ($(BUILD_DOUBLE),1)
 	OPENBLAS_NUM_THREADS=2 ./xdcblat3 < din3
-endif
-ifeq ($(BUILD_COMPLEX),1)
 	OPENBLAS_NUM_THREADS=2 ./xccblat3 < cin3
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OPENBLAS_NUM_THREADS=2 ./xzcblat3 < zin3
 endif
-endif
-endif
+
+all_mysgemm: xscblat3_mygemm
 
 all3_3m: xzcblat3_3m xccblat3_3m
 ifeq ($(USE_OPENMP), 1)
-ifeq ($(BUILD_SINGLE),1)
 	OMP_NUM_THREADS=2 ./xccblat3_3m < cin3_3m
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OMP_NUM_THREADS=2 ./xzcblat3_3m < zin3_3m
-endif
 else
-ifeq ($(BUILD_COMPLEX),1)
 	OPENBLAS_NUM_THREADS=2 ./xccblat3_3m < cin3_3m
-endif
-ifeq ($(BUILD_COMPLEX16),1)
 	OPENBLAS_NUM_THREADS=2 ./xzcblat3_3m < zin3_3m
 endif
 endif
@@ -209,30 +107,17 @@ clean ::
 	rm -f x*
 
 FLDFLAGS = $(FFLAGS:-fPIC=) $(LDFLAGS)
-ifeq ($(USE_OPENMP), 1)
-ifeq ($(F_COMPILER), GFORTRAN)
-ifeq ($(C_COMPILER), CLANG)
-CEXTRALIB = -lomp
-endif
-endif
-ifeq ($(F_COMPILER), NAG)
-CEXTRALIB = -lgomp
-endif
-endif
+CEXTRALIB =
 
-ifeq ($(BUILD_SINGLE),1)
 # Single real
 xscblat1: $(stestl1o) c_sblat1.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xscblat1 c_sblat1.o $(stestl1o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-
 xscblat2: $(stestl2o) c_sblat2.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xscblat2 c_sblat2.o $(stestl2o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-
 xscblat3: $(stestl3o) c_sblat3.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xscblat3 c_sblat3.o $(stestl3o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-endif
-
-ifeq ($(BUILD_DOUBLE),1)
+xscblat3_mygemm: $(stestl3o_mygemm) c_sblat3.o $(TOPDIR)/$(LIBNAME)
+	$(FC) $(FLDFLAGS) -o xscblat3_mygemm c_sblat3.o $(stestl3o_mygemm) $(LIB) $(EXTRALIB) $(CEXTRALIB)
 # Double real
 xdcblat1: $(dtestl1o) c_dblat1.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xdcblat1 c_dblat1.o $(dtestl1o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
@@ -240,10 +125,7 @@ xdcblat2: $(dtestl2o) c_dblat2.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xdcblat2 c_dblat2.o $(dtestl2o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
 xdcblat3: $(dtestl3o) c_dblat3.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xdcblat3 c_dblat3.o $(dtestl3o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-endif
 
-
-ifeq ($(BUILD_COMPLEX),1)
 # Single complex
 xccblat1: $(ctestl1o) c_cblat1.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xccblat1 c_cblat1.o $(ctestl1o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
@@ -254,10 +136,7 @@ xccblat3: $(ctestl3o) c_cblat3.o $(TOPDIR)/$(LIBNAME)
 
 xccblat3_3m: $(ctestl3o_3m) c_cblat3_3m.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xccblat3_3m c_cblat3_3m.o $(ctestl3o_3m) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-endif
 
-
-ifeq ($(BUILD_COMPLEX16),1)
 # Double complex
 xzcblat1: $(ztestl1o) c_zblat1.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xzcblat1 c_zblat1.o $(ztestl1o) $(LIB) $(EXTRALIB) $(CEXTRALIB)
@@ -269,6 +148,6 @@ xzcblat3: $(ztestl3o) c_zblat3.o $(TOPDIR)/$(LIBNAME)
 
 xzcblat3_3m: $(ztestl3o_3m) c_zblat3_3m.o $(TOPDIR)/$(LIBNAME)
 	$(FC) $(FLDFLAGS) -o xzcblat3_3m c_zblat3_3m.o $(ztestl3o_3m) $(LIB) $(EXTRALIB) $(CEXTRALIB)
-endif
+
 
 include $(TOPDIR)/Makefile.tail

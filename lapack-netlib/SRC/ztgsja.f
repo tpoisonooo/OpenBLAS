@@ -401,7 +401,7 @@
 *     .. Parameters ..
       INTEGER            MAXIT
       PARAMETER          ( MAXIT = 40 )
-      DOUBLE PRECISION   ZERO, ONE, HUGENUM
+      DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
@@ -424,8 +424,7 @@
      $                   ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, HUGE
-      PARAMETER          ( HUGENUM = HUGE(ZERO) )
+      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -611,9 +610,9 @@
 *
          A1 = DBLE( A( K+I, N-L+I ) )
          B1 = DBLE( B( I, N-L+I ) )
-         GAMMA = B1 / A1
 *
-         IF( (GAMMA.LE.HUGENUM).AND.(GAMMA.GE.-HUGENUM) ) THEN
+         IF( A1.NE.ZERO ) THEN
+            GAMMA = B1 / A1
 *
             IF( GAMMA.LT.ZERO ) THEN
                CALL ZDSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )

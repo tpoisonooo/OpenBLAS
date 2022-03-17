@@ -58,7 +58,6 @@ extern int blas_level1_thread_with_return_value(int mode, BLASLONG m, BLASLONG n
 #define CUR_MAXINV	"d8"
 #define CUR_MAXINV_V	"v8.2d"
 #define CUR_MAX_V	"v8.2d"
-#define REGINF		"d9"
 
 static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 		         double *ssq, double *scale)
@@ -75,40 +74,36 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	fmov	"SCALE", xzr				\n"
 	"	fmov	"SSQ", #1.0				\n"
 	"	cmp	"N", xzr				\n"
-	"	ble	9f //nrm2_kernel_L999			\n"
+	"	ble	.Lnrm2_kernel_L999			\n"
 	"	cmp	"INC_X", xzr				\n"
-	"	ble	9f //nrm2_kernel_L999			\n"
+	"	ble	.Lnrm2_kernel_L999			\n"
 
-	"1: //nrm2_kernel_F_BEGIN:				\n"
-	"	mov	x6, #0x7FF0000000000000 //+Infinity	\n"
+	".Lnrm2_kernel_F_BEGIN:					\n"
 	"	fmov	"REGZERO", xzr				\n"
 	"	fmov	"REGONE", #1.0				\n"
-	"	fmov	"REGINF", x6				\n"
 	"	lsl	"INC_X", "INC_X", #"INC_SHIFT"		\n"
 	"	mov	"J", "N"				\n"
 	"	cmp	"J", xzr				\n"
-	"	beq	9f //nrm2_kernel_L999			\n"
+	"	beq	.Lnrm2_kernel_L999			\n"
 
-	"2: //nrm2_kernel_F_ZERO_SKIP:				\n"
+	".Lnrm2_kernel_F_ZERO_SKIP:				\n"
 	"	ldr	d4, ["X"]				\n"
 	"	fcmp	d4, "REGZERO"				\n"
-	"	bne	3f //nrm2_kernel_F_INIT			\n"
+	"	bne	.Lnrm2_kernel_F_INIT			\n"
 #if defined(COMPLEX)
 	"	ldr	d4, ["X", #8]				\n"
 	"	fcmp	d4, "REGZERO"				\n"
-	"	bne	4f //nrm2_kernel_F_INIT_I		\n"
+	"	bne	.Lnrm2_kernel_F_INIT_I			\n"
 #endif
 	"	add	"X", "X", "INC_X"			\n"
 	"	subs	"J", "J", #1				\n"
-	"	beq	9f //nrm2_kernel_L999			\n"
-	"	b	2b //nrm2_kernel_F_ZERO_SKIP		\n"
+	"	beq	.Lnrm2_kernel_L999			\n"
+	"	b	.Lnrm2_kernel_F_ZERO_SKIP		\n"
 
-	"3: //nrm2_kernel_F_INIT:				\n"
+	".Lnrm2_kernel_F_INIT:					\n"
 	"	ldr	d4, ["X"]				\n"
 	"	fabs	d4, d4					\n"
 	"	fmax	"CUR_MAX", "SCALE", d4			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
 	"	fmul	"SCALE", "SCALE", "SCALE"		\n"
 	"	fmul	"SSQ", "SSQ", "SCALE"			\n"
@@ -117,12 +112,10 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	fadd	"SSQ", "SSQ", d4			\n"
 	"	fmov	"SCALE", "CUR_MAX"			\n"
 #if defined(COMPLEX)
-	"4: //nrm2_kernel_F_INIT_I:				\n"
+	".Lnrm2_kernel_F_INIT_I:				\n"
 	"	ldr	d3, ["X", #8]				\n"
 	"	fabs	d3, d3					\n"
 	"	fmax	"CUR_MAX", "SCALE", d3			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
 	"	fmul	"SCALE", "SCALE", "SCALE"		\n"
 	"	fmul	"SSQ", "SSQ", "SCALE"			\n"
@@ -133,16 +126,16 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 #endif
 	"	add	"X", "X", "INC_X"			\n"
 	"	subs	"J", "J", #1				\n"
-	"	beq	9f //nrm2_kernel_L999			\n"
+	"	beq	.Lnrm2_kernel_L999			\n"
 
-	"5: //nrm2_kernel_F_START:				\n"
+	".Lnrm2_kernel_F_START:					\n"
 	"	cmp	"INC_X", #"SZ"				\n"
-	"	bne	8f //nrm2_kernel_F1			\n"
+	"	bne	.Lnrm2_kernel_F1			\n"
 	"	asr	"K", "J", #4				\n"
 	"	cmp	"K", xzr				\n"
-	"	beq	8f //nrm2_kernel_F1			\n"
+	"	beq	.Lnrm2_kernel_F1			\n"
 
-	"6: //nrm2_kernel_F:					\n"
+	".Lnrm2_kernel_F:					\n"
 	"	ldp	q16, q17,  ["X"]			\n"
 	"	ldp	q18, q19,  ["X", #32]			\n"
 	"	ldp	q20, q21,  ["X", #64]			\n"
@@ -165,8 +158,6 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	fmaxp	v24.2d, v24.2d, v26.2d			\n"
 	"	fmaxp	v24.2d, v24.2d, v24.2d			\n"
 	"	fmax	"CUR_MAX", "SCALE", d24			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"CUR_MAXINV", "REGONE", "CUR_MAX"	\n"
 	"	//dup	"CUR_MAX_V", v7.d[0]			\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
@@ -226,8 +217,6 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	fmaxp	v24.2d, v24.2d, v26.2d			\n"
 	"	fmaxp	v24.2d, v24.2d, v24.2d			\n"
 	"	fmax	"CUR_MAX", "SCALE", d24			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"CUR_MAXINV", "REGONE", "CUR_MAX"	\n"
 	"	//dup	"CUR_MAX_V", v7.d[0]			\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
@@ -266,18 +255,16 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	fmov	"SCALE", "CUR_MAX"			\n"
 #endif
 	"	subs	"K", "K", #1				\n"
-	"	bne	6b //nrm2_kernel_F			\n"
+	"	bne	.Lnrm2_kernel_F				\n"
 
-	"7: //nrm2_kernel_F_DONE:				\n"
+	".Lnrm2_kernel_F_DONE:					\n"
 	"	ands	"J", "J", #15				\n"
-	"	beq	9f //nrm2_kernel_L999			\n"
+	"	beq	.Lnrm2_kernel_L999			\n"
 
-	"8: //nrm2_kernel_F1:					\n"
+	".Lnrm2_kernel_F1:					\n"
 	"	ldr	d4, ["X"]				\n"
 	"	fabs	d4, d4					\n"
 	"	fmax	"CUR_MAX", "SCALE", d4			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
 	"	fmul	"SCALE", "SCALE", "SCALE"		\n"
 	"	fmul	"SSQ", "SSQ", "SCALE"			\n"
@@ -289,8 +276,6 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	"	ldr	d3, ["X", #8]				\n"
 	"	fabs	d3, d3					\n"
 	"	fmax	"CUR_MAX", "SCALE", d3			\n"
-	"	fcmp	"CUR_MAX", "REGINF"			\n"
-	"	beq	10f					\n"
 	"	fdiv	"SCALE", "SCALE", "CUR_MAX"		\n"
 	"	fmul	"SCALE", "SCALE", "SCALE"		\n"
 	"	fmul	"SSQ", "SSQ", "SCALE"			\n"
@@ -301,16 +286,11 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 #endif
 	"	add	"X", "X", "INC_X"			\n"
 	"	subs	"J", "J", #1				\n"
-	"	bne	8b //nrm2_kernel_F1			\n"
+	"	bne	.Lnrm2_kernel_F1			\n"
 
-	"9: //nrm2_kernel_L999:					\n"
+	".Lnrm2_kernel_L999:					\n"
 	"	str	"SSQ", [%[SSQ_]]			\n"
 	"	str	"SCALE", [%[SCALE_]]			\n"
-	"	b	11f					\n"
-	"10:							\n"
-	"	str	"REGINF", [%[SSQ_]]			\n"
-	"	str	"REGINF", [%[SCALE_]]			\n"
-	"11:							\n"
 
 	:
 	: [SSQ_]    "r"  (ssq),			//%0
@@ -320,8 +300,8 @@ static void nrm2_compute(BLASLONG n, FLOAT *x, BLASLONG inc_x,
 	  [INCX_]   "r"  (inc_x)		//%4
 	: "cc",
 	  "memory",
-	  "x0", "x1", "x2", "x3", "x4", "x5", "x6",
-	  "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", REGINF
+	  "x0", "x1", "x2", "x3", "x4", "x5",
+	  "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"
 	);
 
 }
@@ -348,10 +328,10 @@ FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 	if (n <= 0 || inc_x <= 0) return 0.0;
 
 #if defined(SMP)
+	nthreads = num_cpu_avail(1);
+
 	if (n <= 10000)
 		nthreads = 1;
-	else
-		nthreads = num_cpu_avail(1);
 
 	if (nthreads == 1) {
 		nrm2_compute(n, x, inc_x, &ssq, &scale);
@@ -378,12 +358,6 @@ FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x)
 
 			cur_ssq = *ptr;
 			cur_scale = *(ptr + 1);
-
-			if (cur_ssq == INFINITY) {
-				ssq = INFINITY;
-				scale = INFINITY;
-				break;
-			}
 
 			if (cur_scale != 0) {
 				if (cur_scale > scale) {

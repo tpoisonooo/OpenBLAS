@@ -33,8 +33,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dgemv_n_microk_nehalem-4.c"
 #elif defined(HASWELL) || defined(ZEN) || defined(STEAMROLLER) || defined(EXCAVATOR)
 #include "dgemv_n_microk_haswell-4.c"
-#elif  defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
-#include "dgemv_n_microk_skylakex-4.c"
 #endif
 
 
@@ -111,9 +109,9 @@ static void dgemv_kernel_4x2( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y, FLOAT 
 	"jnz		1b		       \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap[0]),  // 4
@@ -166,9 +164,9 @@ static void dgemv_kernel_4x1(BLASLONG n, FLOAT *ap, FLOAT *x, FLOAT *y, FLOAT *a
         "jnz            1b               \n\t"
 
         :
-          "+r" (i),     // 0    
-          "+r" (n)      // 1
         :
+          "r" (i),      // 0    
+          "r" (n),      // 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap),     // 4
@@ -206,6 +204,7 @@ static void add_y(BLASLONG n, FLOAT *src, FLOAT *dest, BLASLONG inc_dest)
 int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLONG lda, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y, FLOAT *buffer)
 {
 	BLASLONG i;
+	BLASLONG j;
 	FLOAT *a_ptr;
 	FLOAT *x_ptr;
 	FLOAT *y_ptr;
@@ -283,8 +282,8 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha, FLOAT *a, BLASLO
 			if ( n2 & 1 )
 			{
 				dgemv_kernel_4x1(NB,a_ptr,x_ptr,ybuffer,&alpha);
-				/* a_ptr += lda;
-				x_ptr += 1; */
+				a_ptr += lda;
+				x_ptr += 1;	
 
 			}
 

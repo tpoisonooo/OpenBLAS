@@ -78,16 +78,15 @@ static void saxpy_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"jnz		1b		             \n\t"
 	"vzeroupper				     \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (alpha)   // 4
 	: "cc", 
-	  "%xmm0", "%xmm1", "%xmm2", "%xmm3",
-	  "%xmm4", "%xmm5", "%xmm6", "%xmm7",
+	  "%xmm0", 
 	  "%xmm8", "%xmm9", "%xmm10", "%xmm11", 
 	  "%xmm12", "%xmm13", "%xmm14", "%xmm15",
 	  "memory"
@@ -140,16 +139,15 @@ static void saxpy_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"jnz		1b		             \n\t"
 	"vzeroupper				     \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (alpha)   // 4
 	: "cc", 
-	  "%xmm0", "%xmm1", "%xmm2", "%xmm3",
-	  "%xmm4", "%xmm5", "%xmm6", "%xmm7",
+	  "%xmm0", 
 	  "%xmm8", "%xmm9", "%xmm10", "%xmm11", 
 	  "%xmm12", "%xmm13", "%xmm14", "%xmm15",
 	  "memory"

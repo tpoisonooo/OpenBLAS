@@ -50,11 +50,11 @@ static void caxpy_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"vmulps		(%5), %%ymm0 , %%ymm0		    \n\t"
 #endif
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            \n\t"
 
 	"vmovups        (%2,%0,4), %%ymm5                   \n\t" // 4 complex values from x
-	".p2align 1					    \n\t"
+	".align 2					    \n\t"
 	"vmovups      32(%2,%0,4), %%ymm7                   \n\t" // 4 complex values from x
 	"vmovups      64(%2,%0,4), %%ymm9                   \n\t" // 4 complex values from x
 	"vmovups      96(%2,%0,4), %%ymm11                  \n\t" // 4 complex values from x
@@ -85,7 +85,7 @@ static void caxpy_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"vaddps         %%ymm10, %%ymm11, %%ymm11           \n\t"
 
 	"vmovups	%%ymm5 ,   (%3,%0,4)		    \n\t"
-	".p2align 1					    \n\t"
+	".align 2					    \n\t"
 	"vmovups	%%ymm7 , 32(%3,%0,4)		    \n\t"
 	"vmovups	%%ymm9 , 64(%3,%0,4)		    \n\t"
 	"vmovups	%%ymm11, 96(%3,%0,4)		    \n\t"
@@ -95,16 +95,16 @@ static void caxpy_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"jnz		1b		             \n\t"
 	"vzeroupper					    \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (alpha),  // 4
           "r" (mvec)    // 5
 	: "cc", 
-	  "%xmm0", "%xmm1", "%xmm2", "%xmm3",
+	  "%xmm0", "%xmm1",
 	  "%xmm4", "%xmm5", "%xmm6", "%xmm7", 
 	  "%xmm8", "%xmm9", "%xmm10", "%xmm11", 
 	  "%xmm12", "%xmm13", "%xmm14", "%xmm15", 

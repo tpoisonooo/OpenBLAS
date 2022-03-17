@@ -127,7 +127,7 @@
 *> \param[in,out] AUXV
 *> \verbatim
 *>          AUXV is COMPLEX*16 array, dimension (NB)
-*>          Auxiliary vector.
+*>          Auxiliar vector.
 *> \endverbatim
 *>
 *> \param[in,out] F

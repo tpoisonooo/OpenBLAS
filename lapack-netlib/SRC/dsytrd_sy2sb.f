@@ -123,7 +123,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          WORK is DOUBLE PRECISION array, dimension LWORK.
 *>          On exit, if INFO = 0, or if LWORK=-1, 
 *>          WORK(1) returns the size of LWORK.
 *> \endverbatim
@@ -132,7 +132,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK which should be calculated
-*>          by a workspace query. LWORK = MAX(1, LWORK_QUERY)
+*           by a workspace query. LWORK = MAX(1, LWORK_QUERY)
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -158,7 +158,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup doubleSYcomputational
 *
@@ -222,7 +222,7 @@
 *>
 *>  where tau is a real scalar, and v is a real vector with
 *>  v(kd+1:i) = 0 and v(i+kd+1) = 1; v(i+kd+2:n) is stored on exit in
-*>  A(i+kd+2:n,i), and tau in TAU(i).
+*   A(i+kd+2:n,i), and tau in TAU(i).
 *>
 *>  The contents of A on exit are illustrated by the following examples
 *>  with n = 5:
@@ -245,10 +245,10 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -277,7 +277,7 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM, DCOPY,
+      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM,
      $                   DLARFT, DGELQF, DGEQRF, DLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -285,8 +285,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE 
-      EXTERNAL           LSAME, ILAENV2STAGE
+      INTEGER            ILAENV 
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -296,7 +296,7 @@
       INFO   = 0
       UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      LWMIN  = ILAENV2STAGE( 4, 'DSYTRD_SY2SB', '', N, KD, -1, -1 )
+      LWMIN  = ILAENV( 20, 'DSYTRD_SY2SB', '', N, KD, -1, -1 )
       
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
@@ -363,7 +363,7 @@
 *
 *
 *     Set the workspace of the triangular matrix T to zero once such a
-*     way every time T is generated the upper/lower portion will be always zero
+*     way everytime T is generated the upper/lower portion will be always zero  
 *   
       CALL DLASET( "A", LDT, KD, ZERO, ZERO, WORK( TPOS ), LDT )
 *

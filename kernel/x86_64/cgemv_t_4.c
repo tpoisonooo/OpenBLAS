@@ -28,7 +28,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "common.h"
 
-#if defined(HASWELL) || defined(ZEN) || defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
+#if defined(HASWELL) || defined(ZEN)
 #include "cgemv_t_microk_haswell-4.c"
 #elif defined(BULLDOZER) || defined(PILEDRIVER) || defined(STEAMROLLER)  || defined(EXCAVATOR)
 #include "cgemv_t_microk_bulldozer-4.c"
@@ -233,9 +233,9 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha_r, FLOAT alpha_i,
         if ( m < 1 ) return(0);
         if ( n < 1 ) return(0);
 
-        inc_x *= 2;
-        inc_y *= 2;
-        lda   *= 2;
+        inc_x <<= 1;
+        inc_y <<= 1;
+        lda   <<= 1;
 	lda4    = lda << 2;
 
 	xbuffer = buffer;
@@ -300,8 +300,8 @@ int CNAME(BLASLONG m, BLASLONG n, BLASLONG dummy1, FLOAT alpha_r, FLOAT alpha_i,
 			if ( n2 & 1 )
 			{
 				cgemv_kernel_4x1(NB,a_ptr,xbuffer,y_ptr,alpha);
-				/* a_ptr += lda;
-				y_ptr += 2; */
+				a_ptr += lda;
+				y_ptr += 2;
 
 			}
 

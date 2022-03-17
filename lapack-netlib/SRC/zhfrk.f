@@ -117,7 +117,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension (LDA,ka)
+*>          A is COMPLEX*16 array of DIMENSION (LDA,ka)
 *>           where KA
 *>           is K  when TRANS = 'N' or 'n', and is N otherwise. Before
 *>           entry with TRANS = 'N' or 'n', the leading N--by--K part of
@@ -160,7 +160,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16OTHERcomputational
 *
@@ -168,10 +168,10 @@
       SUBROUTINE ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
      $                  C )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   ALPHA, BETA

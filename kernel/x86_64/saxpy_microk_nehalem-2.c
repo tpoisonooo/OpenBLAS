@@ -39,7 +39,7 @@ static void saxpy_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"movss			(%4), %%xmm0		    \n\t"  // alpha	
 	"shufps          $0,  %%xmm0, %%xmm0                \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            \n\t"
         // "prefetcht0      192(%2,%0,4)                       \n\t"
         // "prefetcht0      192(%3,%0,4)                       \n\t"
@@ -73,9 +73,9 @@ static void saxpy_kernel_16( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *alpha)
 	"jnz		1b		             \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (alpha)   // 4

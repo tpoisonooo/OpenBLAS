@@ -85,7 +85,7 @@ static void sgemv_kernel_4x4( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
         "je             4f                      \n\t"
 
 
-	".p2align 4				 \n\t"
+	".align 16				 \n\t"
 	"1:				 \n\t"
 	"prefetcht0	 384(%2,%0,4)		       \n\t"
         "vmovups        (%2,%0,4), %%ymm12       \n\t"  // 8 * x
@@ -152,9 +152,9 @@ static void sgemv_kernel_4x4( BLASLONG n, FLOAT **ap, FLOAT *x, FLOAT *y)
 	"vzeroupper			 \n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
         : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (ap[0]),  // 4

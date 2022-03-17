@@ -43,11 +43,9 @@ lapack_int LAPACKE_cpbequ( int matrix_layout, char uplo, lapack_int n,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cpb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
-            return -5;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_cpb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
+        return -5;
     }
 #endif
     return LAPACKE_cpbequ_work( matrix_layout, uplo, n, kd, ab, ldab, s, scond,

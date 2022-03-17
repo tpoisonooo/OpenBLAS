@@ -50,9 +50,9 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] STAGE1
+*> \param[in] STAGE
 *> \verbatim
-*>          STAGE1 is CHARACTER*1
+*>          STAGE is CHARACTER*1
 *>          = 'N':  "No": to mention that the stage 1 of the reduction  
 *>                  from dense to band using the zhetrd_he2hb routine
 *>                  was not called before this routine to reproduce AB. 
@@ -188,7 +188,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup complex16OTHERcomputational
 *
@@ -237,10 +237,10 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          STAGE1, UPLO, VECT
@@ -273,15 +273,15 @@
       COMPLEX*16         TMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET, XERBLA
+      EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, DBLE, REAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE 
-      EXTERNAL           LSAME, ILAENV2STAGE
+      INTEGER            ILAENV 
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -297,9 +297,9 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
+      IB     = ILAENV( 18, 'ZHETRD_HB2ST', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -512,8 +512,7 @@ C                 END IF
 *
 *                         Call the kernel
 *                             
-#if defined(_OPENMP) &&  _OPENMP >= 201307
-
+#if defined(_OPENMP)
                           IF( TTYPE.NE.1 ) THEN      
 !$OMP TASK DEPEND(in:WORK(MYID+SHIFT-1))
 !$OMP$     DEPEND(in:WORK(MYID-1))

@@ -312,7 +312,7 @@
 *
 *        Factorize A as U*D*U**T using the upper triangle of A
 *
-*        Initialize the first entry of array E, where superdiagonal
+*        Initilize the first entry of array E, where superdiagonal
 *        elements of D are stored
 *
          E( 1 ) = ZERO
@@ -623,7 +623,7 @@
 *
 *        Factorize A as L*D*L**T using the lower triangle of A
 *
-*        Initialize the unused last entry of the subdiagonal array E.
+*        Initilize the unused last entry of the subdiagonal array E.
 *
          E( N ) = ZERO
 *

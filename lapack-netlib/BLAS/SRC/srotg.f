@@ -23,29 +23,6 @@
 *>    SROTG construct givens plane rotation.
 *> \endverbatim
 *
-*  Arguments:
-*  ==========
-*
-*> \param[in] SA
-*> \verbatim
-*>          SA is REAL
-*> \endverbatim
-*>
-*> \param[in] SB
-*> \verbatim
-*>          SB is REAL
-*> \endverbatim
-*>
-*> \param[out] C
-*> \verbatim
-*>          C is REAL
-*> \endverbatim
-*>
-*> \param[out] S
-*> \verbatim
-*>          S is REAL
-*> \endverbatim
-*
 *  Authors:
 *  ========
 *
@@ -54,7 +31,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup single_blas_level1
 *
@@ -69,10 +46,10 @@
 *  =====================================================================
       SUBROUTINE SROTG(SA,SB,C,S)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       REAL C,S,SA,SB

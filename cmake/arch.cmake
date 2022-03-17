@@ -1,10 +1,11 @@
+##
 ## Author: Hank Anderson <hank@statease.com>
 ## Description: Ported from portion of OpenBLAS/Makefile.system
 ##              Sets various variables based on architecture.
 
-if (X86 OR X86_64)
+if (${ARCH} STREQUAL "x86" OR ${ARCH} STREQUAL "x86_64")
 
-  if (X86)
+  if (${ARCH} STREQUAL "x86")
     if (NOT BINARY)
       set(NO_BINARY_MODE 1)
     endif ()
@@ -32,68 +33,52 @@ if (${CMAKE_C_COMPILER_ID} STREQUAL "Intel")
 endif ()
 
 if (USE_OPENMP)
-  # USE_SIMPLE_THREADED_LEVEL3 = 1
-  # NO_AFFINITY = 1
-  find_package(OpenMP REQUIRED)
-  if (OpenMP_FOUND)
-    set(CCOMMON_OPT "${CCOMMON_OPT} ${OpenMP_C_FLAGS} -DUSE_OPENMP")
-    set(FCOMMON_OPT "${FCOMMON_OPT} ${OpenMP_Fortran_FLAGS}")
-  endif()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "LSB")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -fopenmp")
+  endif ()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
+    message(WARNING "Clang doesn't support OpenMP yet.")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -fopenmp")
+  endif ()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "Intel")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -openmp")
+  endif ()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "PGI")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -mp")
+  endif ()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "OPEN64")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -mp")
+    set(CEXTRALIB "${CEXTRALIB} -lstdc++")
+  endif ()
+
+  if (${CMAKE_C_COMPILER_ID} STREQUAL "PATHSCALE")
+    set(CCOMMON_OPT "${CCOMMON_OPT} -mp")
+  endif ()
 endif ()
 
 
 if (DYNAMIC_ARCH)
-  if (ARM64)
-	  set(DYNAMIC_CORE ARMV8 CORTEXA53 CORTEXA55 CORTEXA57 CORTEXA72 CORTEXA73 FALKOR THUNDERX THUNDERX2T99 TSV110 EMAG8180 NEOVERSEN1 NEOVERSEV1 NEOVERSEN2 THUNDERX3T110)
-    if (DYNAMIC_LIST)
-	    set(DYNAMIC_CORE ARMV8 ${DYNAMIC_LIST})
-    endif ()
-  endif ()
-  
-  if (POWER)
-	  set(DYNAMIC_CORE POWER6 POWER8 POWER9 POWER10)
-	  set(CCOMMON_OPT "${CCOMMON_OPT} -DHAVE_P10_SUPPORT")
-  endif ()
-  
-  if (X86)
-    set(DYNAMIC_CORE KATMAI COPPERMINE NORTHWOOD PRESCOTT BANIAS CORE2 PENRYN DUNNINGTON NEHALEM ATHLON OPTERON OPTERON_SSE3 BARCELONA BOBCAT ATOM NANO)
+  if (${ARCH} STREQUAL "x86")
+    set(DYNAMIC_CORE "KATMAI COPPERMINE NORTHWOOD PRESCOTT BANIAS CORE2 PENRYN DUNNINGTON NEHALEM ATHLON OPTERON OPTERON_SSE3 BARCELONA BOBCAT ATOM NANO")
   endif ()
 
-  if (X86_64)
-    set(DYNAMIC_CORE PRESCOTT CORE2)
-    if (DYNAMIC_OLDER)
-	set (DYNAMIC_CORE ${DYNAMIC_CORE} PENRYN DUNNINGTON)
-    endif ()
-    set (DYNAMIC_CORE ${DYNAMIC_CORE} NEHALEM)
-    if (DYNAMIC_OLDER)
-	set (DYNAMIC_CORE ${DYNAMIC_CORE} OPTERON OPTERON_SSE3)
-    endif ()
-    set (DYNAMIC_CORE ${DYNAMIC_CORE} BARCELONA) 
-    if (DYNAMIC_OLDER)
-	set (DYNAMIC_CORE ${DYNAMIC_CORE} BOBCAT ATOM NANO)
-    endif ()
+  if (${ARCH} STREQUAL "x86_64")
+    set(DYNAMIC_CORE "PRESCOTT CORE2 PENRYN DUNNINGTON NEHALEM OPTERON OPTERON_SSE3 BARCELONA BOBCAT ATOM NANO")
     if (NOT NO_AVX)
-      set(DYNAMIC_CORE ${DYNAMIC_CORE} SANDYBRIDGE BULLDOZER PILEDRIVER STEAMROLLER EXCAVATOR)
+      set(DYNAMIC_CORE "${DYNAMIC_CORE} SANDYBRIDGE BULLDOZER PILEDRIVER STEAMROLLER")
     endif ()
     if (NOT NO_AVX2)
-      set(DYNAMIC_CORE ${DYNAMIC_CORE} HASWELL ZEN)
+      set(DYNAMIC_CORE "${DYNAMIC_CORE} HASWELL ZEN")
     endif ()
-    if (NOT NO_AVX512)
-      set(DYNAMIC_CORE ${DYNAMIC_CORE} SKYLAKEX COOPERLAKE)
-      string(REGEX REPLACE "-march=native" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    endif ()
-    if (DYNAMIC_LIST)
-      set(DYNAMIC_CORE PRESCOTT ${DYNAMIC_LIST})
-    endif ()
-  endif ()
-
-  if (EXISTS ${PROJECT_SOURCE_DIR}/config_kernel.h)
-	  message (FATAL_ERROR "Your build directory contains a file config_kernel.h, probably from a previous compilation with make. This will conflict with the cmake compilation and cause strange compiler errors - please remove the file before trying again")
   endif ()
 
   if (NOT DYNAMIC_CORE)
-    message (STATUS "DYNAMIC_ARCH is not supported on this architecture, removing from options")
-    unset(DYNAMIC_ARCH CACHE)
+    unset(DYNAMIC_ARCH)
   endif ()
 endif ()
 
@@ -109,11 +94,7 @@ if (${ARCH} STREQUAL "ia64")
   endif ()
 endif ()
 
-if (MIPS32 OR MIPS64)
-  set(NO_BINARY_MODE 1)
-endif ()
-
-if (LOONGARCH64)
+if (${ARCH} STREQUAL "mips64")
   set(NO_BINARY_MODE 1)
 endif ()
 
@@ -122,12 +103,12 @@ if (${ARCH} STREQUAL "alpha")
   set(BINARY_DEFINED 1)
 endif ()
 
-if (ARM)
+if (${ARCH} STREQUAL "arm")
   set(NO_BINARY_MODE 1)
   set(BINARY_DEFINED 1)
 endif ()
 
-if (ARM64)
+if (${ARCH} STREQUAL "arm64")
   set(NO_BINARY_MODE 1)
   set(BINARY_DEFINED 1)
 endif ()

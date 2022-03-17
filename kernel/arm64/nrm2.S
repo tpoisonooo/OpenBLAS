@@ -54,37 +54,37 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if !defined(DOUBLE)
 	ldr	s4, [X], #4
 	fcmp	s4, REGZERO
-	beq	2f     /* KERNEL_F1_NEXT_\@ */
+	beq	KERNEL_F1_NEXT_\@
 	fabs	s4, s4
 	fcmp	SCALE, s4
-	bge	1f     /* KERNEL_F1_SCALE_GE_X_\@ */
+	bge	KERNEL_F1_SCALE_GE_X_\@
 	fdiv	s2, SCALE, s4
 	fmul	s2, s2, s2
 	fmul	s3, SSQ, s2
 	fadd	SSQ, REGONE, s3
 	fmov	SCALE, s4
-	b	2f     /* KERNEL_F1_NEXT_\@ */
-1:               /* KERNEL_F1_SCALE_GE_X_\@: */
+	b	KERNEL_F1_NEXT_\@
+KERNEL_F1_SCALE_GE_X_\@:
 	fdiv	s2, s4, SCALE
 	fmla	SSQ, s2, v2.s[0]
 #else
 	ldr	d4, [X], #8
 	fcmp	d4, REGZERO
-	beq	2f     /* KERNEL_F1_NEXT_\@ */
+	beq	KERNEL_F1_NEXT_\@
 	fabs	d4, d4
 	fcmp	SCALE, d4
-	bge	1f     /* KERNEL_F1_SCALE_GE_X_\@ */
+	bge	KERNEL_F1_SCALE_GE_X_\@
 	fdiv	d2, SCALE, d4
 	fmul	d2, d2, d2
 	fmul	d3, SSQ, d2
 	fadd	SSQ, REGONE, d3
 	fmov	SCALE, d4
-	b	2f     /* KERNEL_F1_NEXT_\@ */
-1:                     /* KERNEL_F1_SCALE_GE_X_\@: */
+	b	KERNEL_F1_NEXT_\@
+KERNEL_F1_SCALE_GE_X_\@:
 	fdiv	d2, d4, SCALE
 	fmla	SSQ, d2, v2.d[0]
 #endif
-2:                     /* KERNEL_F1_NEXT_\@: */
+KERNEL_F1_NEXT_\@:
 .endm
 
 .macro KERNEL_S1
@@ -162,44 +162,44 @@ KERNEL_S1_NEXT:
 	INIT
 
 	cmp	N, #0
-	ble	.Lnrm2_kernel_L999
+	ble	nrm2_kernel_L999
 
 	cmp	INC_X, #0
-	beq	.Lnrm2_kernel_L999
+	beq	nrm2_kernel_L999
 
 
 	cmp	INC_X, #1
-	bne	.Lnrm2_kernel_S_BEGIN
+	bne	nrm2_kernel_S_BEGIN
 
-.Lnrm2_kernel_F_BEGIN:
+nrm2_kernel_F_BEGIN:
 
 	asr	I, N, #3				// I = N / 8
 	cmp	I, xzr
-	ble	.Lnrm2_kernel_F1
+	ble	nrm2_kernel_F1
 
-.Lnrm2_kernel_F8:
+nrm2_kernel_F8:
 
 	KERNEL_F8
 
 	subs	I, I, #1
-	bne	.Lnrm2_kernel_F8
+	bne	nrm2_kernel_F8
 
-.Lnrm2_kernel_F1:
+nrm2_kernel_F1:
 
 	ands	I, N, #7
-	ble	.Lnrm2_kernel_L999
+	ble	nrm2_kernel_L999
 
 
-.Lnrm2_kernel_F10:
+nrm2_kernel_F10:
 
 	KERNEL_F1
 
 	subs	I, I, #1
-	bne	.Lnrm2_kernel_F10
+	bne	nrm2_kernel_F10
 
-	b	.Lnrm2_kernel_L999
+	b	nrm2_kernel_L999
 
-.Lnrm2_kernel_S_BEGIN:
+nrm2_kernel_S_BEGIN:
 
 	INIT_S
 
@@ -207,15 +207,15 @@ KERNEL_S1_NEXT:
 
 	.align 5
 
-.Lnrm2_kernel_S10:
+nrm2_kernel_S10:
 
 	KERNEL_S1
 
 	subs	I, I, #1
-	bne	.Lnrm2_kernel_S10
+	bne	nrm2_kernel_S10
 
 
-.Lnrm2_kernel_L999:
+nrm2_kernel_L999:
 	fsqrt	SSQ, SSQ
 	fmul	SSQ, SCALE, SSQ
 

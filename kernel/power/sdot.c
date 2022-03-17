@@ -1,5 +1,5 @@
 /***************************************************************************
-Copyright (c) 2013-2017, The OpenBLAS Project
+Copyright (c) 2013-2016, The OpenBLAS Project
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -35,11 +35,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "common.h"
 
-#if defined(POWER8)  || defined(POWER9) || defined(POWER10)
-#if defined(__VEC__) || defined(__ALTIVEC__)
-
+#if defined(POWER8) 
 #include "sdot_microk_power8.c"
-#endif
 #endif
 
 
@@ -69,76 +66,42 @@ static FLOAT sdot_kernel_16(BLASLONG n, FLOAT *x, FLOAT *y)
 
 #endif
 
-#if defined (DSDOT)
-double CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
-#else
 FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
-#endif
 {
 	BLASLONG i=0;
 	BLASLONG ix=0,iy=0;
-	double dot = 0.0 ;
 
-#if defined (DSDOT)
-        double mydot = 0.0;
-        FLOAT asmdot = 0.0;
-#else
-	FLOAT mydot=0.0;
-#endif
-	BLASLONG n1;
+	FLOAT  dot = 0.0 ;
 
 	if ( n <= 0 )  return(dot);
 
 	if ( (inc_x == 1) && (inc_y == 1) )
 	{
 
-	        n1 = n & (BLASLONG)(-32);
+		BLASLONG n1 = n & -32;
 
 		if ( n1 )
-#if defined(DSDOT)
-			{
-			FLOAT *x1=x;
-			FLOAT *y1=y;
-			BLASLONG n2 = 32;
-			while (i<n1) {
-				asmdot = sdot_kernel_16(n2, x1, y1);
-				mydot += (double)asmdot;
-				asmdot=0.;
-				x1+=32;
-				y1+=32;
-				i+=32;
-			}
-		}
-#else		
-			mydot = sdot_kernel_16(n1, x, y);
-#endif
+			dot = sdot_kernel_16(n1, x, y);
+
 		i = n1;
 		while(i < n)
 		{
-#if defined(DSDOT)
-			dot += (double)y[i] * (double)x[i] ;
-#else
+
 			dot += y[i] * x[i] ;
-#endif
 			i++ ;
 
 		}
-
-		dot+=mydot;
 		return(dot);
 
 
 	}
 
-	n1 = n & (BLASLONG)(-2);
+	BLASLONG n1 = n & -2;
 
 	while(i < n1)
 	{
-#if defined (DSDOT)
-		dot += (double)y[iy] * (double)x[ix] + (double)y[iy+inc_y] * (double)x[ix+inc_x];
-#else
+
 		dot += y[iy] * x[ix] + y[iy+inc_y] * x[ix+inc_x];
-#endif
 		ix  += inc_x*2 ;
 		iy  += inc_y*2 ;
 		i+=2 ;
@@ -147,11 +110,8 @@ FLOAT CNAME(BLASLONG n, FLOAT *x, BLASLONG inc_x, FLOAT *y, BLASLONG inc_y)
 
 	while(i < n)
 	{
-#if defined (DSDOT)
-		dot += (double)y[iy] * (double)x[ix] ;
-#else
+
 		dot += y[iy] * x[ix] ;
-#endif
 		ix  += inc_x ;
 		iy  += inc_y ;
 		i++ ;

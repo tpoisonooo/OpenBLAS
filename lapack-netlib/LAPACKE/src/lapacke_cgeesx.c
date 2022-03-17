@@ -51,11 +51,9 @@ lapack_int LAPACKE_cgeesx( int matrix_layout, char jobvs, char sort,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cge_nancheck( matrix_layout, n, n, a, lda ) ) {
-            return -7;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_cge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        return -7;
     }
 #endif
     /* Allocate memory for working array(s) */

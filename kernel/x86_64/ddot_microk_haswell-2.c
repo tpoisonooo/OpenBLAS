@@ -41,7 +41,7 @@ static void ddot_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"vxorpd		%%ymm6, %%ymm6, %%ymm6	             \n\t"
 	"vxorpd		%%ymm7, %%ymm7, %%ymm7	             \n\t"
 
-	".p2align 4				             \n\t"
+	".align 16				             \n\t"
 	"1:				             \n\t"
         "vmovups                  (%2,%0,8), %%ymm12         \n\t"  // 2 * x
         "vmovups                32(%2,%0,8), %%ymm13         \n\t"  // 2 * x
@@ -77,16 +77,15 @@ static void ddot_kernel_8( BLASLONG n, FLOAT *x, FLOAT *y, FLOAT *dot)
 	"vzeroupper				\n\t"
 
 	:
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (dot)     // 4
 	: "cc", 
-	  "%xmm0", "%xmm1", "%xmm2", "%xmm3",
-	  "%xmm4", "%xmm5", "%xmm6", "%xmm7",
-	  "%xmm8", "%xmm9", "%xmm10", "%xmm11",
+	  "%xmm4", "%xmm5", 
+	  "%xmm6", "%xmm7", 
 	  "%xmm12", "%xmm13", "%xmm14", "%xmm15",
 	  "memory"
 	);

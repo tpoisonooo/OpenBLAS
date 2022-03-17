@@ -101,12 +101,7 @@ static FLOAT dm1 = -1.;
 #endif
 
 typedef struct {
-#ifdef HAVE_C11
-  _Atomic 
-#else
-  volatile 
-#endif
-  BLASLONG working[MAX_CPU_NUMBER][CACHE_LINE_SIZE * DIVIDE_RATE];
+  volatile BLASLONG working[MAX_CPU_NUMBER][CACHE_LINE_SIZE * DIVIDE_RATE];
 } job_t;
 
 
@@ -380,9 +375,6 @@ static int thread_driver(blas_arg_t *args, FLOAT *sa, FLOAT *sb){
 #elif defined(DOUBLE)
   mode  =  BLAS_DOUBLE  | BLAS_REAL;
   mask  = MAX(DGEMM_UNROLL_M, DGEMM_UNROLL_N) - 1;
-#elif defined(HALF)
-  mode  =  BLAS_HALF  | BLAS_REAL;
-  mask  = MAX(SBGEMM_UNROLL_M, SBGEMM_UNROLL_N) - 1;
 #else
   mode  =  BLAS_SINGLE  | BLAS_REAL;
   mask  = MAX(SGEMM_UNROLL_M, SGEMM_UNROLL_N) - 1;

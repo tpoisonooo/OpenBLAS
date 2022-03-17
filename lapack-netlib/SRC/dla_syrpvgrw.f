@@ -101,7 +101,7 @@
 *>     as determined by DSYTRF.
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (2*N)
 *> \endverbatim

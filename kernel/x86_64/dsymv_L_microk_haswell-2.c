@@ -44,7 +44,7 @@ static void dsymv_kernel_4x4(BLASLONG from, BLASLONG to, FLOAT **a, FLOAT *x, FL
 	"vbroadcastsd 16(%8),    %%ymm6	             \n\t"	// temp1[1]
 	"vbroadcastsd 24(%8),    %%ymm7	             \n\t"	// temp1[1]
 
-	".p2align 4				     \n\t"
+	".align 16				     \n\t"
 	"1:				     \n\t"
 
 	"vmovups	(%3,%0,8), %%ymm9	           \n\t"  // 2 * y
@@ -105,8 +105,8 @@ static void dsymv_kernel_4x4(BLASLONG from, BLASLONG to, FLOAT **a, FLOAT *x, FL
 	"vzeroupper				     \n\t"
 
 	:
-          "+r" (from)	// 0	
-        :
+        : 
+          "r" (from),	// 0	
 	  "r" (to),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3

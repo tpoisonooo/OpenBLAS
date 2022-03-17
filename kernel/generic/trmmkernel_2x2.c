@@ -11,8 +11,6 @@ int CNAME(BLASLONG bm,BLASLONG bn,BLASLONG bk,FLOAT alpha,FLOAT* ba,FLOAT* bb,FL
    BLASLONG off, temp;
 #if defined(TRMMKERNEL) && !defined(LEFT)
    off = -offset;
-#else
-   off = 0;
 #endif
    for (j=0; j<bn/2; j+=1)
      {

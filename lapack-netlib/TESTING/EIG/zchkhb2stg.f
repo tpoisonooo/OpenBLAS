@@ -313,7 +313,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16_eig
 *
@@ -323,10 +323,10 @@
      $                   D2, D3, U, LDU, WORK, LWORK, RWORK, RESULT, 
      $                   INFO )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
@@ -680,8 +680,8 @@
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD.
 *            
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
                CALL ZLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
@@ -753,8 +753,8 @@
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD. 
 *           
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
-               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
                CALL ZLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH

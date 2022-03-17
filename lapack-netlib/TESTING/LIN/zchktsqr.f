@@ -94,7 +94,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup double_lin
 *
@@ -103,10 +103,10 @@
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -132,8 +132,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRTSQR,
-     $                   ZTSQR01, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRTSQR,
+     $                   DTSQR01, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -159,8 +159,6 @@
 *
 *     Test the error exits
 *
-      CALL XLAENV( 1, 0 )
-      CALL XLAENV( 2, 0 ) 
       IF( TSTERR ) CALL ZERRTSQR( PATH, NOUT )
       INFOT = 0
 *

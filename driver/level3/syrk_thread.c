@@ -48,7 +48,7 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
 
   BLASLONG width, i;
   BLASLONG n_from, n_to;
-  double dnum, nf, nt, di, dinum;
+  double dnum, nf, nt, di;
 
   int num_cpu;
   int mask = 0;
@@ -56,16 +56,12 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
   if (!(mode & BLAS_COMPLEX)) {
 
     switch (mode & BLAS_PREC) {
-#if defined(BUILD_SINGLE) || defined(BUILD_COMPLEX)
     case BLAS_SINGLE:
       mask = SGEMM_UNROLL_MN - 1;
       break;
-#endif
-#if defined(BUILD_DOUBLE) || defined(BUILD_COMPLEX16)
     case BLAS_DOUBLE:
       mask = DGEMM_UNROLL_MN - 1;
       break;
-#endif
 #ifdef EXPRECISION
     case BLAS_XDOUBLE:
       mask = MAX(QGEMM_UNROLL_M, QGEMM_UNROLL_N) - 1;
@@ -74,16 +70,12 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
     }
   } else {
     switch (mode & BLAS_PREC) {
-#ifdef BUILD_COMPLEX
     case BLAS_SINGLE:
       mask = CGEMM_UNROLL_MN - 1;
       break;
-#endif
-#ifdef BUILD_COMPLEX16
     case BLAS_DOUBLE:
       mask = ZGEMM_UNROLL_MN - 1;
       break;
-#endif
 #ifdef EXPRECISION
     case BLAS_XDOUBLE:
       mask = MAX(XGEMM_UNROLL_M, XGEMM_UNROLL_N) - 1;
@@ -117,11 +109,7 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
       if (nthreads - num_cpu > 1) {
 
 	di = (double)i;
-	dinum = di * di +dnum;
-	if (dinum <0)
-	  width = (BLASLONG)(( - di + mask)/(mask+1)) * (mask+1);
-	else
-	  width = (BLASLONG)(( sqrt(dinum) - di + mask)/(mask+1)) * (mask+1);
+	width = (BLASLONG)(( sqrt(di * di + dnum) - di + mask)/(mask+1)) * (mask+1);
 
 	if ((width <= 0) || (width > n_to - i)) width = n_to - i;
 
@@ -148,7 +136,9 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
 
     nf = (double)(arg -> n - n_from);
     nt = (double)(arg -> n - n_to);
+
     dnum = (nt * nt - nf * nf) / (double)nthreads;
+
     num_cpu  = 0;
 
     range[0] = n_from;
@@ -159,11 +149,8 @@ int CNAME(int mode, blas_arg_t *arg, BLASLONG *range_m, BLASLONG *range_n, int (
       if (nthreads - num_cpu > 1) {
 
 	di = (double)(arg -> n - i);
-	dinum = di * di + dnum;
-	if (dinum<0)
-	  width = ((BLASLONG)(di + mask)/(mask+1)) * (mask+1);
-	else
-	  width = ((BLASLONG)((-sqrt(dinum) + di) + mask)/(mask+1)) * (mask+1);
+	width = ((BLASLONG)((-sqrt(di * di + dnum) + di) + mask)/(mask+1)) * (mask+1);
+
 	if ((width <= 0) || (width > n_to - i)) width = n_to - i;
 
       } else {

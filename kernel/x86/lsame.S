@@ -56,13 +56,13 @@
 #ifndef HAVE_CMOV
 	movl	%eax, %ecx
 	subl	$32,  %ecx
-	jl	.L1
+	jle	.L1
 	movl	%ecx, %eax
 .L1:
 
 	movl	%edx, %ecx
 	subl	$32,  %ecx
-	jl	.L2
+	jle	.L2
 	movl	%ecx, %edx
 .L2:
 	subl	%eax, %edx

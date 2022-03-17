@@ -1,8 +1,8 @@
 #include "relapack.h"
 #include "stdlib.h"
 
-static void RELAPACK_spbtrf_rec(const char *, const blasint *, const blasint *,
-    float *, const blasint *, float *, const blasint *, blasint *);
+static void RELAPACK_spbtrf_rec(const char *, const int *, const int *,
+    float *, const int *, float *, const int *, int *);
 
 
 /** SPBTRF computes the Cholesky factorization of a real symmetric positive definite band matrix A.
@@ -12,14 +12,14 @@ static void RELAPACK_spbtrf_rec(const char *, const blasint *, const blasint *,
  * http://www.netlib.org/lapack/explore-html/d1/d22/spbtrf_8f.html
  * */
 void RELAPACK_spbtrf(
-    const char *uplo, const blasint *n, const blasint *kd,
-    float *Ab, const blasint *ldAb,
-    blasint *info
+    const char *uplo, const int *n, const int *kd,
+    float *Ab, const int *ldAb,
+    int *info
 ) {
 
     // Check arguments
-    const blasint lower = LAPACK(lsame)(uplo, "L");
-    const blasint upper = LAPACK(lsame)(uplo, "U");
+    const int lower = LAPACK(lsame)(uplo, "L");
+    const int upper = LAPACK(lsame)(uplo, "U");
     *info = 0;
     if (!lower && !upper)
         *info = -1;
@@ -30,13 +30,10 @@ void RELAPACK_spbtrf(
     else if (*ldAb < *kd + 1)
         *info = -5;
     if (*info) {
-        const blasint minfo = -*info;
-        LAPACK(xerbla)("SPBTRF", &minfo, strlen("SPBTRF"));
+        const int minfo = -*info;
+        LAPACK(xerbla)("SPBTRF", &minfo);
         return;
     }
-
-
-    if (*n == 0) return;
 
     // Clean char * arguments
     const char cleanuplo = lower ? 'L' : 'U';
@@ -45,9 +42,9 @@ void RELAPACK_spbtrf(
     const float ZERO[] = { 0. };
 
     // Allocate work space
-    const blasint n1 = SREC_SPLIT(*n);
-    const blasint mWork = abs( (*kd > n1) ? (lower ? *n - *kd : n1) : *kd);
-    const blasint nWork = abs((*kd > n1) ? (lower ? n1 : *n - *kd) : *kd);
+    const int n1 = SREC_SPLIT(*n);
+    const int mWork = (*kd > n1) ? (lower ? *n - *kd : n1) : *kd;
+    const int nWork = (*kd > n1) ? (lower ? n1 : *n - *kd) : *kd;
     float *Work = malloc(mWork * nWork * sizeof(float));
     LAPACK(slaset)(uplo, &mWork, &nWork, ZERO, ZERO, Work, &mWork);
 
@@ -61,15 +58,13 @@ void RELAPACK_spbtrf(
 
 /** spbtrf's recursive compute kernel */
 static void RELAPACK_spbtrf_rec(
-    const char *uplo, const blasint *n, const blasint *kd,
-    float *Ab, const blasint *ldAb,
-    float *Work, const blasint *ldWork,
-    blasint *info
+    const char *uplo, const int *n, const int *kd,
+    float *Ab, const int *ldAb,
+    float *Work, const int *ldWork,
+    int *info
 ){
 
-    if (*n == 0 ) return;
-
-    if ( *n <= MAX(CROSSOVER_SPBTRF, 1) || *ldAb == 1) {
+    if (*n <= MAX(CROSSOVER_SPBTRF, 1)) {
         // Unblocked
         LAPACK(spbtf2)(uplo, n, kd, Ab, ldAb, info);
         return;
@@ -80,12 +75,12 @@ static void RELAPACK_spbtrf_rec(
     const float MONE[] = { -1. };
 
     // Unskew A
-    const blasint ldA[] = { *ldAb - 1 };
+    const int ldA[] = { *ldAb - 1 };
     float *const A = Ab + ((*uplo == 'L') ? 0 : *kd);
 
     // Splitting
-    const blasint n1 = MIN(SREC_SPLIT(*n), *kd);
-    const blasint n2 = *n - n1;
+    const int n1 = MIN(SREC_SPLIT(*n), *kd);
+    const int n2 = *n - n1;
 
     // * *
     // * Ab_BR
@@ -104,8 +99,8 @@ static void RELAPACK_spbtrf_rec(
         return;
 
     // Banded splitting
-    const blasint n21 = MIN(n2, *kd - n1);
-    const blasint n22 = MIN(n2 - n21, *kd);
+    const int n21 = MIN(n2, *kd - n1);
+    const int n22 = MIN(n2 - n21, *kd);
 
     //     n1    n21    n22
     // n1  *     A_TRl  A_TRr
@@ -153,7 +148,7 @@ static void RELAPACK_spbtrf_rec(
     }
 
     // recursion(A_BR)
-    if (*kd > n1 && ldA != 0)
+    if (*kd > n1)
         RELAPACK_spotrf(uplo, &n2, A_BR, ldA, info);
     else
         RELAPACK_spbtrf_rec(uplo, &n2, kd, Ab_BR, ldAb, Work, ldWork, info);

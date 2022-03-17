@@ -49,7 +49,7 @@ if ( n < 1280 )
 	"vxorpd		%%ymm6, %%ymm6, %%ymm6	             \n\t"
 	"vxorpd		%%ymm7, %%ymm7, %%ymm7	             \n\t"
 
-	".p2align 4			             \n\t"
+	".align 16			             \n\t"
 	"1:				             \n\t"
         "vmovups                  (%2,%0,8), %%ymm8          \n\t"  // 2 * x
         "vmovups                32(%2,%0,8), %%ymm9          \n\t"  // 2 * x
@@ -107,10 +107,10 @@ if ( n < 1280 )
 	"vmovups       %%xmm4,  16(%4)		\n\t"
 	"vzeroupper					     \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (dot)     // 4
@@ -137,7 +137,7 @@ if ( n < 1280 )
 	"vxorpd		%%ymm6, %%ymm6, %%ymm6	             \n\t"
 	"vxorpd		%%ymm7, %%ymm7, %%ymm7	             \n\t"
 
-	".p2align 4			             \n\t"
+	".align 16			             \n\t"
 	"1:				             \n\t"
 	"prefetcht0	512(%2,%0,8)		     \n\t"
         "vmovups                  (%2,%0,8), %%ymm8          \n\t"  // 2 * x
@@ -199,10 +199,10 @@ if ( n < 1280 )
 	"vmovups       %%xmm4,  16(%4)		\n\t"
 	"vzeroupper					     \n\t"
 
-	: 
-          "+r" (i),	// 0	
-	  "+r" (n)  	// 1
-        :
+	:
+        : 
+          "r" (i),	// 0	
+	  "r" (n),  	// 1
           "r" (x),      // 2
           "r" (y),      // 3
           "r" (dot)     // 4

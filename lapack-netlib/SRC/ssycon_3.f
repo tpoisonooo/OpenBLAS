@@ -149,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup singleSYcomputational
 *
@@ -157,7 +157,7 @@
 *  ==================
 *> \verbatim
 *>
-*>  June 2017,  Igor Kozachenko,
+*>  December 2016,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -171,10 +171,10 @@
       SUBROUTINE SSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
      $                     WORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO

@@ -19,7 +19,6 @@
 #define	DDOTC_K			ddot_k
 #define	DNRM2_K			dnrm2_k
 #define	DSCAL_K			dscal_k
-#define	DSUM_K			dsum_k
 #define	DSWAP_K			dswap_k
 #define	DROT_K			drot_k
 
@@ -157,8 +156,6 @@
 #define DIMATCOPY_K_RT      dimatcopy_k_rt
 #define DGEADD_K                dgeadd_k 
 
-#define DGEMM_SMALL_MATRIX_PERMIT	dgemm_small_matrix_permit
-
 #else
 
 #define	DAMAX_K			gotoblas -> damax_k
@@ -177,7 +174,6 @@
 #define	DDOTC_K			gotoblas -> ddot_k
 #define	DNRM2_K			gotoblas -> dnrm2_k
 #define	DSCAL_K			gotoblas -> dscal_k
-#define	DSUM_K			gotoblas -> dsum_k
 #define	DSWAP_K			gotoblas -> dswap_k
 #define	DROT_K			gotoblas -> drot_k
 
@@ -283,20 +279,7 @@
 
 #define DGEADD_K                gotoblas -> dgeadd_k 
 
-#define DGEMM_SMALL_MATRIX_PERMIT	gotoblas -> dgemm_small_matrix_permit
-
 #endif
-
-#define DGEMM_SMALL_KERNEL_NN		FUNC_OFFSET(dgemm_small_kernel_nn)
-#define DGEMM_SMALL_KERNEL_NT		FUNC_OFFSET(dgemm_small_kernel_nt)
-#define DGEMM_SMALL_KERNEL_TN		FUNC_OFFSET(dgemm_small_kernel_tn)
-#define DGEMM_SMALL_KERNEL_TT		FUNC_OFFSET(dgemm_small_kernel_tt)
-
-#define DGEMM_SMALL_KERNEL_B0_NN	FUNC_OFFSET(dgemm_small_kernel_b0_nn)
-#define DGEMM_SMALL_KERNEL_B0_NT	FUNC_OFFSET(dgemm_small_kernel_b0_nt)
-#define DGEMM_SMALL_KERNEL_B0_TN	FUNC_OFFSET(dgemm_small_kernel_b0_tn)
-#define DGEMM_SMALL_KERNEL_B0_TT	FUNC_OFFSET(dgemm_small_kernel_b0_tt)
-
 
 #define	DGEMM_NN		dgemm_nn
 #define	DGEMM_CN		dgemm_tn

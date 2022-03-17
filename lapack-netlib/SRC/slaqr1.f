@@ -55,21 +55,21 @@
 *
 *> \param[in] N
 *> \verbatim
-*>          N is INTEGER
+*>          N is integer
 *>              Order of the matrix H. N must be either 2 or 3.
 *> \endverbatim
 *>
 *> \param[in] H
 *> \verbatim
-*>          H is REAL array, dimension (LDH,N)
+*>          H is REAL array of dimension (LDH,N)
 *>              The 2-by-2 or 3-by-3 matrix H in (*).
 *> \endverbatim
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is INTEGER
+*>          LDH is integer
 *>              The leading dimension of H as declared in
-*>              the calling procedure.  LDH >= N
+*>              the calling procedure.  LDH.GE.N
 *> \endverbatim
 *>
 *> \param[in] SR1
@@ -95,7 +95,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is REAL array, dimension (N)
+*>          V is REAL array of dimension N
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim
@@ -108,7 +108,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup realOTHERauxiliary
 *
@@ -121,10 +121,10 @@
 *  =====================================================================
       SUBROUTINE SLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       REAL               SI1, SI2, SR1, SR2
@@ -147,13 +147,6 @@
       INTRINSIC          ABS
 *     ..
 *     .. Executable Statements ..
-*
-*     Quick return if possible
-*
-      IF( N.NE.2 .AND. N.NE.3 ) THEN
-         RETURN
-      END IF
-*
       IF( N.EQ.2 ) THEN
          S = ABS( H( 1, 1 )-SR2 ) + ABS( SI2 ) + ABS( H( 2, 1 ) )
          IF( S.EQ.ZERO ) THEN

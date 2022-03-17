@@ -31,6 +31,7 @@
 * Generated January, 2013
 *****************************************************************************/
 
+#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_zlacp2_work( int matrix_layout, char uplo, lapack_int m,

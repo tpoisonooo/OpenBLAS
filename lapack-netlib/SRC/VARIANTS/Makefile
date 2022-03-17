@@ -1,3 +1,5 @@
+include ../../make.inc
+
 #######################################################################
 #  This is the makefile to create a the variants libraries for LAPACK.
 #  The files are organized as follows:
@@ -15,8 +17,7 @@
 #  1065-1081. http://dx.doi.org/10.1137/S0895479896297744
 #######################################################################
 
-TOPSRCDIR = ../..
-include $(TOPSRCDIR)/make.inc
+VARIANTSDIR = LIB
 
 CHOLRL = cholesky/RL/cpotrf.o cholesky/RL/dpotrf.o cholesky/RL/spotrf.o cholesky/RL/zpotrf.o
 
@@ -31,36 +32,36 @@ LUREC = lu/REC/cgetrf.o lu/REC/dgetrf.o lu/REC/sgetrf.o lu/REC/zgetrf.o
 QRLL = qr/LL/cgeqrf.o qr/LL/dgeqrf.o qr/LL/sgeqrf.o qr/LL/zgeqrf.o qr/LL/sceil.o
 
 
-.PHONY: all
-all: cholrl.a choltop.a lucr.a lull.a lurec.a qrll.a
+all: cholrl choltop lucr lull lurec qrll
 
-cholrl.a: $(CHOLRL)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+cholrl: $(CHOLRL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/cholrl.a $(CHOLRL)
+	$(RANLIB) $(VARIANTSDIR)/cholrl.a
 
-choltop.a: $(CHOLTOP)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+choltop: $(CHOLTOP)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/choltop.a $(CHOLTOP)
+	$(RANLIB) $(VARIANTSDIR)/choltop.a
 
-lucr.a: $(LUCR)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+lucr: $(LUCR)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lucr.a $(LUCR)
+	$(RANLIB) $(VARIANTSDIR)/lucr.a
 
-lull.a: $(LULL)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+lull: $(LULL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lull.a $(LULL)
+	$(RANLIB) $(VARIANTSDIR)/lull.a
 
-lurec.a: $(LUREC)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+lurec: $(LUREC)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lurec.a $(LUREC)
+	$(RANLIB) $(VARIANTSDIR)/lurec.a
 
-qrll.a: $(QRLL)
-	$(AR) $(ARFLAGS) $@ $^
-	$(RANLIB) $@
+qrll: $(QRLL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/qrll.a $(QRLL)
+	$(RANLIB) $(VARIANTSDIR)/qrll.a
 
-.PHONY: clean cleanobj cleanlib
-clean: cleanobj cleanlib
-cleanobj:
-	rm -f $(CHOLRL) $(CHOLTOP) $(LUCR) $(LULL) $(LUREC) $(QRLL)
-cleanlib:
-	rm -f *.a
+
+.f.o:
+	$(FORTRAN) $(OPTS) -c -o $@ $<
+
+clean:
+	rm -f $(CHOLRL) $(CHOLTOP) $(LUCR) $(LULL) $(LUREC) $(QRLL) \
+	      $(VARIANTSDIR)/*.a

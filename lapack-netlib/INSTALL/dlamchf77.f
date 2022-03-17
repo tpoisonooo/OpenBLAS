@@ -10,10 +10,6 @@
 *
 *      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *
-*     .. Scalar Arguments ..
-*     CHARACTER          CMACH
-*     ..
-*
 *
 *> \par Purpose:
 *  =============

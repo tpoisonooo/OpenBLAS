@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dormbr
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -48,20 +48,18 @@ lapack_int LAPACKE_dormbr( int matrix_layout, char vect, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        nq = LAPACKE_lsame( side, 'l' ) ? m : n;
-        ar = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
-        ac = LAPACKE_lsame( vect, 'q' ) ? MIN(nq,k) : nq;
-        if( LAPACKE_dge_nancheck( matrix_layout, ar, ac, a, lda ) ) {
-            return -8;
-        }
-        if( LAPACKE_dge_nancheck( matrix_layout, m, n, c, ldc ) ) {
-            return -11;
-        }
-        if( LAPACKE_d_nancheck( MIN(nq,k), tau, 1 ) ) {
-            return -10;
-        }
+    /* Optionally check input matrices for NaNs */
+    nq = LAPACKE_lsame( side, 'l' ) ? m : n;
+    ar = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
+    ac = LAPACKE_lsame( vect, 'q' ) ? MIN(nq,k) : nq;
+    if( LAPACKE_dge_nancheck( matrix_layout, ar, ac, a, lda ) ) {
+        return -8;
+    }
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        return -11;
+    }
+    if( LAPACKE_d_nancheck( MIN(nq,k), tau, 1 ) ) {
+        return -10;
     }
 #endif
     /* Query optimal working array(s) size */

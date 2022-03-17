@@ -39,32 +39,32 @@
 #include <stdio.h>
 #include "common.h"
 
-int CNAME(BLASLONG m, BLASLONG n, IFLOAT *a, BLASLONG lda, IFLOAT *b){
+int CNAME(BLASLONG m, BLASLONG n, FLOAT *a, BLASLONG lda, FLOAT *b){
 
   BLASLONG i, j;
 
-  IFLOAT *aoffset;
-  IFLOAT *aoffset1, *aoffset2, *aoffset3, *aoffset4;
-  IFLOAT *aoffset5, *aoffset6, *aoffset7, *aoffset8;
+  FLOAT *aoffset;
+  FLOAT *aoffset1, *aoffset2, *aoffset3, *aoffset4;
+  FLOAT *aoffset5, *aoffset6, *aoffset7, *aoffset8;
 
-  IFLOAT *boffset,  *boffset1, *boffset2, *boffset3, *boffset4;
+  FLOAT *boffset,  *boffset1, *boffset2, *boffset3, *boffset4;
 
-  IFLOAT ctemp01, ctemp02, ctemp03, ctemp04;
-  IFLOAT ctemp05, ctemp06, ctemp07, ctemp08;
-  IFLOAT ctemp09, ctemp10, ctemp11, ctemp12;
-  IFLOAT ctemp13, ctemp14, ctemp15, ctemp16;
-  IFLOAT ctemp17, ctemp18, ctemp19, ctemp20;
-  IFLOAT ctemp21, ctemp22, ctemp23, ctemp24;
-  IFLOAT ctemp25, ctemp26, ctemp27, ctemp28;
-  IFLOAT ctemp29, ctemp30, ctemp31, ctemp32;
-  IFLOAT ctemp33, ctemp34, ctemp35, ctemp36;
-  IFLOAT ctemp37, ctemp38, ctemp39, ctemp40;
-  IFLOAT ctemp41, ctemp42, ctemp43, ctemp44;
-  IFLOAT ctemp45, ctemp46, ctemp47, ctemp48;
-  IFLOAT ctemp49, ctemp50, ctemp51, ctemp52;
-  IFLOAT ctemp53, ctemp54, ctemp55, ctemp56;
-  IFLOAT ctemp57, ctemp58, ctemp59, ctemp60;
-  IFLOAT ctemp61, ctemp62, ctemp63, ctemp64;
+  FLOAT ctemp01, ctemp02, ctemp03, ctemp04;
+  FLOAT ctemp05, ctemp06, ctemp07, ctemp08;
+  FLOAT ctemp09, ctemp10, ctemp11, ctemp12;
+  FLOAT ctemp13, ctemp14, ctemp15, ctemp16;
+  FLOAT ctemp17, ctemp18, ctemp19, ctemp20;
+  FLOAT ctemp21, ctemp22, ctemp23, ctemp24;
+  FLOAT ctemp25, ctemp26, ctemp27, ctemp28;
+  FLOAT ctemp29, ctemp30, ctemp31, ctemp32;
+  FLOAT ctemp33, ctemp34, ctemp35, ctemp36;
+  FLOAT ctemp37, ctemp38, ctemp39, ctemp40;
+  FLOAT ctemp41, ctemp42, ctemp43, ctemp44;
+  FLOAT ctemp45, ctemp46, ctemp47, ctemp48;
+  FLOAT ctemp49, ctemp50, ctemp51, ctemp52;
+  FLOAT ctemp53, ctemp54, ctemp55, ctemp56;
+  FLOAT ctemp57, ctemp58, ctemp59, ctemp60;
+  FLOAT ctemp61, ctemp62, ctemp63, ctemp64;
 
   aoffset   = a;
   boffset   = b;
@@ -719,10 +719,10 @@ int CNAME(BLASLONG m, BLASLONG n, IFLOAT *a, BLASLONG lda, IFLOAT *b){
 
   if (m & 1){
     aoffset1  = aoffset;
-    // aoffset += lda;
+    aoffset += lda;
 
     boffset1  = boffset;
-    // boffset  += 8;
+    boffset  += 8;
 
     i = (n >> 3);
     if (i > 0){
@@ -762,7 +762,7 @@ int CNAME(BLASLONG m, BLASLONG n, IFLOAT *a, BLASLONG lda, IFLOAT *b){
        *(boffset2 +  1) = ctemp02;
        *(boffset2 +  2) = ctemp03;
        *(boffset2 +  3) = ctemp04;
-       // boffset2 += 4;
+       boffset2 += 4;
      }
 
      if (n & 2){
@@ -772,7 +772,7 @@ int CNAME(BLASLONG m, BLASLONG n, IFLOAT *a, BLASLONG lda, IFLOAT *b){
 
        *(boffset3 +  0) = ctemp01;
        *(boffset3 +  1) = ctemp02;
-       // boffset3 += 2;
+       boffset3 += 2;
      }
 
      if (n & 1){

@@ -52,7 +52,6 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The m by n matrix A.
-*> \endverbatim
 *>
 *> \param[in] LDA
 *> \verbatim
@@ -158,8 +157,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DZASUM, DLAMCH, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, DASUM, DZASUM, DLAMCH, ZLANGE
+      DOUBLE PRECISION   DASUM, DLAMCH, ZLANGE
+      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH, ZLANGE
+      DOUBLE PRECISION   DZASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM

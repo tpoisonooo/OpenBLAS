@@ -103,7 +103,7 @@
 *
 *> \date December 2016
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup double_eig
 *
 *  =====================================================================
       SUBROUTINE DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )

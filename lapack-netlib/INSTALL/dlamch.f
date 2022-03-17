@@ -10,10 +10,6 @@
 *
 *      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *
-*     .. Scalar Arguments ..
-*     CHARACTER          CMACH
-*     ..
-*
 *
 *> \par Purpose:
 *  =============
@@ -28,7 +24,6 @@
 *
 *> \param[in] CMACH
 *> \verbatim
-*>          CMACH is CHARACTER*1
 *>          Specifies the value to be returned by DLAMCH:
 *>          = 'E' or 'e',   DLAMCH := eps
 *>          = 'S' or 's ,   DLAMCH := sfmin

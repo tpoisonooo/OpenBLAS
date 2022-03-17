@@ -103,7 +103,7 @@
 *
 *> \date December 2016
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup single_eig
 *
 *  =====================================================================
       SUBROUTINE SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )

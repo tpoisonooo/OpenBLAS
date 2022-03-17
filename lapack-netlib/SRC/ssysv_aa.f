@@ -42,7 +42,7 @@
 *> matrices.
 *>
 *> Aasen's algorithm is used to factor A as
-*>    A = U**T * T * U,  if UPLO = 'U', or
+*>    A = U * T * U**T,  if UPLO = 'U', or
 *>    A = L * T * L**T,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is symmetric tridiagonal. The factored
@@ -86,7 +86,7 @@
 *>
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
-*>          factorization A = U**T*T*U or A = L*T*L**T as computed by
+*>          factorization A = U*T*U**T or A = L*T*L**T as computed by
 *>          SSYTRF.
 *> \endverbatim
 *>
@@ -154,7 +154,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup realSYsolve
 *
@@ -162,10 +162,10 @@
       SUBROUTINE SSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -187,7 +187,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SSYTRS_AA, SSYTRF_AA
+      EXTERNAL           XERBLA, SSYTRF, SSYTRS, SSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -220,6 +220,9 @@
          LWKOPT_SYTRS = INT( WORK(1) )
          LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
          WORK( 1 ) = LWKOPT
+         IF( LWORK.LT.LWKOPT .AND. .NOT.LQUERY ) THEN
+            INFO = -10
+         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -229,7 +232,7 @@
          RETURN
       END IF
 *
-*     Compute the factorization A = U**T*T*U or A = L*T*L**T.
+*     Compute the factorization A = U*T*U**T or A = L*T*L**T.
 *
       CALL SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN

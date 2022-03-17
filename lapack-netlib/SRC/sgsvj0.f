@@ -117,7 +117,7 @@
 *> \param[in] MV
 *> \verbatim
 *>          MV is INTEGER
-*>          If JOBV = 'A', then MV rows of V are post-multipled by a
+*>          If JOBV .EQ. 'A', then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then MV is not referenced.
 *> \endverbatim
@@ -125,9 +125,9 @@
 *> \param[in,out] V
 *> \verbatim
 *>          V is REAL array, dimension (LDV,N)
-*>          If JOBV = 'V' then N rows of V are post-multipled by a
+*>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
-*>          If JOBV = 'A' then MV rows of V are post-multipled by a
+*>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then V is not referenced.
 *> \endverbatim
@@ -136,8 +136,8 @@
 *> \verbatim
 *>          LDV is INTEGER
 *>          The leading dimension of the array V,  LDV >= 1.
-*>          If JOBV = 'V', LDV >= N.
-*>          If JOBV = 'A', LDV >= MV.
+*>          If JOBV = 'V', LDV .GE. N.
+*>          If JOBV = 'A', LDV .GE. MV.
 *> \endverbatim
 *>
 *> \param[in] EPS
@@ -157,7 +157,7 @@
 *>          TOL is REAL
 *>          TOL is the threshold for Jacobi rotations. For a pair
 *>          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
-*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) > TOL.
+*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
 *> \endverbatim
 *>
 *> \param[in] NSWEEP
@@ -169,20 +169,20 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (LWORK)
+*>          WORK is REAL array, dimension LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          LWORK is the dimension of WORK. LWORK >= M.
+*>          LWORK is the dimension of WORK. LWORK .GE. M.
 *> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0:  successful exit.
-*>          < 0:  if INFO = -i, then the i-th argument had an illegal value
+*>          = 0 : successful exit.
+*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
 *
 *  Authors:
@@ -193,7 +193,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup realOTHERcomputational
 *
@@ -218,10 +218,10 @@
       SUBROUTINE SGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
      $                   SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
@@ -262,8 +262,7 @@
       EXTERNAL           ISAMAX, LSAME, SDOT, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP,
-     $                   XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP
 *     ..
 *     .. Executable Statements ..
 *
@@ -1045,7 +1044,7 @@
 
  1993 CONTINUE
 *     end i=1:NSWEEP loop
-* #:) Reaching this point means that the procedure has completed the given
+* #:) Reaching this point means that the procedure has comleted the given
 *     number of iterations.
       INFO = NSWEEP - 1
       GO TO 1995

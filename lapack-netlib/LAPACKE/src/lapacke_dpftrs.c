@@ -42,14 +42,12 @@ lapack_int LAPACKE_dpftrs( int matrix_layout, char transr, char uplo,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dpf_nancheck( n, a ) ) {
-            return -6;
-        }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
-            return -7;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_dpf_nancheck( n, a ) ) {
+        return -6;
+    }
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        return -7;
     }
 #endif
     return LAPACKE_dpftrs_work( matrix_layout, transr, uplo, n, nrhs, a, b,

@@ -222,7 +222,7 @@
 *>
 *> \param[out] ISUPPZ
 *> \verbatim
-*>          ISUPPZ is INTEGER array, dimension ( 2*max(1,M) )
+*>          ISUPPZ is INTEGER ARRAY, dimension ( 2*max(1,M) )
 *>          The support of the eigenvectors in Z, i.e., the indices
 *>          indicating the nonzero elements in Z. The i-th computed eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
@@ -233,13 +233,13 @@
 *> \param[in,out] TRYRAC
 *> \verbatim
 *>          TRYRAC is LOGICAL
-*>          If TRYRAC = .TRUE., indicates that the code should check whether
+*>          If TRYRAC.EQ..TRUE., indicates that the code should check whether
 *>          the tridiagonal matrix defines its eigenvalues to high relative
 *>          accuracy.  If so, the code uses relative-accuracy preserving
 *>          algorithms that might be (a bit) slower depending on the matrix.
 *>          If the matrix does not define its eigenvalues to high relative
 *>          accuracy, the code can uses possibly faster algorithms.
-*>          If TRYRAC = .FALSE., the code is not required to guarantee
+*>          If TRYRAC.EQ..FALSE., the code is not required to guarantee
 *>          relatively accurate eigenvalues and can use the fastest possible
 *>          techniques.
 *>          On exit, a .TRUE. TRYRAC will be set to .FALSE. if the matrix
@@ -321,7 +321,7 @@
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016

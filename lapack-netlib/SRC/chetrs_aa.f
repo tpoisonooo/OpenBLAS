@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> CHETRS_AA solves a system of linear equations A*X = B with a complex
-*> hermitian matrix A using the factorization A = U**H*T*U or
+*> hermitian matrix A using the factorization A = U*T*U**H or
 *> A = L*T*L**H computed by CHETRF_AA.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U**H*T*U;
+*>          = 'U':  Upper triangular, form is A = U*T*U**H;
 *>          = 'L':  Lower triangular, form is A = L*T*L**H.
 *> \endverbatim
 *>
@@ -66,7 +66,7 @@
 *>          of the matrix B.  NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          Details of factors computed by CHETRF_AA.
@@ -97,16 +97,14 @@
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          WORK is DOUBLE array, dimension (MAX(1,LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= max(1,3*N-2).
-*> \endverbatim
+*>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -123,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup complexHEcomputational
 *
@@ -131,10 +129,10 @@
       SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                      WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
       IMPLICIT NONE
 *
@@ -161,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CGTSV, CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -200,31 +198,24 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B, where A = U**H*T*U.
+*        Solve A*X = B, where A = U*T*U**T.
 *
-*        1) Forward substitution with U**H
+*        P**T * B
 *
-         IF( N.GT.1 ) THEN
+         K = 1
+         DO WHILE ( K.LE.N )
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $          CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+            K = K + 1
+         END DO
 *
-*           Pivot, P**T * B -> B
+*        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-            K = 1
-            DO WHILE ( K.LE.N )
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-               K = K + 1
-            END DO
+         CALL CTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
-*           Compute U**H \ B -> B    [ (U**H \P**T * B) ]
-*
-            CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ),
-     $                  LDA, B( 2, 1 ), LDB)
-         END IF
-*
-*        2) Solve with triangular matrix T
-*
-*        Compute T \ B -> B   [ T \ (U**H \P**T * B) ]
+*        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
@@ -235,82 +226,65 @@
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
-*        3) Backward substitution with U
+*        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         IF( N.GT.1 ) THEN
+         CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+     $               B(2, 1), LDB)
 *
-*           Compute U \ B -> B   [ U \ (T \ (U**H \P**T * B) ) ]
+*        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
-     $                  LDA, B(2, 1), LDB)
-*
-*           Pivot, P * B  -> B [ P * (U \ (T \ (U**H \P**T * B) )) ]
-*
-            K = N
-            DO WHILE ( K.GE.1 )
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-               K = K - 1
-            END DO
-         END IF
+         K = N
+         DO WHILE ( K.GE.1 )
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+            K = K - 1
+         END DO
 *
       ELSE
 *
-*        Solve A*X = B, where A = L*T*L**H.
+*        Solve A*X = B, where A = L*T*L**T.
 *
-*        1) Forward substitution with L
+*        Pivot, P**T * B
 *
-         IF( N.GT.1 ) THEN
+         K = 1
+         DO WHILE ( K.LE.N )
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+            K = K + 1
+         END DO
 *
-*           Pivot, P**T * B -> B
+*        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-            K = 1
-            DO WHILE ( K.LE.N )
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-               K = K + 1
-            END DO
-*
-*           Compute L \ B -> B    [ (L \P**T * B) ]
-*
-            CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1),
-     $                  LDA, B(2, 1), LDB )
-         END IF
-*
-*        2) Solve with triangular matrix T
+         CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
+     $               B(2, 1), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1 )
+             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
              CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
              CALL CLACGV( N-1, WORK( 2*N ), 1 )
          END IF
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
-*        3) Backward substitution with L**H
+*        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         IF( N.GT.1 ) THEN
+         CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+     $              B( 2, 1 ), LDB)
 *
-*           Compute (L**H \ B) -> B   [ L**H \ (T \ (L \P**T * B) ) ]
+*        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-            CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ),
-     $                  LDA, B( 2, 1 ), LDB )
-*
-*           Pivot, P * B -> B  [ P * (L**H \ (T \ (L \P**T * B) )) ]
-*
-            K = N
-            DO WHILE ( K.GE.1 )
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-               K = K - 1
-            END DO
-         END IF
+         K = N
+         DO WHILE ( K.GE.1 )
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+            K = K - 1
+         END DO
 *
       END IF
 *

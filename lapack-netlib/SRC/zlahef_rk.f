@@ -331,7 +331,7 @@
 *        Factorize the trailing columns of A using the upper triangle
 *        of A and working backwards, and compute the matrix W = U12*D
 *        for use in updating A11 (note that conjg(W) is actually stored)
-*        Initialize the first entry of array E, where superdiagonal
+*        Initilize the first entry of array E, where superdiagonal
 *        elements of D are stored
 *
          E( 1 ) = CZERO
@@ -789,7 +789,7 @@
 *        of A and working forwards, and compute the matrix W = L21*D
 *        for use in updating A22 (note that conjg(W) is actually stored)
 *
-*        Initialize the unused last entry of the subdiagonal array E.
+*        Initilize the unused last entry of the subdiagonal array E.
 *
          E( N ) = CZERO
 *

@@ -117,15 +117,10 @@ void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
 void CNAME(enum CBLAS_ORDER order,
 	   enum CBLAS_UPLO Uplo,
 	   blasint n,
-	   void *VALPHA,
-	   void  *vx, blasint incx,
-	   void  *vy, blasint incy,
-	   void  *va) {
-
-  FLOAT* ALPHA = (FLOAT*) VALPHA;
-  FLOAT* x = (FLOAT*) vx;
-  FLOAT* y = (FLOAT*) vy;
-  FLOAT* a = (FLOAT*) va;
+	   FLOAT *ALPHA,
+	   FLOAT  *x, blasint incx,
+	   FLOAT  *y, blasint incy,
+	   FLOAT  *a) {
 
   FLOAT alpha_r	= ALPHA[0];
   FLOAT alpha_i	= ALPHA[1];

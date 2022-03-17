@@ -58,7 +58,7 @@ static void daxpy_kernel_8 (long n, double *x, double *y, double alpha)
 
   __asm__
     (
-       XXSPLTD_S(%x4,%x22,0)
+       "xxspltd		%x4, %x22, 0	\n\t"
 
        "dcbt		0, %2		\n\t"
        "dcbt		0, %3		\n\t"
@@ -90,10 +90,10 @@ static void daxpy_kernel_8 (long n, double *x, double *y, double alpha)
        "addi		%3, %3, -64	\n\t"
 
        "addic.		%1, %1, -16	\n\t"
-       "ble		two%=		\n\t"
+       "ble		2f		\n\t"
 
        ".align 5			\n"
-     "one%=:				\n\t"
+     "1:				\n\t"
 
        "xvmaddadp	%x13, %x5, %x4	\n\t"
        "xvmaddadp	%x14, %x6, %x4	\n\t"
@@ -152,9 +152,9 @@ static void daxpy_kernel_8 (long n, double *x, double *y, double alpha)
        "addi		%3, %3, -64	\n\t"
 
        "addic.		%1, %1, -16	\n\t"
-       "bgt		one%=		\n"
+       "bgt		1b		\n"
 
-     "two%=:				\n\t"
+     "2:				\n\t"
 
        "xvmaddadp	%x13, %x5, %x4	\n\t"
        "xvmaddadp	%x14, %x6, %x4	\n\t"

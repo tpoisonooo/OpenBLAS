@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> DSYTRS_AA solves a system of linear equations A*X = B with a real
-*> symmetric matrix A using the factorization A = U**T*T*U or
+*> symmetric matrix A using the factorization A = U*T*U**T or
 *> A = L*T*L**T computed by DSYTRF_AA.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U**T*T*U;
+*>          = 'U':  Upper triangular, form is A = U*T*U**T;
 *>          = 'L':  Lower triangular, form is A = L*T*L**T.
 *> \endverbatim
 *>
@@ -66,7 +66,7 @@
 *>          of the matrix B.  NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of factors computed by DSYTRF_AA.
@@ -97,16 +97,14 @@
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[in] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is DOUBLE array, dimension (MAX(1,LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= max(1,3*N-2).
-*> \endverbatim
+*>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -123,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup doubleSYcomputational
 *
@@ -131,10 +129,10 @@
       SUBROUTINE DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                      WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
       IMPLICIT NONE
 *
@@ -161,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DGTSV, DSWAP, DTRSM, XERBLA
+      EXTERNAL           DGTSV, DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -200,29 +198,22 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B, where A = U**T*T*U.
+*        Solve A*X = B, where A = U*T*U**T.
 *
-*        1) Forward substitution with U**T
+*        Pivot, P**T * B
 *
-         IF( N.GT.1 ) THEN
+         DO K = 1, N
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $          CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+         END DO
 *
-*           Pivot, P**T * B -> B
+*        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-            DO K = 1, N
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $             CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            END DO
+         CALL DTRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
-*           Compute U**T \ B -> B    [ (U**T \P**T * B) ]
-*
-            CALL DTRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ),
-     $                  LDA, B( 2, 1 ), LDB)
-         END IF
-*
-*        2) Solve with triangular matrix T
-*
-*        Compute T \ B -> B   [ T \ (U**T \P**T * B) ]
+*        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
          CALL DLACPY( 'F', 1, N, A( 1, 1 ), LDA+1, WORK( N ), 1)
          IF( N.GT.1 ) THEN
@@ -232,47 +223,35 @@
          CALL DGTSV( N, NRHS, WORK( 1 ), WORK( N ), WORK( 2*N ), B, LDB,
      $               INFO )
 *
-*        3) Backward substitution with U
+*        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         IF( N.GT.1 ) THEN
+         CALL DTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
-*           Compute U \ B -> B   [ U \ (T \ (U**T \P**T * B) ) ]
+*        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
 *
-            CALL DTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
-     $                  LDA, B( 2, 1 ), LDB)
-*
-*           Pivot, P * B -> B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
-*
-            DO K = N, 1, -1
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            END DO
-         END IF
+         DO K = N, 1, -1
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+         END DO
 *
       ELSE
 *
 *        Solve A*X = B, where A = L*T*L**T.
 *
-*        1) Forward substitution with L
+*        Pivot, P**T * B
 *
-         IF( N.GT.1 ) THEN
+         DO K = 1, N
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+         END DO
 *
-*           Pivot, P**T * B -> B
+*        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-            DO K = 1, N
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            END DO
-*
-*           Compute L \ B -> B    [ (L \P**T * B) ]
-*
-            CALL DTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ),
-     $                  LDA, B( 2, 1 ), LDB)
-         END IF
-*
-*        2) Solve with triangular matrix T
+         CALL DTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
@@ -284,23 +263,18 @@
          CALL DGTSV( N, NRHS, WORK( 1 ), WORK(N), WORK( 2*N ), B, LDB,
      $               INFO)
 *
-*        3) Backward substitution with L**T
+*        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         IF( N.GT.1 ) THEN
+         CALL DTRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+     $              B( 2, 1 ), LDB)
 *
-*           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
+*        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-            CALL DTRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ),
-     $                  LDA, B( 2, 1 ), LDB)
-*
-*           Pivot, P * B -> B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
-*
-            DO K = N, 1, -1
-               KP = IPIV( K )
-               IF( KP.NE.K )
-     $            CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            END DO
-         END IF
+         DO K = N, 1, -1
+            KP = IPIV( K )
+            IF( KP.NE.K )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+         END DO
 *
       END IF
 *

@@ -42,8 +42,7 @@
 *>
 *>      Specifically, if ITYPE=1, then:
 *>
-*>              RESULT(1) = | U**H A U - S | / ( |A| m ulp ) and
-*>              RESULT(2) = | I - U**H U | / ( m ulp )
+*>              RESULT(1) = | U' A U - S | / ( |A| m ulp ) *andC>              RESULT(2) = | I - U'U | / ( m ulp )
 *> \endverbatim
 *
 *  Arguments:
@@ -53,8 +52,7 @@
 *>  ITYPE   INTEGER
 *>          Specifies the type of tests to be performed.
 *>          1: U expressed as a dense orthogonal matrix:
-*>             RESULT(1) = | A - U S U**H | / ( |A| n ulp )   *and
-*>             RESULT(2) = | I - U U**H | / ( n ulp )
+*>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
 *>
 *>  UPLO    CHARACTER
 *>          If UPLO='U', the upper triangle of A will be used and the
@@ -124,7 +122,7 @@
 *>
 *>  TAU     COMPLEX*16 array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)**H in the Householder transformation H(j) of
+*>          v(j) v(j)' in the Householder transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *>          Not modified.
@@ -217,7 +215,7 @@
 *
 *     Compute error matrix:
 *
-*     ITYPE=1: error = U**H A U - S
+*     ITYPE=1: error = U' A U - S
 *
       CALL ZHEMM( 'L', UPLO, N, M, CONE, A, LDA, U, LDU, CZERO, WORK,
      $            N )
@@ -251,7 +249,7 @@
 *
 *     Do Test 2
 *
-*     Compute  U**H U - I
+*     Compute  U'U - I
 *
       IF( ITYPE.EQ.1 )
      $   CALL ZUNT01( 'Columns', N, M, U, LDU, WORK, 2*N*N, RWORK,

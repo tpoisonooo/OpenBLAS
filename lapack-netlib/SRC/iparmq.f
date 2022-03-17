@@ -41,7 +41,7 @@
 *
 *> \param[in] ISPEC
 *> \verbatim
-*>          ISPEC is INTEGER
+*>          ISPEC is integer scalar
 *>              ISPEC specifies which tunable parameter IPARMQ should
 *>              return.
 *>
@@ -60,7 +60,7 @@
 *>                        invest in an (expensive) multi-shift QR sweep.
 *>                        If the aggressive early deflation subroutine
 *>                        finds LD converged eigenvalues from an order
-*>                        NW deflation window and LD > (NW*NIBBLE)/100,
+*>                        NW deflation window and LD.GT.(NW*NIBBLE)/100,
 *>                        then the next QR sweep is skipped and early
 *>                        deflation is applied immediately to the
 *>                        remaining active diagonal block.  Setting
@@ -104,20 +104,20 @@
 *>
 *> \param[in] NAME
 *> \verbatim
-*>          NAME is CHARACTER string
+*>          NAME is character string
 *>               Name of the calling subroutine
 *> \endverbatim
 *>
 *> \param[in] OPTS
 *> \verbatim
-*>          OPTS is CHARACTER string
+*>          OPTS is character string
 *>               This is a concatenation of the string arguments to
 *>               TTQRE.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
-*>          N is INTEGER
+*>          N is integer scalar
 *>               N is the order of the Hessenberg matrix H.
 *> \endverbatim
 *>
@@ -135,7 +135,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER
+*>          LWORK is integer scalar
 *>               The amount of workspace available.
 *> \endverbatim
 *
@@ -147,7 +147,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -184,8 +184,8 @@
 *>                        This depends on ILO, IHI and NS, the
 *>                        number of simultaneous shifts returned
 *>                        by IPARMQ(ISPEC=15).  The default for
-*>                        (IHI-ILO+1) <= 500 is NS.  The default
-*>                        for (IHI-ILO+1) > 500 is 3*NS/2.
+*>                        (IHI-ILO+1).LE.500 is NS.  The default
+*>                        for (IHI-ILO+1).GT.500 is 3*NS/2.
 *>
 *>       IPARMQ(ISPEC=14) Nibble crossover point.  Default: 14.
 *>
@@ -222,10 +222,10 @@
 *  =====================================================================
       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            IHI, ILO, ISPEC, LWORK, N

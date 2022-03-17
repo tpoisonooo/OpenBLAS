@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
-*                            WORK, INFO )
+*                            WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *       DOUBLE PRECISION   ANORM, RCOND
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            IPIV( * )
+*       INTEGER            IPIV( * ), IWORK( * )
 *       COMPLEX*16         A( LDA, * ), E ( * ), WORK( * )
 *       ..
 *
@@ -129,6 +129,11 @@
 *>          WORK is COMPLEX*16 array, dimension (2*N)
 *> \endverbatim
 *>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -144,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16SYcomputational
 *
@@ -152,7 +157,7 @@
 *  ==================
 *> \verbatim
 *>
-*>  June 2017,  Igor Kozachenko,
+*>  December 2016,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -166,10 +171,10 @@
       SUBROUTINE ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
      $                     WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO

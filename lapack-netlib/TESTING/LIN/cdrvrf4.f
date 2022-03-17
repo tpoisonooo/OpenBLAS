@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex_lin
 *
@@ -114,10 +114,10 @@
       SUBROUTINE CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
      +                    LDA, S_WORK_CLANGE )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDC, NN, NOUT
@@ -209,10 +209,10 @@
                         IF ( IALPHA.EQ. 1) THEN
                            ALPHA = ZERO
                            BETA = ZERO
-                        ELSE IF ( IALPHA.EQ. 2) THEN
+                        ELSE IF ( IALPHA.EQ. 1) THEN
                            ALPHA = ONE
                            BETA = ZERO
-                        ELSE IF ( IALPHA.EQ. 3) THEN
+                        ELSE IF ( IALPHA.EQ. 1) THEN
                            ALPHA = ZERO
                            BETA = ONE
                         ELSE

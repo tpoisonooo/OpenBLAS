@@ -65,9 +65,10 @@ int CNAME(BLASLONG n, BLASLONG k1, BLASLONG k2, FLOAT dummy1, FLOAT *a, BLASLONG
   a--;
   k1 --;
 
+#ifndef MINUS
  ipiv += k1;
-#ifdef MINUS
-  ipiv -= (k2 - k1 - 1) * incx;
+#else
+  ipiv -= (k2 - 1) * incx;
 #endif
 
   if (n  <= 0) return 0;
@@ -173,7 +174,7 @@ int CNAME(BLASLONG n, BLASLONG k1, BLASLONG k2, FLOAT dummy1, FLOAT *a, BLASLONG
 	      *a8 = B8;
 	      *b8 = A8;
 	    }
-	} else {
+	} else
 	  if (b1 == a2) {
 	    if (b2 != a1) {
 	      if (b2 == a2) {
@@ -224,7 +225,7 @@ int CNAME(BLASLONG n, BLASLONG k1, BLASLONG k2, FLOAT dummy1, FLOAT *a, BLASLONG
 		*b5 = A5;
 		*a7 = B7;
 		*b7 = A7;
-	      } else {
+	      } else
 		if (b2 == b1) {
 		  *a1 = B1;
 		  *a2 = A1;
@@ -256,8 +257,6 @@ int CNAME(BLASLONG n, BLASLONG k1, BLASLONG k2, FLOAT dummy1, FLOAT *a, BLASLONG
 		  *b7 = A7;
 		  *b8 = A8;
 		}
-	      }
-	  }
 	  }
 
 	  b1 = a + ip1;

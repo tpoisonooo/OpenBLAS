@@ -33,16 +33,8 @@
 *>
 *> \verbatim
 *>
-*> ZGELQ2 computes an LQ factorization of a complex m-by-n matrix A:
-*>
-*>    A = ( L 0 ) *  Q
-*>
-*> where:
-*>
-*>    Q is a n-by-n orthogonal matrix;
-*>    L is an lower-triangular m-by-m matrix;
-*>    0 is a m-by-(n-m) zero matrix, if m < n.
-*>
+*> ZGELQ2 computes an LQ factorization of a complex m by n matrix A:
+*> A = L * Q.
 *> \endverbatim
 *
 *  Arguments:
@@ -104,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2019
+*> \date December 2016
 *
 *> \ingroup complex16GEcomputational
 *
@@ -129,10 +121,10 @@
 *  =====================================================================
       SUBROUTINE ZGELQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.9.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2019
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N

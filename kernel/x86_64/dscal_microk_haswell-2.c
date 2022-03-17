@@ -58,7 +58,7 @@ static void dscal_kernel_8( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"subq	        $1 , %0			            \n\t"		
 	"jz		2f		             	    \n\t"
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 	// "prefetcht0     640(%1)				    \n\t" 
 
@@ -122,9 +122,9 @@ static void dscal_kernel_8( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"vzeroupper					    \n\t"
 
 	:
-	  "+r" (n1),  	// 0
-          "+r" (x)      // 1
-	:
+        : 
+	  "r" (n1),  	// 0
+          "r" (x),      // 1
           "r" (alpha),  // 2
 	  "r" (n2)   	// 3
 	: "cc", 
@@ -156,7 +156,7 @@ static void dscal_kernel_8_zero( BLASLONG n, FLOAT *alpha, FLOAT *x)
 	"cmpq 	$0, %0					    \n\t"
 	"je	2f					    \n\t" 
 
-	".p2align 4				            \n\t"
+	".align 16				            \n\t"
 	"1:				            	    \n\t"
 
 	"vmovups	%%xmm0  ,-128(%1)		    \n\t"
@@ -187,10 +187,10 @@ static void dscal_kernel_8_zero( BLASLONG n, FLOAT *alpha, FLOAT *x)
 
 	"vzeroupper					    \n\t"
 
-	: 
-	  "+r" (n1),  	// 0
-          "+r" (x)      // 1
 	:
+        : 
+	  "r" (n1),  	// 0
+          "r" (x),      // 1
           "r" (alpha),  // 2
 	  "r" (n2)   	// 3
 	: "cc", 

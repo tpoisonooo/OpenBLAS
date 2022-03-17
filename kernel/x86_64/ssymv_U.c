@@ -33,7 +33,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ssymv_U_microk_bulldozer-2.c"
 #elif defined(NEHALEM)
 #include "ssymv_U_microk_nehalem-2.c"
-#elif defined(HASWELL) || defined(ZEN) || defined (SKYLAKEX) || defined (COOPERLAKE) || defined (SAPPHIRERAPIDS)
+#elif defined(HASWELL) || defined(ZEN)
 #include "ssymv_U_microk_haswell-2.c"
 #elif defined(SANDYBRIDGE)
 #include "ssymv_U_microk_sandy-2.c"
@@ -164,6 +164,7 @@ int CNAME(BLASLONG m, BLASLONG offset, FLOAT alpha, FLOAT *a, BLASLONG lda, FLOA
 	FLOAT temp2;
 	FLOAT *xp, *yp;
 	FLOAT *a0,*a1,*a2,*a3;
+	FLOAT at0,at1,at2,at3;
 	FLOAT tmp1[4];
 	FLOAT tmp2[4];
 

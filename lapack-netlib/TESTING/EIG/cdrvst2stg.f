@@ -328,7 +328,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex_eig
 *
@@ -338,10 +338,10 @@
      $                   LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
@@ -399,7 +399,8 @@
      $                   CHET22, CHPEV, CHPEVD, CHPEVX, CLACPY, CLASET,
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
      $                   CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
-     $                   CHBEVX_2STAGE, CLATMR, CLATMS
+     $                   CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_SY2SB, 
+     $                   CHETRD_SB2ST, CLATMR, CLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, INT, LOG, MAX, MIN, SQRT

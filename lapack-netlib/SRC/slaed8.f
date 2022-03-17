@@ -353,7 +353,7 @@
          Z( I ) = W( INDX( I ) )
    40 CONTINUE
 *
-*     Calculate the allowable deflation tolerance
+*     Calculate the allowable deflation tolerence
 *
       IMAX = ISAMAX( N, Z, 1 )
       JMAX = ISAMAX( N, D, 1 )

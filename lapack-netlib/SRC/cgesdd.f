@@ -281,9 +281,9 @@
      $                   CUNGQR, CUNMBR, SBDSDC, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
+      LOGICAL            LSAME
       REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, SLAMCH, CLANGE, SISNAN
+      EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -647,10 +647,6 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = CLANGE( 'M', M, N, A, LDA, DUM )
-      IF( SISNAN ( ANRM ) ) THEN
-          INFO = -4
-          RETURN
-      END IF
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1

@@ -97,17 +97,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
 *
-*  -- LAPACK auxiliary routine (version 3.8.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, N
@@ -181,7 +181,7 @@
             CALL DSCAL( N-1, BIGNUM, X, INCX )
             BETA = BETA*BIGNUM
             ALPHA = ALPHA*BIGNUM
-            IF( (ABS( BETA ).LT.SMLNUM) .AND. (KNT .LT. 20) )
+            IF( ABS( BETA ).LT.SMLNUM )
      $         GO TO 10
 *
 *           New BETA is at most 1, at least SMLNUM

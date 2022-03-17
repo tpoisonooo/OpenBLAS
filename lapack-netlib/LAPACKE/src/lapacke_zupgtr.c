@@ -45,14 +45,12 @@ lapack_int LAPACKE_zupgtr( int matrix_layout, char uplo, lapack_int n,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zpp_nancheck( n, ap ) ) {
-            return -4;
-        }
-        if( LAPACKE_z_nancheck( n-1, tau, 1 ) ) {
-            return -5;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_zpp_nancheck( n, ap ) ) {
+        return -4;
+    }
+    if( LAPACKE_z_nancheck( n-1, tau, 1 ) ) {
+        return -5;
     }
 #endif
     /* Allocate memory for working array(s) */

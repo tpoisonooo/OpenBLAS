@@ -91,7 +91,7 @@ void cblas_sgemm(const CBLAS_LAYOUT layout, const CBLAS_TRANSPOSE TransA,
       else
       {
          cblas_xerbla(2, "cblas_sgemm",
-                       "Illegal TransB setting, %d\n", TransB);
+                       "Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;

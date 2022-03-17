@@ -103,7 +103,7 @@
 *
 *> \date December 2016
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup complex16_eig
 *
 *  =====================================================================
       SUBROUTINE ZLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )

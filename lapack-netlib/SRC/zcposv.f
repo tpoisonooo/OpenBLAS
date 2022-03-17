@@ -111,9 +111,9 @@
 *>          elements need not be set and are assumed to be zero.
 *>
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO = 0 and ITER >= 0, see description below), then A is
+*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO = 0 and ITER < 0, see description below), then the
+*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
 *>          array A contains the factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H.
 *> \endverbatim
@@ -150,7 +150,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N,NRHS)
+*>          WORK is COMPLEX*16 array, dimension (N*NRHS)
 *>          This array is used to hold the residual vectors.
 *> \endverbatim
 *>
@@ -209,7 +209,7 @@
       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -248,7 +248,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C, CLAG2Z,
-     $                   CPOTRF, CPOTRS, XERBLA, ZPOTRF, ZPOTRS
+     $                   CPOTRF, CPOTRS, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX
@@ -431,7 +431,7 @@
    30 CONTINUE
 *
 *     If we are at this place of the code, this is because we have
-*     performed ITER=ITERMAX iterations and never satisfied the
+*     performed ITER=ITERMAX iterations and never satisified the
 *     stopping criterion, set up the ITER flag accordingly and follow
 *     up on double precision routine.
 *

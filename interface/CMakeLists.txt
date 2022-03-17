@@ -1,6 +1,5 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_BINARY_DIR})
 
 
 set(BLAS1_SOURCES
@@ -12,7 +11,6 @@ set(BLAS1_REAL_ONLY_SOURCES
   rotm.c rotmg.c # N.B. these do not have complex counterparts
   rot.c
   asum.c
-  sum.c
 )
 
 # these will have 'z' prepended for the complex version
@@ -24,23 +22,16 @@ set(BLAS1_MANGLED_SOURCES
   axpby.c
 )
 
-# TODO: USE_NETLIB_GEMV should switch gemv.c to netlib/*gemv.f
+# TODO: USE_NETLIB_GEMV shoudl switch gemv.c to netlib/*gemv.f
 # these all have 'z' sources for complex versions
 set(BLAS2_SOURCES
   gemv.c ger.c
-  trsv.c trmv.c 
-  syr2.c gbmv.c
-  sbmv.c 
-  spr2.c
+  trsv.c trmv.c symv.c
+  syr.c syr2.c gbmv.c
+  sbmv.c spmv.c
+  spr.c spr2.c
   tbsv.c tbmv.c
   tpsv.c tpmv.c
-)
-
-set(BLAS2_REAL_ONLY_SOURCES
-  symv.c syr.c spmv.c spr.c
-)
-set(BLAS2_COMPLEX_LAPACK_SOURCES
-  symv.c syr.c spmv.c spr.c
 )
 
 set(BLAS2_COMPLEX_ONLY_MANGLED_SOURCES
@@ -85,22 +76,13 @@ foreach (CBLAS_FLAG ${CBLAS_FLAGS})
   GenerateNamedObjects("${BLAS1_REAL_ONLY_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false 1)
   GenerateNamedObjects("${BLAS1_MANGLED_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false ${MANGLE_COMPLEX})
   GenerateNamedObjects("${BLAS2_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false ${MANGLE_COMPLEX})
-  GenerateNamedObjects("${BLAS2_REAL_ONLY_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false 1)
-  if (NOT DEFINED NO_LAPACK)
-  GenerateNamedObjects("${BLAS2_COMPLEX_LAPACK_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false ${MANGLE_COMPLEX})
-  endif ()
   GenerateNamedObjects("${BLAS2_COMPLEX_ONLY_MANGLED_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false 4)
   GenerateNamedObjects("${BLAS3_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false ${DISABLE_COMPLEX})
   GenerateNamedObjects("${BLAS3_MANGLED_SOURCES}" "" "" ${CBLAS_FLAG} "" "" false ${MANGLE_COMPLEX})
 
-  GenerateNamedObjects("xerbla.c" "" "xerbla" ${CBLAS_FLAG} "" "" true)
   #sdsdot, dsdot
-  if (BUILD_SINGLE OR BUILD_DOUBLE)
   GenerateNamedObjects("sdsdot.c" "" "sdsdot" ${CBLAS_FLAG} "" "" true "SINGLE")
-endif ()
-if (BUILD_DOUBLE)
   GenerateNamedObjects("dsdot.c" "" "dsdot" ${CBLAS_FLAG} "" "" true "SINGLE")
-endif ()
 
   # trmm is trsm with a compiler flag set
   GenerateNamedObjects("trsm.c" "TRMM" "trmm" ${CBLAS_FLAG})
@@ -116,15 +98,6 @@ endif ()
   GenerateNamedObjects("imax.c" "USE_ABS;USE_MIN" "i*amin" ${CBLAS_FLAG})
   GenerateNamedObjects("imax.c" "USE_MIN" "i*min" ${CBLAS_FLAG})
 
-if (BUILD_BFLOAT16)
-	GenerateNamedObjects("bf16dot.c" "" "sbdot" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("gemm.c" "" "sbgemm" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("sbgemv.c" "" "sbgemv" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("tobf16.c" "SINGLE_PREC" "sbstobf16" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("tobf16.c" "DOUBLE_PREC" "sbdtobf16" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("bf16to.c" "SINGLE_PREC" "sbf16tos" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-	GenerateNamedObjects("bf16to.c" "DOUBLE_PREC" "dbf16tod" ${CBLAS_FLAG} "" "" true "BFLOAT16")
-endif ()
 
 # complex-specific sources
 foreach (float_type ${FLOAT_TYPES})
@@ -140,7 +113,7 @@ foreach (float_type ${FLOAT_TYPES})
     GenerateNamedObjects("syr2k.c" "HEMM" "her2k" ${CBLAS_FLAG} "" "" false ${float_type})
 
     if (USE_GEMM3M)
-      GenerateNamedObjects("gemm.c" "GEMM3M" "gemm3m" ${CBLAS_FLAG} "" "" false ${float_type})
+      GenerateNamedObjects("gemm.c" "GEMM3M" "gemm3m" false "" "" false ${float_type})
     endif()
   endif ()
   if (${float_type} STREQUAL "COMPLEX")
@@ -150,7 +123,6 @@ foreach (float_type ${FLOAT_TYPES})
     GenerateNamedObjects("max.c" "USE_ABS;USE_MIN" "scamin" ${CBLAS_FLAG} "" "" true "COMPLEX")
     GenerateNamedObjects("max.c" "USE_ABS" "scamax" ${CBLAS_FLAG} "" "" true "COMPLEX")
     GenerateNamedObjects("asum.c" "" "scasum" ${CBLAS_FLAG} "" "" true "COMPLEX")
-    GenerateNamedObjects("sum.c" "" "scsum" ${CBLAS_FLAG} "" "" true "COMPLEX")
   endif ()
   if (${float_type} STREQUAL "ZCOMPLEX")
     GenerateNamedObjects("zscal.c" "SSCAL" "dscal" ${CBLAS_FLAG} "" "" false "ZCOMPLEX")
@@ -159,7 +131,6 @@ foreach (float_type ${FLOAT_TYPES})
     GenerateNamedObjects("max.c" "USE_ABS;USE_MIN" "dzamin" ${CBLAS_FLAG} "" "" true "ZCOMPLEX")
     GenerateNamedObjects("max.c" "USE_ABS" "dzamax" ${CBLAS_FLAG} "" "" true "ZCOMPLEX")
     GenerateNamedObjects("asum.c" "" "dzasum" ${CBLAS_FLAG} "" "" true "ZCOMPLEX")
-    GenerateNamedObjects("sum.c" "" "dzsum" ${CBLAS_FLAG} "" "" true "ZCOMPLEX")
   endif ()
 endforeach ()
 
@@ -190,33 +161,6 @@ if (NOT DEFINED NO_LAPACK)
 
   GenerateNamedObjects("${LAPACK_SOURCES}")
   GenerateNamedObjects("${LAPACK_MANGLED_SOURCES}" "" "" 0 "" "" 0 3)
-endif ()
-
-if ( BUILD_COMPLEX AND NOT  BUILD_SINGLE)
-	GenerateNamedObjects("scal.c" "" "scal" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("copy.c" "" "copy" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("dot.c" "" "dot" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("rot.c" "" "rot" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("nrm2.c" "" "nrm2" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("gemv.c" "" "gemv" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("gemm.c" "" "gemm" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("asum.c" "" "asum" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("swap.c" "" "swap" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("axpy.c" "" "axpy" 0 "" "" false "SINGLE")
-	GenerateNamedObjects("imax.c" "USE_ABS" "i*amax" 0 "" "" false "SINGLE")
-endif ()
-if ( BUILD_COMPLEX16 AND NOT  BUILD_DOUBLE)
-	GenerateNamedObjects("scal.c" "" "scal" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("copy.c" "" "copy" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("dot.c" "" "dot" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("rot.c" "" "rot" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("nrm2.c" "" "nrm2" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("gemv.c" "" "gemv" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("gemm.c" "" "gemm" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("asum.c" "" "asum" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("swap.c" "" "swap" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("axpy.c" "" "axpy" 0 "" "" false "DOUBLE")
-	GenerateNamedObjects("imax.c" "USE_ABS" "i*amax" 0 "" "" false "DOUBLE")
 endif ()
 
 add_library(interface OBJECT ${OPENBLAS_SRC})

@@ -27,8 +27,8 @@
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            SELECT( * )
-*       REAL               RWORK( * )
-*       COMPLEX            T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
+*       REAL   RWORK( * )
+*       COMPLEX         T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
 *      $                   WORK( * )
 *       ..
 *
@@ -222,7 +222,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *  @generated from ztrevc3.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
@@ -247,10 +247,10 @@
      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, SIDE
@@ -258,17 +258,17 @@
 *     ..
 *     .. Array Arguments ..
       LOGICAL            SELECT( * )
-      REAL               RWORK( * )
-      COMPLEX            T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
+      REAL   RWORK( * )
+      COMPLEX         T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
+      REAL   ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
-      COMPLEX            CZERO, CONE
+      COMPLEX         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
      $                     CONE  = ( 1.0E+0, 0.0E+0 ) )
       INTEGER            NBMIN, NBMAX
@@ -277,18 +277,18 @@
 *     .. Local Scalars ..
       LOGICAL            ALLV, BOTHV, LEFTV, LQUERY, OVER, RIGHTV, SOMEV
       INTEGER            I, II, IS, J, K, KI, IV, MAXWRK, NB
-      REAL               OVFL, REMAX, SCALE, SMIN, SMLNUM, ULP, UNFL
-      COMPLEX            CDUM
+      REAL   OVFL, REMAX, SCALE, SMIN, SMLNUM, ULP, UNFL
+      COMPLEX         CDUM
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV, ICAMAX
-      REAL               SLAMCH, SCASUM
+      REAL   SLAMCH, SCASUM
       EXTERNAL           LSAME, ILAENV, ICAMAX, SLAMCH, SCASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
-     $                   CLATRS, CLACPY, SLABAD
+     $                   CLATRS, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX

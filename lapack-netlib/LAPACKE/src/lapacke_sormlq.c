@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sormlq
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -47,18 +47,16 @@ lapack_int LAPACKE_sormlq( int matrix_layout, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
-        if( LAPACKE_sge_nancheck( matrix_layout, k, r, a, lda ) ) {
-            return -7;
-        }
-        if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
-            return -10;
-        }
-        if( LAPACKE_s_nancheck( k, tau, 1 ) ) {
-            return -9;
-        }
+    /* Optionally check input matrices for NaNs */
+    lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
+    if( LAPACKE_sge_nancheck( matrix_layout, k, r, a, lda ) ) {
+        return -7;
+    }
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        return -10;
+    }
+    if( LAPACKE_s_nancheck( k, tau, 1 ) ) {
+        return -9;
     }
 #endif
     /* Query optimal working array(s) size */

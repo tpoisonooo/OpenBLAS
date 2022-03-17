@@ -73,7 +73,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define MB  __sync_synchronize()
 #define WMB __sync_synchronize()
-#define RMB __sync_synchronize()
 
 #define INLINE inline
 
@@ -95,7 +94,7 @@ static inline unsigned int rpcc(void){
 #define RPCC_DEFINED
 
 #ifndef NO_AFFINITY
-//#define WHEREAMI
+#define WHEREAMI
 static inline int WhereAmI(void){
   int ret=0;
   __asm__ __volatile__(".set push \n"
@@ -227,9 +226,14 @@ REALNAME: ;\
 
 #define SEEK_ADDRESS
 
-#define BUFFER_SIZE     ( 32 << 21)
+#define BUFFER_SIZE     ( 32 << 20)
 
-#if defined(LOONGSON3R3) || defined(LOONGSON3R4)
+#if defined(LOONGSON3A)
+#define PAGESIZE	(16UL << 10)
+#define FIXED_PAGESIZE	(16UL << 10)
+#endif
+
+#if defined(LOONGSON3B)
 #define PAGESIZE	(16UL << 10)
 #define FIXED_PAGESIZE	(16UL << 10)
 #endif
@@ -245,7 +249,7 @@ REALNAME: ;\
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
-#if defined(LOONGSON3R3) || defined(LOONGSON3R4)
+#if defined(LOONGSON3A) || defined(LOONGSON3B)
 #define PREFETCHD_(x) ld $0, x
 #define PREFETCHD(x)  PREFETCHD_(x)
 #else

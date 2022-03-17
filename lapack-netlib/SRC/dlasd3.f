@@ -94,7 +94,8 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is DOUBLE PRECISION array, dimension (LDQ,K)
+*>          Q is DOUBLE PRECISION array,
+*>                     dimension at least (LDQ,K).
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -103,7 +104,7 @@
 *>         The leading dimension of the array Q.  LDQ >= K.
 *> \endverbatim
 *>
-*> \param[in,out] DSIGMA
+*> \param[in] DSIGMA
 *> \verbatim
 *>          DSIGMA is DOUBLE PRECISION array, dimension(K)
 *>         The first K elements of this array contain the old roots
@@ -124,7 +125,7 @@
 *>         The leading dimension of the array U.  LDU >= N.
 *> \endverbatim
 *>
-*> \param[in] U2
+*> \param[in,out] U2
 *> \verbatim
 *>          U2 is DOUBLE PRECISION array, dimension (LDU2, N)
 *>         The first K columns of this matrix contain the non-deflated
@@ -186,7 +187,7 @@
 *>         type is any column which has been deflated.
 *> \endverbatim
 *>
-*> \param[in,out] Z
+*> \param[in] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (K)
 *>         The first K elements of this array contain the components
@@ -209,7 +210,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -224,10 +225,10 @@
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDQ, LDU, LDU2, LDVT, LDVT2, NL, NR,

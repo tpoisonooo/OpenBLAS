@@ -62,10 +62,10 @@ static void zcopy_kernel_16 (long n, FLOAT *x, FLOAT *y)
        "addi		%2, %2, 128	\n\t"
 
        "addic.		%1, %1, -16	\n\t"
-       "ble		two%=		\n\t"
+       "ble		2f		\n\t"
 
-       ".align	5		\n"
-     "one%=:				\n\t"
+       ".p2align	5		\n"
+     "1:				\n\t"
 
        "stxvd2x		32, 0, %3	\n\t"
        "stxvd2x		33, %5, %3	\n\t"
@@ -108,9 +108,9 @@ static void zcopy_kernel_16 (long n, FLOAT *x, FLOAT *y)
        "addi		%2, %2, 128	\n\t"
 
        "addic.		%1, %1, -16	\n\t"
-       "bgt		one%=		\n"
+       "bgt		1b		\n"
 
-     "two%=:				\n\t"
+     "2:				\n\t"
 
        "stxvd2x		32, 0, %3	\n\t"
        "stxvd2x		33, %5, %3	\n\t"

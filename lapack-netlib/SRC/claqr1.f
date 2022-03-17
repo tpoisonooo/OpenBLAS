@@ -50,21 +50,21 @@
 *
 *> \param[in] N
 *> \verbatim
-*>          N is INTEGER
+*>          N is integer
 *>              Order of the matrix H. N must be either 2 or 3.
 *> \endverbatim
 *>
 *> \param[in] H
 *> \verbatim
-*>          H is COMPLEX array, dimension (LDH,N)
+*>          H is COMPLEX array of dimension (LDH,N)
 *>              The 2-by-2 or 3-by-3 matrix H in (*).
 *> \endverbatim
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is INTEGER
+*>          LDH is integer
 *>              The leading dimension of H as declared in
-*>              the calling procedure.  LDH >= N
+*>              the calling procedure.  LDH.GE.N
 *> \endverbatim
 *>
 *> \param[in] S1
@@ -81,7 +81,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is COMPLEX array, dimension (N)
+*>          V is COMPLEX array of dimension N
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim
@@ -94,7 +94,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complexOTHERauxiliary
 *
@@ -107,10 +107,10 @@
 *  =====================================================================
       SUBROUTINE CLAQR1( N, H, LDH, S1, S2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       COMPLEX            S1, S2
@@ -142,13 +142,6 @@
       CABS1( CDUM ) = ABS( REAL( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
-*
-*     Quick return if possible
-*
-      IF( N.NE.2 .AND. N.NE.3 ) THEN
-         RETURN
-      END IF
-*
       IF( N.EQ.2 ) THEN
          S = CABS1( H( 1, 1 )-S2 ) + CABS1( H( 2, 1 ) )
          IF( S.EQ.RZERO ) THEN

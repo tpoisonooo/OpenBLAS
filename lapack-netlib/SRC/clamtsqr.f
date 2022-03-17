@@ -1,4 +1,3 @@
-*> \brief \b CLAMTSQR
 *
 *  Definition:
 *  ===========
@@ -24,7 +23,7 @@
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
-*> TRANS = 'C':      Q**H * C       C * Q**H
+*> TRANS = 'C':      Q**C * C       C * Q**C
 *>      where Q is a real orthogonal matrix defined as the product
 *>      of blocked elementary reflectors computed by tall skinny
 *>      QR factorization (CLATSQR)
@@ -36,15 +35,15 @@
 *> \param[in] SIDE
 *> \verbatim
 *>          SIDE is CHARACTER*1
-*>          = 'L': apply Q or Q**H from the Left;
-*>          = 'R': apply Q or Q**H from the Right.
+*>          = 'L': apply Q or Q**T from the Left;
+*>          = 'R': apply Q or Q**T from the Right.
 *> \endverbatim
 *>
 *> \param[in] TRANS
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Conjugate Transpose, apply Q**H.
+*>          = 'C':  Conjugate Transpose, apply Q**C.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -82,7 +81,7 @@
 *>          N >= NB >= 1.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
@@ -118,7 +117,7 @@
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
-*>          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.
+*>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -196,10 +195,10 @@
       SUBROUTINE CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $        LDT, C, LDC, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER         SIDE, TRANS

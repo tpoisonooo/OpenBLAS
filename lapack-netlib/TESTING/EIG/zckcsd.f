@@ -228,7 +228,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHDG, ALAREQ, ALASUM, ZCSDTS, ZLACSG, ZLAROR,
-     $                   ZLASET, ZDROT
+     $                   ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN

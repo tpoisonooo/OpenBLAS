@@ -117,7 +117,7 @@
 *> \param[in] MV
 *> \verbatim
 *>          MV is INTEGER
-*>          If JOBV = 'A', then MV rows of V are post-multipled by a
+*>          If JOBV .EQ. 'A', then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then MV is not referenced.
 *> \endverbatim
@@ -125,9 +125,9 @@
 *> \param[in,out] V
 *> \verbatim
 *>          V is COMPLEX array, dimension (LDV,N)
-*>          If JOBV = 'V' then N rows of V are post-multipled by a
+*>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
-*>          If JOBV = 'A' then MV rows of V are post-multipled by a
+*>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then V is not referenced.
 *> \endverbatim
@@ -136,8 +136,8 @@
 *> \verbatim
 *>          LDV is INTEGER
 *>          The leading dimension of the array V,  LDV >= 1.
-*>          If JOBV = 'V', LDV >= N.
-*>          If JOBV = 'A', LDV >= MV.
+*>          If JOBV = 'V', LDV .GE. N.
+*>          If JOBV = 'A', LDV .GE. MV.
 *> \endverbatim
 *>
 *> \param[in] EPS
@@ -157,7 +157,7 @@
 *>          TOL is REAL
 *>          TOL is the threshold for Jacobi rotations. For a pair
 *>          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
-*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) > TOL.
+*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
 *> \endverbatim
 *>
 *> \param[in] NSWEEP
@@ -169,20 +169,20 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (LWORK)
+*>          WORK is COMPLEX array, dimension LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          LWORK is the dimension of WORK. LWORK >= M.
+*>          LWORK is the dimension of WORK. LWORK .GE. M.
 *> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0:  successful exit.
-*>          < 0:  if INFO = -i, then the i-th argument had an illegal value
+*>          = 0 : successful exit.
+*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
 *
 *  Authors:
@@ -218,7 +218,7 @@
       SUBROUTINE CGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
      $                   SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -268,7 +268,7 @@
 *     .. External Subroutines ..
 *     ..
 *     from BLAS
-      EXTERNAL           CCOPY, CROT, CSWAP, CAXPY
+      EXTERNAL           CCOPY, CROT, CSWAP
 *     from LAPACK
       EXTERNAL           CLASCL, CLASSQ, XERBLA
 *     ..

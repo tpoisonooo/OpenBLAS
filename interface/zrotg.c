@@ -4,15 +4,7 @@
 #include "functable.h"
 #endif
 
-#ifndef CBLAS
 void NAME(FLOAT *DA, FLOAT *DB, FLOAT *C, FLOAT *S){
-
-#else
-void CNAME(void *VDA, void *VDB, FLOAT *C, void *VS) {
-    FLOAT *DA = (FLOAT*) VDA;
-    FLOAT *DB = (FLOAT*) VDB;
-    FLOAT *S  = (FLOAT*) VS;
-#endif /* CBLAS */
 
 #if defined(__i386__) || defined(__x86_64__) || defined(__ia64__) || defined(_M_X64) || defined(_M_IX86)
 
@@ -22,7 +14,7 @@ void CNAME(void *VDA, void *VDB, FLOAT *C, void *VS) {
   long double db_i = *(DB + 1);
   long double r;
 
-  long double ada = fabsl(da_r) + fabsl(da_i);
+  long double ada = fabs(da_r) + fabs(da_i);
 
   PRINT_DEBUG_NAME;
 
@@ -87,12 +79,8 @@ void CNAME(void *VDA, void *VDB, FLOAT *C, void *VS) {
       aa_i = fabs(da_r);
     }
 
-    if (aa_r == ZERO) {
-	ada = 0.;
-    } else {
-        scale = (aa_i / aa_r);
-        ada = aa_r * sqrt(ONE + scale * scale);
-    }
+    scale = (aa_i / aa_r);
+    ada = aa_r * sqrt(ONE + scale * scale);
 
     bb_r = fabs(db_r);
     bb_i = fabs(db_i);
@@ -102,12 +90,9 @@ void CNAME(void *VDA, void *VDB, FLOAT *C, void *VS) {
       bb_i = fabs(bb_r);
     }
 
-    if (bb_r == ZERO) {
-	adb = 0.;
-    } else {
-    	scale = (bb_i / bb_r);
-    	adb = bb_r * sqrt(ONE + scale * scale);
-    }
+    scale = (bb_i / bb_r);
+    adb = bb_r * sqrt(ONE + scale * scale);
+
     scale = ada + adb;
 
     aa_r    = da_r / scale;

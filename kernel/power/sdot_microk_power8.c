@@ -78,10 +78,10 @@ static float sdot_kernel_16 (long n, float *x, float *y)
        "addi		%3, %3, 128	\n\t"
 
        "addic.		%1, %1, -32	\n\t"
-       "ble		two%=		\n\t"
+       "ble		2f		\n\t"
 
-       ".align	5		\n"
-     "one%=:				\n\t"
+       ".p2align	5		\n"
+     "1:				\n\t"
 
        "xvmaddasp	32, 40, 48	\n\t"
        "lxvd2x		40, 0, %2	\n\t"
@@ -112,9 +112,9 @@ static float sdot_kernel_16 (long n, float *x, float *y)
        "addi		%3, %3, 128	\n\t"
 
        "addic.		%1, %1, -32	\n\t"
-       "bgt		one%=		\n"
+       "bgt		1b		\n"
 
-     "two%=:				\n\t"
+     "2:				\n\t"
 
        "xvmaddasp	32, 40, 48	\n\t"
        "xvmaddasp	33, 41, 49	\n\t"

@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dbdsdc
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -48,14 +48,12 @@ lapack_int LAPACKE_dbdsdc( int matrix_layout, char uplo, char compq,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
-            return -5;
-        }
-        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
-            return -6;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        return -5;
+    }
+    if( LAPACKE_d_nancheck( n, e, 1 ) ) {
+        return -6;
     }
 #endif
     /* Additional scalars initializations for work arrays */

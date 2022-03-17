@@ -106,9 +106,9 @@
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO = 0 and ITER >= 0, see description below), then A is
+*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO = 0 and ITER < 0, see description below), then the
+*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
 *>          array A contains the factor U or L from the Cholesky
 *>          factorization A = U**T*U or A = L*L**T.
 *> \endverbatim
@@ -199,7 +199,7 @@
       SUBROUTINE DSPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, ITER, INFO )
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -235,7 +235,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DSYMM, DLACPY, DLAT2S, DLAG2S, SLAG2D,
-     $                   SPOTRF, SPOTRS, DPOTRF, DPOTRS, XERBLA
+     $                   SPOTRF, SPOTRS, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
@@ -413,7 +413,7 @@
    30 CONTINUE
 *
 *     If we are at this place of the code, this is because we have
-*     performed ITER=ITERMAX iterations and never satisfied the
+*     performed ITER=ITERMAX iterations and never satisified the
 *     stopping criterion, set up the ITER flag accordingly and follow
 *     up on double precision routine.
 *

@@ -46,14 +46,12 @@ lapack_int LAPACKE_ssygv_2stage( int matrix_layout, lapack_int itype, char jobz,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck() ) {
-        /* Optionally check input matrices for NaNs */
-        if( LAPACKE_ssy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
-            return -6;
-        }
-        if( LAPACKE_ssy_nancheck( matrix_layout, uplo, n, b, ldb ) ) {
-            return -8;
-        }
+    /* Optionally check input matrices for NaNs */
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        return -6;
+    }
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        return -8;
     }
 #endif
     /* Query optimal working array(s) size */

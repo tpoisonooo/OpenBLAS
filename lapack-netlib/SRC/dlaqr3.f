@@ -100,7 +100,7 @@
 *> \param[in] NW
 *> \verbatim
 *>          NW is INTEGER
-*>          Deflation window size.  1 <= NW <= (KBOT-KTOP+1).
+*>          Deflation window size.  1 .LE. NW .LE. (KBOT-KTOP+1).
 *> \endverbatim
 *>
 *> \param[in,out] H
@@ -116,9 +116,9 @@
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is INTEGER
+*>          LDH is integer
 *>          Leading dimension of H just as declared in the calling
-*>          subroutine.  N <= LDH
+*>          subroutine.  N .LE. LDH
 *> \endverbatim
 *>
 *> \param[in] ILOZ
@@ -130,7 +130,7 @@
 *> \verbatim
 *>          IHIZ is INTEGER
 *>          Specify the rows of Z to which transformations must be
-*>          applied if WANTZ is .TRUE.. 1 <= ILOZ <= IHIZ <= N.
+*>          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
 *> \endverbatim
 *>
 *> \param[in,out] Z
@@ -144,14 +144,14 @@
 *>
 *> \param[in] LDZ
 *> \verbatim
-*>          LDZ is INTEGER
+*>          LDZ is integer
 *>          The leading dimension of Z just as declared in the
-*>          calling subroutine.  1 <= LDZ.
+*>          calling subroutine.  1 .LE. LDZ.
 *> \endverbatim
 *>
 *> \param[out] NS
 *> \verbatim
-*>          NS is INTEGER
+*>          NS is integer
 *>          The number of unconverged (ie approximate) eigenvalues
 *>          returned in SR and SI that may be used as shifts by the
 *>          calling subroutine.
@@ -159,7 +159,7 @@
 *>
 *> \param[out] ND
 *> \verbatim
-*>          ND is INTEGER
+*>          ND is integer
 *>          The number of converged eigenvalues uncovered by this
 *>          subroutine.
 *> \endverbatim
@@ -189,15 +189,15 @@
 *>
 *> \param[in] LDV
 *> \verbatim
-*>          LDV is INTEGER
+*>          LDV is integer scalar
 *>          The leading dimension of V just as declared in the
-*>          calling subroutine.  NW <= LDV
+*>          calling subroutine.  NW .LE. LDV
 *> \endverbatim
 *>
 *> \param[in] NH
 *> \verbatim
-*>          NH is INTEGER
-*>          The number of columns of T.  NH >= NW.
+*>          NH is integer scalar
+*>          The number of columns of T.  NH.GE.NW.
 *> \endverbatim
 *>
 *> \param[out] T
@@ -207,16 +207,16 @@
 *>
 *> \param[in] LDT
 *> \verbatim
-*>          LDT is INTEGER
+*>          LDT is integer
 *>          The leading dimension of T just as declared in the
-*>          calling subroutine.  NW <= LDT
+*>          calling subroutine.  NW .LE. LDT
 *> \endverbatim
 *>
 *> \param[in] NV
 *> \verbatim
-*>          NV is INTEGER
+*>          NV is integer
 *>          The number of rows of work array WV available for
-*>          workspace.  NV >= NW.
+*>          workspace.  NV.GE.NW.
 *> \endverbatim
 *>
 *> \param[out] WV
@@ -226,9 +226,9 @@
 *>
 *> \param[in] LDWV
 *> \verbatim
-*>          LDWV is INTEGER
+*>          LDWV is integer
 *>          The leading dimension of W just as declared in the
-*>          calling subroutine.  NW <= LDV
+*>          calling subroutine.  NW .LE. LDV
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -240,7 +240,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER
+*>          LWORK is integer
 *>          The dimension of the work array WORK.  LWORK = 2*NW
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
@@ -275,7 +275,7 @@
      $                   IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
      $                   LDT, NV, WV, LDWV, WORK, LWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.7.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016

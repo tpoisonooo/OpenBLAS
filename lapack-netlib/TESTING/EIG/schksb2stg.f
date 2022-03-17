@@ -307,7 +307,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup single_eig
 *
@@ -316,10 +316,10 @@
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
@@ -363,7 +363,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLASET, SLASUM, SLATMR, SLATMS, SSBT21,
-     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR
+     $                   SSBTRD, XERBLA, SSBTRD_SB2ST, SSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -670,8 +670,8 @@
 *              the one from above. Compare it with D1 computed 
 *              using the SSBTRD.
 *            
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
+               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
                CALL SLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH

@@ -35,12 +35,10 @@
 *> \verbatim
 *>
 *>      This program sets problem and machine dependent parameters
-*>      useful for xHETRD_2STAGE, xHETRD_HE2HB, xHETRD_HB2ST,
+*>      useful for xHETRD_2STAGE, xHETRD_H@2HB, xHETRD_HB2ST,
 *>      xGEBRD_2STAGE, xGEBRD_GE2GB, xGEBRD_GB2BD 
 *>      and related subroutines for eigenvalue problems. 
-*>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21.
-*>      It is called whenever ILAENV2STAGE is called with 1 <= ISPEC <= 5
-*>      with a direct conversion ISPEC + 16.
+*>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +51,7 @@
 *>              return.
 *>
 *>              ISPEC=17: the optimal blocksize nb for the reduction to
-*>                        BAND
+*                         BAND
 *>
 *>              ISPEC=18: the optimal blocksize ib for the eigenvectors
 *>                        singular vectors update routine
@@ -90,14 +88,14 @@
 *> \param[in] NBI
 *> \verbatim
 *>          NBI is INTEGER which is the used in the reduciton, 
-*>          (e.g., the size of the band), needed to compute workspace
-*>          and LHOUS2.
+*           (e.g., the size of the band), needed to compute workspace
+*           and LHOUS2.
 *> \endverbatim
 *>
 *> \param[in] IBI
 *> \verbatim
 *>          IBI is INTEGER which represent the IB of the reduciton,
-*>          needed to compute workspace and LHOUS2.
+*           needed to compute workspace and LHOUS2.
 *> \endverbatim
 *>
 *> \param[in] NXI
@@ -159,7 +157,7 @@
 #endif
       IMPLICIT NONE
 *
-*  -- LAPACK auxiliary routine (version 3.8.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -174,7 +172,7 @@
       INTEGER            I, IC, IZ, KD, IB, LHOUS, LWORK, NTHREADS,
      $                   FACTOPTNB, QROPTNB, LQOPTNB
       LOGICAL            RPREC, CPREC
-      CHARACTER          PREC*1, ALGO*3, STAG*5, SUBNAM*12, VECT*1
+      CHARACTER          PREC*1, ALGO*3, STAG*5, SUBNAM*12, VECT*3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CHAR, ICHAR, MAX

@@ -35,7 +35,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define MB  __sync_synchronize()
 #define WMB __sync_synchronize()
-#define RMB __sync_synchronize()
 
 #define INLINE inline
 
@@ -43,7 +42,6 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef ASSEMBLER
 
-#if !defined(MIPS24K)
 static inline unsigned int rpcc(void){
   unsigned long ret;
 
@@ -54,7 +52,6 @@ static inline unsigned int rpcc(void){
   return ret;
 }
 #define RPCC_DEFINED
-#endif
 
 static inline int blas_quickdivide(blasint x, blasint y){
   return x / y;
@@ -94,7 +91,7 @@ REALNAME:
 #endif
 #define HUGE_PAGESIZE   ( 4 << 20)
 
-#define BUFFER_SIZE     (16 << 21)
+#define BUFFER_SIZE     (16 << 20)
 
 
 #define BASE_ADDRESS (START_ADDRESS - BUFFER_SIZE * MAX_CPU_NUMBER)

@@ -183,7 +183,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date December 2016
 *
 *> \ingroup complex16_lin
 *
@@ -192,10 +192,10 @@
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, NOUT )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -237,13 +237,13 @@
       DOUBLE PRECISION   EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWQ( 1 )
-      DOUBLE PRECISION   RESULT( NTESTS ), RWQ( 1 )
-      COMPLEX*16         WQ( 1 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWORKQUERY
+      DOUBLE PRECISION   RESULT( NTESTS ), RWORKQUERY
+      COMPLEX*16         WORKQUERY
 *     ..
 *     .. Allocatable Arrays ..
       COMPLEX*16, ALLOCATABLE :: WORK (:)
-      DOUBLE PRECISION, ALLOCATABLE :: RWORK (:), WORK2 (:)
+      DOUBLE PRECISION, ALLOCATABLE :: RWORK (:)
       INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
@@ -324,89 +324,51 @@
       M = MMAX
       N = NMAX
       NRHS = NSMAX
+      LDA = MAX( 1, M )
+      LDB = MAX( 1, M, N )
       MNMIN = MAX( MIN( M, N ), 1 )
 *
 *     Compute workspace needed for routines
 *     ZQRT14, ZQRT17 (two side cases), ZQRT15 and ZQRT12
 *
-      LWORK = MAX( 1, ( M+N )*NRHS,
+      LWORK = MAX( ( M+N )*NRHS,
      $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
      $      MAX( M+MNMIN, NRHS*MNMIN,2*N+M ),
      $      MAX( M*N+4*MNMIN+MAX(M,N), M*N+2*MNMIN+4*N ) )
-      LRWORK = 1
-      LIWORK = 1
 *
-*     Iterate through all test cases and compute necessary workspace
-*     sizes for ?GELS, ?GETSLS, ?GELSY, ?GELSS and ?GELSD routines.
-*
-      DO IM = 1, NM
-         M = MVAL( IM )
-         LDA = MAX( 1, M )
-         DO IN = 1, NN
-            N = NVAL( IN )
-            MNMIN = MAX(MIN( M, N ),1)
-            LDB = MAX( 1, M, N )
-            DO INS = 1, NNS
-               NRHS = NSVAL( INS )
-               DO IRANK = 1, 2
-                  DO ISCALE = 1, 3
-                     ITYPE = ( IRANK-1 )*3 + ISCALE
-                     IF( DOTYPE( ITYPE ) ) THEN
-                        IF( IRANK.EQ.1 ) THEN
-                           DO ITRAN = 1, 2
-                              IF( ITRAN.EQ.1 ) THEN
-                                 TRANS = 'N'
-                              ELSE
-                                 TRANS = 'C'
-                              END IF
-*
-*                             Compute workspace needed for ZGELS
-                              CALL ZGELS( TRANS, M, N, NRHS, A, LDA,
-     $                                    B, LDB, WQ, -1, INFO )
-                              LWORK_ZGELS = INT ( WQ( 1 ) )
-*                             Compute workspace needed for ZGETSLS
-                              CALL ZGETSLS( TRANS, M, N, NRHS, A, LDA,
-     $                                      B, LDB, WQ, -1, INFO )
-                              LWORK_ZGETSLS = INT( WQ( 1 ) )
-                           ENDDO
-                        END IF
-*                       Compute workspace needed for ZGELSY
-                        CALL ZGELSY( M, N, NRHS, A, LDA, B, LDB, IWQ,
-     $                               RCOND, CRANK, WQ, -1, RWQ, INFO )
-                        LWORK_ZGELSY = INT( WQ( 1 ) )
-                        LRWORK_ZGELSY = 2*N
-*                       Compute workspace needed for ZGELSS
-                        CALL ZGELSS( M, N, NRHS, A, LDA, B, LDB, S,
-     $                               RCOND, CRANK, WQ, -1 , RWQ,
-     $                               INFO )
-                        LWORK_ZGELSS = INT( WQ( 1 ) )
-                        LRWORK_ZGELSS = 5*MNMIN
-*                       Compute workspace needed for ZGELSD
-                        CALL ZGELSD( M, N, NRHS, A, LDA, B, LDB, S,
-     $                               RCOND, CRANK, WQ, -1, RWQ, IWQ,
-     $                               INFO )
-                        LWORK_ZGELSD = INT( WQ( 1 ) )
-                        LRWORK_ZGELSD = INT( RWQ ( 1 ) )
-*                       Compute LIWORK workspace needed for ZGELSY and ZGELSD
-                        LIWORK = MAX( LIWORK, N, IWQ( 1 ) )
-*                       Compute LRWORK workspace needed for ZGELSY, ZGELSS and ZGELSD
-                        LRWORK = MAX( LRWORK, LRWORK_ZGELSY,
-     $                                LRWORK_ZGELSS, LRWORK_ZGELSD )
-*                       Compute LWORK workspace needed for all functions
-                        LWORK = MAX( LWORK, LWORK_ZGELS, LWORK_ZGETSLS,
-     $                               LWORK_ZGELSY, LWORK_ZGELSS,
-     $                               LWORK_ZGELSD )
-                     END IF
-                  ENDDO
-               ENDDO
-            ENDDO
-         ENDDO
-      ENDDO
-*
+*     Compute workspace needed for ZGELS
+      CALL ZGELS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $            WORKQUERY, -1, INFO )
+      LWORK_ZGELS = INT ( WORKQUERY )
+*     Compute workspace needed for ZGETSLS
+      CALL ZGETSLS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $              WORKQUERY, -1, INFO )
+      LWORK_ZGETSLS = INT( WORKQUERY )
+*     Compute workspace needed for ZGELSY
+      CALL ZGELSY( M, N, NRHS, A, LDA, B, LDB, IWORKQUERY,
+     $             RCOND, CRANK, WORKQUERY, -1, RWORK, INFO )
+      LWORK_ZGELSY = INT( WORKQUERY )
+      LRWORK_ZGELSY = 2*N
+*     Compute workspace needed for ZGELSS
+      CALL ZGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1 , RWORK, INFO )
+      LWORK_ZGELSS = INT( WORKQUERY )
+      LRWORK_ZGELSS = 5*MNMIN
+*     Compute workspace needed for ZGELSD
+      CALL ZGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND, CRANK,
+     $             WORKQUERY, -1, RWORKQUERY, IWORKQUERY, INFO )
+      LWORK_ZGELSD = INT( WORKQUERY )
+      LRWORK_ZGELSD = INT( RWORKQUERY )
+*     Compute LIWORK workspace needed for ZGELSY and ZGELSD
+      LIWORK = MAX( 1, N, IWORKQUERY )
+*     Compute LRWORK workspace needed for ZGELSY, ZGELSS and ZGELSD
+      LRWORK = MAX( 1, LRWORK_ZGELSY, LRWORK_ZGELSS, LRWORK_ZGELSD )
+*     Compute LWORK workspace needed for all functions
+      LWORK = MAX( 1, LWORK, LWORK_ZGELS, LWORK_ZGETSLS, LWORK_ZGELSY,
+     $             LWORK_ZGELSS, LWORK_ZGELSD )
       LWLSY = LWORK
 *
       ALLOCATE( WORK( LWORK ) )
-      ALLOCATE( WORK2( 2 * LWORK ) )
       ALLOCATE( IWORK( LIWORK ) )
       ALLOCATE( RWORK( LRWORK ) )
 *
@@ -564,7 +526,7 @@
                                  CALL ZLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
                                  CALL ZSCAL( NCOLS*NRHS,
-     $                                       CONE / DBLE( NCOLS ), WORK,
+     $                                       ONE / DBLE( NCOLS ), WORK,
      $                                       1 )
                               END IF
                               CALL ZGEMM( TRANS, 'No transpose', NROWS,
@@ -597,7 +559,7 @@
      $                           CALL ZLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, C, LDB )
                               CALL ZQRT16( TRANS, M, N, NRHS, COPYA,
-     $                                     LDA, B, LDB, C, LDB, WORK2,
+     $                                     LDA, B, LDB, C, LDB, WORK,
      $                                     RESULT( 15 ) )
 *
                               IF( ( ITRAN.EQ.1 .AND. M.GE.N ) .OR.

@@ -270,15 +270,8 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 ) THEN
-         DO I = 1, M
-            X(I) = ZERO
-         END DO
-         DO I = 1, P
-            Y(I) = ZERO
-         END DO
-         RETURN
-      END IF
+      IF( N.EQ.0 )
+     $   RETURN
 *
 *     Compute the GQR factorization of matrices A and B:
 *

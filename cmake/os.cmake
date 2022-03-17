@@ -3,12 +3,20 @@
 ## Description: Ported from portion of OpenBLAS/Makefile.system
 ##              Detects the OS and sets appropriate variables.
 
-if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  set(EXTRALIB "${EXTRALIB} -lm")
-  set(NO_EXPRECISION 1)
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set(ENV{MACOSX_DEPLOYMENT_TARGET} "10.2") # TODO: should be exported as an env var
+  set(MD5SUM "md5 -r")
 endif ()
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD|OpenBSD|NetBSD|DragonFly|Darwin")
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+  set(MD5SUM "md5 -r")
+endif ()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
+  set(MD5SUM "md5 -n")
+endif ()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   set(EXTRALIB "${EXTRALIB} -lm")
   set(NO_EXPRECISION 1)
 endif ()
@@ -48,7 +56,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 
   # Ensure the correct stack alignment on Win32
   # http://permalink.gmane.org/gmane.comp.lib.openblas.general/97
-  if (X86)
+  if (${ARCH} STREQUAL "x86")
     if (NOT MSVC AND NOT ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
       set(CCOMMON_OPT "${CCOMMON_OPT} -mincoming-stack-boundary=2")
     endif ()
@@ -70,7 +78,7 @@ if (CYGWIN)
 endif ()
 
 if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Interix" AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
-  if (USE_THREAD)
+  if (SMP)
     set(EXTRALIB "${EXTRALIB} -lpthread")
   endif ()
 endif ()
@@ -80,16 +88,8 @@ if (QUAD_PRECISION)
   set(NO_EXPRECISION 1)
 endif ()
 
-if (X86)
+if (${ARCH} STREQUAL "x86")
   set(NO_EXPRECISION 1)
-endif ()
-
-if (DYNAMIC_ARCH)
-if (TARGET)
-if (${TARGET} STREQUAL "GENERIC")
-  set(NO_EXPRECISION 1)
-endif ()
-endif ()
 endif ()
 
 if (UTEST_CHECK)

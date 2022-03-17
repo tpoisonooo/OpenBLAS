@@ -83,7 +83,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is REAL array, dimension ( LDA, N )
+*>          A is REAL array of DIMENSION ( LDA, n ).
 *>           Before entry with  UPLO = 'U' or 'u', the leading n by n
 *>           upper triangular part of the array A must contain the upper
 *>           triangular matrix and the strictly lower triangular part of
@@ -106,7 +106,7 @@
 *>
 *> \param[in,out] X
 *> \verbatim
-*>          X is REAL array, dimension at least
+*>          X is REAL array of dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCX ) ).
 *>           Before entry, the incremented array X must contain the n
 *>           element right-hand side vector b. On exit, X is overwritten

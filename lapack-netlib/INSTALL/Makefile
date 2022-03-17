@@ -1,50 +1,35 @@
-TOPSRCDIR = ..
-include $(TOPSRCDIR)/make.inc
+include ../make.inc
 
-.PHONY: all testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
+.SUFFIXES: .o .f
 all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
 
 testlsame: lsame.o lsametst.o
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ lsame.o lsametst.o
 
 testslamch: slamch.o lsame.o slamchtst.o
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ slamch.o lsame.o slamchtst.o
 
 testdlamch: dlamch.o lsame.o dlamchtst.o
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ dlamch.o lsame.o dlamchtst.o
 
 testsecond: second_$(TIMER).o secondtst.o
 	@echo "[INFO] : TIMER value: $(TIMER) (given by make.inc)"
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ second_$(TIMER).o secondtst.o
 
 testdsecnd: dsecnd_$(TIMER).o dsecndtst.o
 	@echo "[INFO] : TIMER value: $(TIMER) (given by make.inc)"
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ dsecnd_$(TIMER).o dsecndtst.o
 
 testieee: tstiee.o
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ tstiee.o
 
 testversion: ilaver.o LAPACK_version.o
-	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+	$(LOADER) $(LOADOPTS) -o $@ ilaver.o LAPACK_version.o
 
-.PHONY: run
-run: all
-	./testlsame
-	./testslamch
-	./testdlamch
-	./testsecond
-	./testdsecnd
-	./testieee
-	./testversion
-
-.PHONY: clean cleanobj cleanexe cleantest
-clean: cleanobj cleanexe cleantest
-cleanobj:
+clean:
 	rm -f *.o
-cleanexe:
-	rm -f test*
-cleantest:
-	rm -f core
+.f.o:
+	$(FORTRAN) $(OPTS) -c -o $@ $<
 
-slamch.o: slamch.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
-dlamch.o: dlamch.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+slamch.o: slamch.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+dlamch.o: dlamch.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<

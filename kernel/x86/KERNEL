@@ -169,7 +169,7 @@ ifndef ZDOTKERNEL
 ZDOTKERNEL   = ../arm/zdot.c
 endif
 
-DSDOTKERNEL   = ../generic/dot.c
+DSDOTKERNEL   = ../arm/dot.c
 
 # Bug in znrm2 assembler kernel
 ifndef ZNRM2KERNEL

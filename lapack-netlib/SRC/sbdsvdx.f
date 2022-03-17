@@ -165,7 +165,7 @@
 *>
 *> \param[out] Z
 *> \verbatim
-*>          Z is REAL array, dimension (2*N,K)
+*>          Z is REAL array, dimension (2*N,K) )
 *>          If JOBZ = 'V', then if INFO = 0 the first NS columns of Z
 *>          contain the singular vectors of the matrix B corresponding to
 *>          the selected singular values, with U in rows 1 to N and V
@@ -226,10 +226,10 @@
       SUBROUTINE SBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                    NS, S, Z, LDZ, WORK, IWORK, INFO)
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -269,7 +269,7 @@
       EXTERNAL           ISAMAX, LSAME, SAXPY, SDOT, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASET, SSCAL, SSWAP, SSTEVX, XERBLA
+      EXTERNAL           SCOPY, SLASET, SSCAL, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, SIGN, SQRT

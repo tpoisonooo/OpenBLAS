@@ -1,8 +1,8 @@
 #include "relapack.h"
 #include "stdlib.h"
 
-static void RELAPACK_zpbtrf_rec(const char *, const blasint *, const blasint *,
-    double *, const blasint *, double *, const blasint *, blasint *);
+static void RELAPACK_zpbtrf_rec(const char *, const int *, const int *,
+    double *, const int *, double *, const int *, int *);
 
 
 /** ZPBTRF computes the Cholesky factorization of a complex Hermitian positive definite band matrix A.
@@ -12,14 +12,14 @@ static void RELAPACK_zpbtrf_rec(const char *, const blasint *, const blasint *,
  * http://www.netlib.org/lapack/explore-html/db/da9/zpbtrf_8f.html
  * */
 void RELAPACK_zpbtrf(
-    const char *uplo, const blasint *n, const blasint *kd,
-    double *Ab, const blasint *ldAb,
-    blasint *info
+    const char *uplo, const int *n, const int *kd,
+    double *Ab, const int *ldAb,
+    int *info
 ) {
 
     // Check arguments
-    const blasint lower = LAPACK(lsame)(uplo, "L");
-    const blasint upper = LAPACK(lsame)(uplo, "U");
+    const int lower = LAPACK(lsame)(uplo, "L");
+    const int upper = LAPACK(lsame)(uplo, "U");
     *info = 0;
     if (!lower && !upper)
         *info = -1;
@@ -30,12 +30,10 @@ void RELAPACK_zpbtrf(
     else if (*ldAb < *kd + 1)
         *info = -5;
     if (*info) {
-        const blasint minfo = -*info;
-        LAPACK(xerbla)("ZPBTRF", &minfo, strlen("ZPBTRF"));
+        const int minfo = -*info;
+        LAPACK(xerbla)("ZPBTRF", &minfo);
         return;
     }
-
-    if (*n == 0) return;
 
     // Clean char * arguments
     const char cleanuplo = lower ? 'L' : 'U';
@@ -44,11 +42,10 @@ void RELAPACK_zpbtrf(
     const double ZERO[] = { 0., 0. };
 
     // Allocate work space
-    const blasint n1 = ZREC_SPLIT(*n);
-    const blasint mWork = abs((*kd > n1) ? (lower ? *n - *kd : n1) : *kd);
-    const blasint nWork = abs((*kd > n1) ? (lower ? n1 : *n - *kd) : *kd);
+    const int n1 = ZREC_SPLIT(*n);
+    const int mWork = (*kd > n1) ? (lower ? *n - *kd : n1) : *kd;
+    const int nWork = (*kd > n1) ? (lower ? n1 : *n - *kd) : *kd;
     double *Work = malloc(mWork * nWork * 2 * sizeof(double));
-
     LAPACK(zlaset)(uplo, &mWork, &nWork, ZERO, ZERO, Work, &mWork);
 
     // Recursive kernel
@@ -61,13 +58,13 @@ void RELAPACK_zpbtrf(
 
 /** zpbtrf's recursive compute kernel */
 static void RELAPACK_zpbtrf_rec(
-    const char *uplo, const blasint *n, const blasint *kd,
-    double *Ab, const blasint *ldAb,
-    double *Work, const blasint *ldWork,
-    blasint *info
+    const char *uplo, const int *n, const int *kd,
+    double *Ab, const int *ldAb,
+    double *Work, const int *ldWork,
+    int *info
 ){
 
-    if (*n <= MAX(CROSSOVER_ZPBTRF, 1) || *ldAb == 1) {
+    if (*n <= MAX(CROSSOVER_ZPBTRF, 1)) {
         // Unblocked
         LAPACK(zpbtf2)(uplo, n, kd, Ab, ldAb, info);
         return;
@@ -78,12 +75,12 @@ static void RELAPACK_zpbtrf_rec(
     const double MONE[] = { -1., 0. };
 
     // Unskew A
-    const blasint ldA[] = { *ldAb - 1 };
+    const int ldA[] = { *ldAb - 1 };
     double *const A = Ab + 2 * ((*uplo == 'L') ? 0 : *kd);
 
     // Splitting
-    const blasint n1 = MIN(ZREC_SPLIT(*n), *kd);
-    const blasint n2 = *n - n1;
+    const int n1 = MIN(ZREC_SPLIT(*n), *kd);
+    const int n2 = *n - n1;
 
     // * *
     // * Ab_BR
@@ -102,8 +99,8 @@ static void RELAPACK_zpbtrf_rec(
         return;
 
     // Banded splitting
-    const blasint n21 = MIN(n2, *kd - n1);
-    const blasint n22 = MIN(n2 - n21, *kd);
+    const int n21 = MIN(n2, *kd - n1);
+    const int n22 = MIN(n2 - n21, *kd);
 
     //     n1    n21    n22
     // n1  *     A_TRl  A_TRr
@@ -151,7 +148,7 @@ static void RELAPACK_zpbtrf_rec(
     }
 
     // recursion(A_BR)
-    if (*kd > n1 && ldA != 0)
+    if (*kd > n1)
         RELAPACK_zpotrf(uplo, &n2, A_BR, ldA, info);
     else
         RELAPACK_zpbtrf_rec(uplo, &n2, kd, Ab_BR, ldAb, Work, ldWork, info);

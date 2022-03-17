@@ -98,9 +98,8 @@
 *> \param[out] E
 *> \verbatim
 *>          E is COMPLEX array, dimension (NMAX)
-*> \endverbatim
-*>
 *> \param[out] AINV
+*>
 *> \verbatim
 *>          AINV is COMPLEX array, dimension (NMAX*NMAX)
 *> \endverbatim

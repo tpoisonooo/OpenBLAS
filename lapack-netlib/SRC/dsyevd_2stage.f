@@ -180,7 +180,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup doubleSYeigen
 *
@@ -229,10 +229,10 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK driver routine (version 3.8.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -260,9 +260,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
+      INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
+      EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC, DSTERF,
@@ -295,14 +295,10 @@
             LIWMIN = 1
             LWMIN = 1
          ELSE
-            KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ,
-     $                            N, -1, -1, -1 )
-            IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ,
-     $                            N, KD, -1, -1 )
-            LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ,
-     $                            N, KD, IB, -1 )
-            LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ,
-     $                            N, KD, IB, -1 )
+            KD    = ILAENV( 17, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
+            IB    = ILAENV( 18, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
+            LHTRD = ILAENV( 19, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+            LWTRD = ILAENV( 20, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
             IF( WANTZ ) THEN
                LIWMIN = 3 + 5*N
                LWMIN = 1 + 6*N + 2*N**2
@@ -385,7 +381,7 @@
       IF( .NOT.WANTZ ) THEN
          CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-*        Not available in this release, and argument checking should not
+*        Not available in this release, and agrument checking should not
 *        let it getting here
          RETURN
          CALL DSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
